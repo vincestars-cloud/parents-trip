@@ -78,10 +78,11 @@ const G = [
     o: [ { id: 'mix', l: 'Vietjet there, Thai Airways back', s: 'Cheap outbound; the full-service airline for the day you connect to the long flight home.', p: 237, tag: 'rec' },
          { id: 'vietjet', l: 'Vietjet both ways', s: 'Includes about $30 of bag fees.', p: 200, tag: 'frugal' },
          { id: 'thai', l: 'Thai Airways both ways', s: 'Bags and snacks included, best timings.', p: 244 } ] },
-  { id: 'bkk', title: 'Bangkok hotel · 3 nights', help: 'All three are highly rated and clean. The difference is size, pool, and the walk to the hospital.', mode: 'one',
-    o: [ { id: 'doubletree', l: 'DoubleTree by Hilton Ploenchit', s: '5-star, pool, rated 4.8. Ten-minute walk to the hospital and dentist; next to the Skytrain.', p: 283, tag: 'rec' },
-         { id: 'eastin', l: 'Eastin Grand Sathorn', s: '5-star, rated 4.7 by 8,000 guests, on a Skytrain station; 20 minutes to the hospital.', p: 264 },
-         { id: 'vince', l: 'Vince Hotel Pratunam', s: '4-star, rated 4.7 by 7,800 guests. Market district; 15-minute taxi to the hospital.', p: 175, tag: 'frugal' } ] },
+  { id: 'bkk', title: 'Bangkok hotel · 3 nights (plus Saturday night so the room is ready at 9 AM Sunday)', help: 'All rated 8.8 or above and spotless. The difference is the walk to the hospital on Monday morning.', mode: 'one',
+    o: [ { id: 'adlib', l: 'Ad Lib Bangkok', s: '4-star, Booking.com 9.1. One minute’s walk to Bumrungrad, 500 m to the dentist, free tuk-tuk to the Skytrain. Rooms are smallish. 4 nights at about $85.', p: 340, tag: 'rec' },
+         { id: 'doubletree', l: 'DoubleTree by Hilton Ploenchit', s: '4-star, Booking.com 8.8. Big rooms, big breakfast, same street as the dentist; 10-minute walk to the Skytrain. 4 nights at about $105.', p: 420 },
+         { id: 'sindhorn', l: 'Sindhorn Midtown', s: '5-star, Booking.com 9.2 (cleanliness 9.5), infinity pool, quiet street — but 2 km from the hospitals, so every medical trip is a $3 taxi. 4 nights at about $122.', p: 488 },
+         { id: 'adlib3', l: 'Ad Lib, 3 nights only (arrive and wait for the room)', s: 'Saves one night; you may sit in the lobby until the room is cleaned, after a 20-hour journey.', p: 255, tag: 'frugal' } ] },
   { id: 'cnx', title: 'Chiang Mai hotel · 2 nights', help: 'The Old City is flat and walkable. Both of these have an elevator — many small Chiang Mai hotels do not.', mode: 'one',
     o: [ { id: 'vijit', l: 'THEE Vijit Lanna', s: '4-star, elevator, two pools, one minute from the old city gate. Sends a car to the airport for about $11.', p: 139, tag: 'rec' },
          { id: 'melia', l: 'Meliá Chiang Mai', s: '5-star, Booking.com 9.0 from 980 guests, elevator, quiet rooms, rooftop pool. On the river edge of town.', p: 224 },
@@ -91,12 +92,14 @@ const G = [
          { id: 'ac', l: 'Mostly restaurants with air conditioning', s: 'About $60 a day for both.', p: 360 },
          { id: 'street', l: 'Mostly markets and street stalls', s: 'About $25 a day for both.', p: 150, tag: 'frugal' } ] },
   { id: 'bkkdo', title: 'Things to do in Bangkok', help: 'Tick what you want. Prices are for both of you.', mode: 'many',
-    o: [ { id: 'palace', l: 'Grand Palace, Wat Pho, Wat Arun', s: 'Tickets for the three big temples. The ferry across the river is 15 cents.', p: 50, on: true },
-         { id: 'cruise', l: 'Stella’s birthday: river dinner cruise', s: 'Two hours on the water with dinner and music.', p: 70, on: true },
-         { id: 'rooftop', l: 'Stella’s birthday: rooftop dinner instead', s: 'City lights, quieter. Pick this OR the cruise.', p: 80 },
-         { id: 'chinatown', l: 'Chinatown street-food night', s: 'Yaowarat Road. Loud, bright, unforgettable.', p: 20, on: true },
-         { id: 'floating', l: 'Half-day floating-market tour', s: 'Hotel pick-up, boat ride, back by lunch.', p: 60 },
-         { id: 'massage', l: 'Thai massage, one hour each', s: 'Everywhere; the hotel can send you to a clean one.', p: 30, on: true } ] },
+    o: [ { id: 'palace', l: 'Grand Palace, Wat Pho, Wat Arun', s: 'Tickets for the three big temples, plus the 15-cent ferry across the river.', p: 50, on: true },
+         { id: 'watpho_massage', l: 'Foot massage in the Wat Pho pavilion, 30 minutes each', s: 'The original Thai massage school, in the shade, after the palace.', p: 24, on: true },
+         { id: 'supanniga', l: 'Stella’s birthday: rooftop table facing Wat Arun (Supanniga)', s: 'A reserved table at sunset; the $62 minimum for the table is the dinner for two.', p: 62, on: true },
+         { id: 'cruise', l: 'Stella’s birthday: river dinner cruise instead', s: 'Buffet and a band on a 200-person boat; boarding is a 40-minute taxi away. Same money, less comfort.', p: 60 },
+         { id: 'chinatown', l: 'Stella’s birthday: Chinatown street-food night instead', s: 'T&K Seafood and the neon walk. Loud, bright, unforgettable, hot.', p: 25 },
+         { id: 'costume', l: 'Thai-dress portrait at Wat Arun', s: 'The birthday photo, with the temple tower behind you.', p: 12, on: true },
+         { id: 'jim', l: 'Jim Thompson House (Monday afternoon)', s: 'Teak houses and a shaded garden, guided, mostly flat.', p: 16 },
+         { id: 'museumsiam', l: 'Museum Siam (Tuesday, the hot hours)', s: 'Air-conditioned, next to the palace. Two hours out of the sun.', p: 12, on: true } ] },
   { id: 'cnxdo', title: 'Things to do in Chiang Mai', help: 'One main thing per day is plenty.', mode: 'many',
     o: [ { id: 'suthep', l: 'Doi Suthep mountain temple with a driver', s: 'Private car up and back (about $25), waits while you visit. The cable car up the last stretch is 60 cents, so no 306 steps. Go at 7 AM before the clouds.', p: 30, on: true },
          { id: 'elephants', l: 'Elephant Nature Park, half-day morning', s: 'Hotel pick-up 7:30, feed and walk slowly beside rescued elephants on a flat path. No riding, no bathing. $77 each.', p: 154, on: true },
@@ -108,7 +111,7 @@ const G = [
          { id: 'auhtaxi', l: 'Taxis for the day', s: 'Hotel → mosque → museum → hotel → airport.', p: 60, on: true },
          { id: 'auhfood', l: 'Meals in Abu Dhabi', s: 'Emirati lunch at Al Mrzab (dates and Arabic coffee come free), dinner near the hotel.', p: 55, on: true } ] },
   { id: 'transport', title: 'Getting around in Thailand', help: 'Grab and Bolt are the taxi apps (like Uber). The Skytrain is $1 a ride. Airport taxis are about $12.', mode: 'one',
-    o: [ { id: 'mixtx', l: 'Skytrain and boats, taxi apps when tired', s: 'Includes both airport rides in each city.', p: 100, tag: 'rec' },
+    o: [ { id: 'mixtx', l: 'Skytrain and boats, taxi apps when tired', s: 'Includes both airport rides in each city ($12–16 in Bangkok, $5 in Chiang Mai).', p: 100, tag: 'rec' },
          { id: 'taxi', l: 'Taxi apps for everything', s: 'Door to door, air-conditioned, no stairs.', p: 160 },
          { id: 'driver', l: 'Private driver on the sightseeing days', s: 'A car and driver for the day in each city.', p: 260 } ] },
   { id: 'phone', title: 'Phone service', help: 'You need data for the taxi apps, maps, and WhatsApp. Thailand SIM cards are cheap; US roaming is not.', mode: 'one',
@@ -180,7 +183,7 @@ function render() {
   document.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
     const g = G.find(x => x.id === b.dataset.g), o = b.dataset.o;
     if (g.mode === 'one') sel[g.id] = o;
-    else { const arr = sel[g.id].slice(); const i = arr.indexOf(o); if (i >= 0) arr.splice(i, 1); else { arr.push(o); if (o === 'rooftop') { const j = arr.indexOf('cruise'); if (j >= 0) arr.splice(j, 1); } if (o === 'cruise') { const j = arr.indexOf('rooftop'); if (j >= 0) arr.splice(j, 1); } } sel[g.id] = arr; }
+    else { const arr = sel[g.id].slice(); const i = arr.indexOf(o); if (i >= 0) arr.splice(i, 1); else { arr.push(o); const bday = ['supanniga', 'cruise', 'chinatown']; if (bday.includes(o)) bday.filter(x => x !== o).forEach(x => { const j = arr.indexOf(x); if (j >= 0) arr.splice(j, 1); }); } sel[g.id] = arr; }
     save(); const y = window.scrollY; render(); window.scrollTo(0, y);
   }));
 }
