@@ -126,10 +126,13 @@ const G = [
   { id: 'misc', title: 'Odds and ends', mode: 'many',
     o: [ { id: 'tips', l: 'Tips, snacks, small gifts', s: '', p: 60, on: true },
          { id: 'buffer', l: 'A 10% cushion for surprises', s: 'Recommended by every planner. Money you probably bring home.', p: 0, dyn: 'buffer' } ] },
-  { id: 'medical', title: 'Medical — outside the $3,500', help: 'Shown so nothing surprises you. Dad was going to pay the dentist anyway; the check-ups are optional.', mode: 'many', outside: true,
-    o: [ { id: 'chk_him', l: 'Executive check-up, Cajetan', s: 'Bumrungrad hospital, one morning, results same day.', p: 680, on: true },
-         { id: 'chk_her', l: 'Executive check-up, Stella', s: 'Same, with the women’s screening added.', p: 575, on: true },
-         { id: 'dental', l: 'Dad’s dental work', s: 'A crown is roughly $500–800 in Bangkok; the exact price comes from the hospital once they see the x-rays.', p: 650, on: true } ] }
+  { id: 'medical', title: 'Medical — outside the $3,500', help: 'Shown so nothing surprises you. Dad was going to pay the dentist anyway; the check-ups are optional. Prices checked 30 August on the hospitals’ own price lists (32.5 baht to the dollar).', mode: 'many', outside: true,
+    o: [ { id: 'chk_basic', l: 'Basic “Executive” check-up at Bumrungrad, both of you', s: 'Bloods, ECG, chest x-ray, ultrasound. Does NOT include PSA, mammogram, bone density, eye or hearing. Him $500, her $637.', p: 1137 },
+         { id: 'chk_70', l: 'Bumrungrad “Holistic 70+” check-up, both of you', s: 'The one built for your age: everything above plus PSA/mammogram, bone density, eye scan, hearing, stress test. 6–8 hours, same-day first results. Him $1,412, her $1,422.', p: 2834 },
+         { id: 'chk_bkh', l: 'Bangkok Hospital “Longevity 60+”, both of you', s: 'Same idea as Holistic 70+, adds a heart echo and neck-artery scan, costs a third less — but a 20-minute taxi instead of a walk, and book 7 days ahead. Him $969, her $1,077.', p: 2046, on: true, tag: 'rec' },
+         { id: 'dental_crown', l: 'Dad’s dental: a crown at BIDH (across the road from Bumrungrad)', s: 'Zirconia crown 22,000 baht ($677); a one-day crown 25,000 ($769). Two visits, Monday and Wednesday. 2-year warranty.', p: 677, on: true },
+         { id: 'dental_rct', l: 'Dad’s dental: a root canal instead', s: 'About 17,000 baht ($523) at BIDC. Borderline for flying two days later — the dentist decides.', p: 523 },
+         { id: 'dental_implant', l: 'Dad’s dental: an implant', s: '65,000–95,000 baht ($2,000–2,900). Cannot be finished on this trip — needs 2–4 months of healing and a second visit.', p: 2000 } ] }
 ];
 
 const STORE = 'ptrip.costs.v1';
