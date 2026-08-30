@@ -18,6 +18,11 @@
   .tag { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; margin-left: 6px; vertical-align: middle; background: var(--accent-wash); color: var(--accent-2); }
   .meter { background: var(--bg-2); border-radius: var(--r); padding: 14px 18px; font-size: 18px; }
   .meter b { font-family: "Outfit", sans-serif; font-weight: 600; }
+  .presets { display: flex; gap: 10px; flex-wrap: wrap; }
+  .presets .btn { flex: 1 1 160px; min-height: 52px; font-size: 17px; }
+  .gave { background: var(--warn-wash); border-radius: var(--r); padding: 14px 18px; font-size: 17px; display: none; }
+  .gave.show { display: block; }
+  .gave b { font-family: "Outfit", sans-serif; font-weight: 600; }
 </style>
 </head>
 <body>
@@ -29,7 +34,12 @@
   </header>
   <div id="persBox"></div>
   <div class="total"><span class="k">Total for both</span><span class="v" id="totalV">$0</span><span class="vs" id="totalVs"></span></div>
+  <div class="presets">
+    <button class="btn secondary" id="pFit" type="button">Fit it in $3,500</button>
+    <button class="btn secondary" id="pAnswers" type="button">Back to our answers</button>
+  </div>
   <div class="meter" id="saveline"></div>
+  <div class="gave" id="gaveBox"></div>
   <div id="groups" style="display:grid;gap:36px"></div>
   <section style="display:grid;gap:12px">
     <h2>Send your choices to Vince</h2>
@@ -72,10 +82,10 @@ function reasonFor(id) {
   })[id] || '';
 }
 function render() {
-  const { inside, outside, base } = totals(sel);
+  const { inside, cushion, outside, base } = totals(sel);
   document.getElementById('totalV').textContent = money(inside);
   const diff = BUDGET - inside;
-  document.getElementById('totalVs').textContent = (diff >= 0 ? money(diff) + ' under the $3,500 budget' : money(-diff) + ' over the $3,500 budget') + ' · medical ' + money(outside) + ' on top';
+  document.getElementById('totalVs').textContent = (diff >= 0 ? money(diff) + ' under the $3,500 budget' : money(-diff) + ' over the $3,500 budget') + ' · plus about ' + money(cushion) + ' to carry as a cushion · medical ' + money(outside) + ' on top';
   const s = seededTotal() - inside;
   document.getElementById('saveline').innerHTML = !D.answered
     ? 'These are the standard choices. <a href="questions.html">Answer the questions</a> and they change to match you.'
@@ -109,6 +119,19 @@ function render() {
   }));
 }
 render();
+document.getElementById('pFit').addEventListener('click', () => {
+  const r = fitBudget(sel, BUDGET);
+  sel = r.sel; save(); render();
+  const box = document.getElementById('gaveBox');
+  if (!r.gave.length) box.innerHTML = '<b>Already under $3,500.</b> Nothing had to go.';
+  else box.innerHTML = '<b>' + (r.fits ? 'Now ' + money(r.total) + '.' : 'Trimmed to ' + money(r.total) + ', still over.') + '</b> To get there it dropped: ' + r.gave.join('; ') + '. Tap anything back on if you would rather keep it and go over.';
+  box.classList.add('show'); box.scrollIntoView({ block: 'nearest' });
+});
+document.getElementById('pAnswers').addEventListener('click', () => {
+  sel = JSON.parse(JSON.stringify(seeded)); save(); render();
+  document.getElementById('gaveBox').classList.remove('show');
+  window.scrollTo({ top: 0 });
+});
 const toastEl = document.getElementById('toast');
 function toast(m) { toastEl.textContent = m; toastEl.classList.add('show'); setTimeout(() => toastEl.classList.remove('show'), 2000); }
 document.getElementById('sendBtn').addEventListener('click', async () => {

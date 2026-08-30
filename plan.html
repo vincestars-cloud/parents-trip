@@ -67,7 +67,17 @@ function days(d) {
       bullets: ['Land 7:20 PM. Passport stamp at the counter, free. Ask for the assistance lane.',
         'Taxi from the rank at the door, $15 to $27.',
         'Say “Etihad stopover” and your surname at the hotel. The room is already paid.'] });
-    if (d.lowEnergyAUH) {
+    if (d.wantsCamels && !d.lowEnergyAUH) {
+      L.push({ date: 'Saturday 19', title: 'Camels, then the white mosque.', img: 'img/grand_mosque.jpg', cost: 150,
+        one: 'a camel ride in the desert at 8 AM. The desert that early is 30°C, cooler than the city, and the light is the best of the trip.',
+        bullets: ['Picked up at the hotel at 7:15. Camel farm, a real ride, a Bedouin camp, back by noon. $68 each.',
+          '<b>Tell them in writing you are skipping the dune bashing.</b> The operators\u2019 own health rules exclude backs, necks and hearts, and it is not worth it.',
+          'Dropped at the Grand Mosque at 12:30. Ask for the golf cart. AED 10 each now, not free.',
+          'Late lunch and coffee at the souk across the water, then Dad picks his oud properly.',
+          'Airport at 5 PM. Flight to Bangkok 9:10 PM.'],
+        why: 'riding a camel in the desert',
+        tl: [['7:15','Hotel pick-up for the morning desert trip.'],['8:00','Camel farm and the ride. 30\u00b0C, not 40.'],['12:30','Dropped at the Grand Mosque. Golf cart to the door.'],['14:00','Souk Qaryat Al Beri. Lunch on the terrace, mosque across the water.'],['15:45','The perfume souk. One bottle, chosen slowly.'],['17:00','Taxi to Terminal A.']] });
+    } else if (d.lowEnergyAUH) {
       L.push({ date: 'Saturday 19', title: 'The white mosque, then rest.', img: 'img/grand_mosque.jpg', cost: 136,
         one: 'Sheikh Zayed Grand Mosque at 9 AM, before the heat. Free. Golf carts for seniors, so no long walk.',
         bullets: ['Coffee at the souk five minutes away, with the mosque across the water. In the shade.',
@@ -122,6 +132,12 @@ function days(d) {
     bullets: tueB, why: d.birthday !== 'rooftop' ? 'the birthday dinner you chose' : '',
     tl: [['7:35','Taxi app to the Grand Palace, $5 to $7.'],['8:30','Grand Palace and the Emerald Buddha. $15 each.'],['10:40','Walk 10 minutes to Wat Pho, the reclining Buddha. $9 each.'],['12:30','Lunch, air-conditioned, 100 m away.'],['1:45', d.hot ? 'Museum or hotel. Out of the sun.' : 'Museum Siam, $6 each, or a café by the pier.'],['4:00','Ferry to Wat Arun, 15 cents. Birthday photo in Thai dress, from $6.'],['5:15','Dinner: ' + bd[0] + '.']] });
 
+  if (d.wantsRuins) L.push({ date: 'Tuesday 22 (or swap with the palace)', title: 'A day at the ruined old capital.', img: 'img/wat_pho.jpg', cost: 40,
+    one: 'Ayutthaya, the capital the Burmese burned in 1767. A new air-conditioned train gets there in an hour for $1.50 each.',
+    bullets: ['Two or three ruins and the open-air reclining Buddha, then back before the afternoon rain. A full day out there is 12 hours with no shade.',
+      'A 5-cent ferry across the river, and a tuk-tuk between the temples.',
+      'This is the one day trip worth taking. Everything else near Bangkok is either the wrong day or four hours each way.'],
+    why: 'a day out at the old ruined city' });
   L.push({ date: 'Wednesday 23', title: 'Crown on, fly north.', img: 'img/night_bazaar.jpg', cost: 110,
     one: 'the 5:35 PM flight to Chiang Mai. 85 minutes, same airport, no cross-town transfer.',
     bullets: [d.implant ? '9 AM the dentist checks the site and clears you to fly.' : '9 AM the dentist: the crown is fitted. Collect the printed check-up report on the way back.',
