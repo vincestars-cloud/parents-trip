@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Costs — Cajetan &amp; Stella's Trip</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Sora:wght@600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+<style>
+  .total { position: sticky; top: 58px; z-index: 4; background: var(--card); border: 2px solid var(--accent); border-radius: 12px; padding: 14px 18px; display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; align-items: center; box-shadow: 0 6px 20px rgba(0,0,0,.06); }
+  .total .k { font-size: 15px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+  .total .v { font-family: "Sora", sans-serif; font-size: 34px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .total .vs { font-size: 17px; color: var(--muted); grid-column: 1 / -1; }
+  .total .vs b.ok { color: var(--good); } .total .vs b.over { color: var(--warn); }
+  .group { display: grid; gap: 12px; }
+  .group h2 { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .group h2 .gsum { font-family: "Atkinson Hyperlegible", sans-serif; font-size: 18px; color: var(--muted); font-weight: 400; white-space: nowrap; }
+  .opt .price { font-family: "Sora", sans-serif; font-weight: 700; font-size: 19px; white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
+  .opt.priced { grid-template-columns: auto 1fr auto; }
+  .opt .tag { display: inline-block; background: var(--accent-wash); color: var(--accent-ink); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 1px 7px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+  .opt .tag.frugal { background: var(--pick-wash); color: #7A5410; }
+  .saveline { background: var(--pick-wash); border-radius: 10px; padding: 12px 16px; font-size: 18px; }
+  .saveline b { font-family: "Sora", sans-serif; }
+  .medical .opt .price { color: var(--muted); }
+  @media (max-width: 480px) { .total .v { font-size: 28px; } }
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in"><a class="home" href="index.html">← Your trip</a><span class="step">What it costs</span></div></div>
+<main class="page">
+  <header style="display:grid;gap:10px">
+    <div class="eyebrow">For both of you · nine days · prices checked 29 August 2026</div>
+    <h1>Tap the choices and watch the total change.</h1>
+    <p class="help">Every price is for <b>the two of you together</b>. Your choices are saved on this device. Nothing here is booked — this is for deciding together. Dad: the yellow “Saves money” tags are for you. Mom: the green “Recommended” tags are the comfortable choice.</p>
+  </header>
+
+  <div class="total" id="total">
+    <span class="k">Total for both</span><span class="v" id="totalV">$0</span>
+    <span class="vs" id="totalVs"></span>
+  </div>
+
+  <div class="saveline" id="saveline"></div>
+
+  <div id="groups"></div>
+
+  <section class="card">
+    <h2>Send your choices to Vince</h2>
+    <p class="help">Sends the choices above and the total to Vince by email so he can book what you picked.</p>
+    <button class="btn big" id="sendBtn" type="button">Send my choices to Vince</button>
+    <p class="help" id="sendStatus"></p>
+  </section>
+
+  <section class="card soft">
+    <h2>How to read this</h2>
+    <p>Flights are the one thing that changes price every day — lock those first. Hotels in Thailand are cheap in September because it is the rainy season (short afternoon showers, not all-day rain). The medical costs at the bottom are on purpose kept <b>outside</b> the $3,500, because Dad was going to pay the dentist anyway.</p>
+  </section>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const BUDGET = 3500;
+// Each group: id, title, help, mode (one|many), options [{id, l, s, p (USD for two), tag}]
+const G = [
+  { id: 'flights', title: 'The big flights', help: 'Atlanta to Bangkok and back, both of you. Etihad is the cheapest AND the only one with a free stopover hotel.', mode: 'one',
+    o: [ { id: 'etihad', l: 'Etihad through Abu Dhabi', s: 'Thu 9:30 PM out, home Sat 4:30 PM. One free hotel night in Abu Dhabi included.', p: 1841, tag: 'rec' },
+         { id: 'united', l: 'United through San Francisco', s: 'No stopover, 2 stops, 27 hours each way.', p: 2062 },
+         { id: 'qatar', l: 'Qatar Airways through New York and Doha', s: 'Doha instead of Abu Dhabi; 3 flights each way.', p: 2532 } ] },
+  { id: 'stopover', title: 'The night in Abu Dhabi', help: 'With Etihad the hotel night is free. You only pay if you want to choose your own hotel or skip the city.', mode: 'one',
+    o: [ { id: 'free', l: 'Etihad’s free stopover hotel', s: 'A 3- or 4-star hotel from their list. Clean, central.', p: 0, tag: 'frugal' },
+         { id: 'novotel', l: 'Pick our own: Novotel Abu Dhabi Gate', s: '4-star, rated 4.7 by 13,800 guests, next to the Grand Mosque.', p: 79, tag: 'rec' },
+         { id: 'rayhaan', l: 'Pick our own: Khalidiya Palace Rayhaan', s: '5-star on the beach, rated 4.7.', p: 99 },
+         { id: 'skip', l: 'Skip Abu Dhabi, fly straight through', s: 'No city, no hotel; about 2 hours in the airport.', p: 0 } ] },
+  { id: 'domestic', title: 'Bangkok ↔ Chiang Mai flights', help: 'One hour in the air. Vietjet is a budget airline (pay for bags); Thai Airways includes bags and a snack.', mode: 'one',
+    o: [ { id: 'mix', l: 'Vietjet there, Thai Airways back', s: 'Cheap outbound; the full-service airline for the day you connect to the long flight home.', p: 237, tag: 'rec' },
+         { id: 'vietjet', l: 'Vietjet both ways', s: 'Includes about $30 of bag fees.', p: 200, tag: 'frugal' },
+         { id: 'thai', l: 'Thai Airways both ways', s: 'Bags and snacks included, best timings.', p: 244 } ] },
+  { id: 'bkk', title: 'Bangkok hotel · 3 nights', help: 'All three are highly rated and clean. The difference is size, pool, and the walk to the hospital.', mode: 'one',
+    o: [ { id: 'doubletree', l: 'DoubleTree by Hilton Ploenchit', s: '5-star, pool, rated 4.8. Ten-minute walk to the hospital and dentist; next to the Skytrain.', p: 283, tag: 'rec' },
+         { id: 'eastin', l: 'Eastin Grand Sathorn', s: '5-star, rated 4.7 by 8,000 guests, on a Skytrain station; 20 minutes to the hospital.', p: 264 },
+         { id: 'vince', l: 'Vince Hotel Pratunam', s: '4-star, rated 4.7 by 7,800 guests. Market district; 15-minute taxi to the hospital.', p: 175, tag: 'frugal' } ] },
+  { id: 'cnx', title: 'Chiang Mai hotel · 2 nights', help: 'The Old City is flat and walkable; all three are inside or beside it.', mode: 'one',
+    o: [ { id: 'vijit', l: 'THEE Vijit Lanna', s: '4-star, rated 4.7, one minute from the old city gate.', p: 139, tag: 'rec' },
+         { id: 'u', l: 'U Chiang Mai', s: '4-star, rated 4.8, on the Night Bazaar, courtyard pool, all-day breakfast.', p: 207 },
+         { id: 'pastell', l: 'Pastell Oldtown', s: '4-star, rated 4.7, ten minutes’ walk from the main temple.', p: 99, tag: 'frugal' } ] },
+  { id: 'food', title: 'Food, six days', help: 'A sit-down Thai restaurant with air conditioning is about $8–12 a person; a famous street stall is $2–4. Hotel breakfast is usually included.', mode: 'one',
+    o: [ { id: 'mixfood', l: 'A mix — stalls at lunch, restaurants at dinner', s: 'About $40 a day for both.', p: 240, tag: 'rec' },
+         { id: 'ac', l: 'Mostly restaurants with air conditioning', s: 'About $60 a day for both.', p: 360 },
+         { id: 'street', l: 'Mostly markets and street stalls', s: 'About $25 a day for both.', p: 150, tag: 'frugal' } ] },
+  { id: 'bkkdo', title: 'Things to do in Bangkok', help: 'Tick what you want. Prices are for both of you.', mode: 'many',
+    o: [ { id: 'palace', l: 'Grand Palace, Wat Pho, Wat Arun', s: 'Tickets for the three big temples. The ferry across the river is 15 cents.', p: 50, on: true },
+         { id: 'cruise', l: 'Stella’s birthday: river dinner cruise', s: 'Two hours on the water with dinner and music.', p: 70, on: true },
+         { id: 'rooftop', l: 'Stella’s birthday: rooftop dinner instead', s: 'City lights, quieter. Pick this OR the cruise.', p: 80 },
+         { id: 'chinatown', l: 'Chinatown street-food night', s: 'Yaowarat Road. Loud, bright, unforgettable.', p: 20, on: true },
+         { id: 'floating', l: 'Half-day floating-market tour', s: 'Hotel pick-up, boat ride, back by lunch.', p: 60 },
+         { id: 'massage', l: 'Thai massage, one hour each', s: 'Everywhere; the hotel can send you to a clean one.', p: 30, on: true } ] },
+  { id: 'cnxdo', title: 'Things to do in Chiang Mai', help: 'One main thing per day is plenty.', mode: 'many',
+    o: [ { id: 'suthep', l: 'Doi Suthep mountain temple with a driver', s: 'Half-day private car, waits while you visit. Cable car up if you skip the steps.', p: 40, on: true },
+         { id: 'elephants', l: 'Elephant Nature Park, half day', s: 'Hotel pick-up, feed and walk with rescued elephants. No riding. Can be muddy.', p: 140, on: true },
+         { id: 'cooking', l: 'Thai cooking class, 3 hours', s: 'Market visit, then cook four dishes and eat them.', p: 60 },
+         { id: 'cnxmassage', l: 'Massage at a women’s training centre', s: 'Chiang Mai is famous for it.', p: 25, on: true } ] },
+  { id: 'auh', title: 'The Abu Dhabi day', help: 'Only if you take the stopover. The mosque is free.', mode: 'many',
+    o: [ { id: 'louvre', l: 'Louvre Abu Dhabi tickets', s: 'Air-conditioned, two hours, world-class.', p: 36, on: true },
+         { id: 'qasr', l: 'Qasr Al Watan palace tickets', s: 'The presidential palace. Gold and marble.', p: 36 },
+         { id: 'auhtaxi', l: 'Taxis for the day', s: 'Hotel → mosque → museum → hotel → airport.', p: 60, on: true },
+         { id: 'auhfood', l: 'Meals in Abu Dhabi', s: 'Lunch at the museum café and an Emirati dinner.', p: 50, on: true } ] },
+  { id: 'transport', title: 'Getting around in Thailand', help: 'Grab and Bolt are the taxi apps (like Uber). The Skytrain is $1 a ride. Airport taxis are about $12.', mode: 'one',
+    o: [ { id: 'mixtx', l: 'Skytrain and boats, taxi apps when tired', s: 'Includes both airport rides in each city.', p: 100, tag: 'rec' },
+         { id: 'taxi', l: 'Taxi apps for everything', s: 'Door to door, air-conditioned, no stairs.', p: 160 },
+         { id: 'driver', l: 'Private driver on the sightseeing days', s: 'A car and driver for the day in each city.', p: 260 } ] },
+  { id: 'phone', title: 'Phone service', help: 'You need data for the taxi apps, maps, and WhatsApp. Thailand SIM cards are cheap; US roaming is not.', mode: 'one',
+    o: [ { id: 'esim1', l: 'One eSIM, shared to the other phone', s: 'A plan you download before leaving. Dad’s phone shares its internet with Mom’s.', p: 25, tag: 'frugal' },
+         { id: 'esim2', l: 'One eSIM each', s: 'Both phones work on their own.', p: 50, tag: 'rec' },
+         { id: 'airportsim', l: 'SIM cards at the Bangkok airport', s: 'A counter at arrivals swaps the card in five minutes.', p: 30 },
+         { id: 'roam', l: 'Use our US phone plan abroad', s: 'About $10–12 a day per phone.', p: 200 } ] },
+  { id: 'insurance', title: 'Travel insurance', help: 'Medicare does not cover you outside the USA. This is the one thing not to skip at 70.', mode: 'one',
+    o: [ { id: 'ins', l: 'Yes — medical and emergency flight-home cover', s: 'About $100 each for the ten days.', p: 200, tag: 'rec' },
+         { id: 'noins', l: 'No insurance', s: 'Not recommended.', p: 0 } ] },
+  { id: 'layover', title: 'The 8-hour wait at Abu Dhabi airport on the way home', help: '12:30 AM to 9:20 AM. The terminal is new and quiet.', mode: 'one',
+    o: [ { id: 'wait', l: 'Rest in the terminal', s: 'Free. Quiet seats, cafés open all night.', p: 0, tag: 'frugal' },
+         { id: 'lounge', l: 'Lounge with recliners and showers', s: 'About $50 each.', p: 100 },
+         { id: 'airhotel', l: 'A room at the airport hotel', s: 'A real bed for six hours.', p: 120 } ] },
+  { id: 'misc', title: 'Odds and ends', mode: 'many',
+    o: [ { id: 'tips', l: 'Tips, snacks, small gifts', s: '', p: 60, on: true },
+         { id: 'buffer', l: 'A 10% cushion for surprises', s: 'Recommended by every planner. Money you probably bring home.', p: 0, dyn: 'buffer' } ] },
+  { id: 'medical', title: 'Medical — outside the $3,500', help: 'Shown so nothing surprises you. Dad was going to pay the dentist anyway; the check-ups are optional.', mode: 'many', outside: true,
+    o: [ { id: 'chk_him', l: 'Executive check-up, Cajetan', s: 'Bumrungrad hospital, one morning, results same day.', p: 680, on: true },
+         { id: 'chk_her', l: 'Executive check-up, Stella', s: 'Same, with the women’s screening added.', p: 575, on: true },
+         { id: 'dental', l: 'Dad’s dental work', s: 'A crown is roughly $500–800 in Bangkok; the exact price comes from the hospital once they see the x-rays.', p: 650, on: true } ] }
+];
+
+const STORE = 'ptrip.costs.v1';
+let sel = {}; try { sel = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) {}
+G.forEach(g => { if (sel[g.id] == null) sel[g.id] = g.mode === 'one' ? g.o.find(o => o.tag === 'rec')?.id || g.o[0].id : g.o.filter(o => o.on).map(o => o.id); });
+const save = () => { try { localStorage.setItem(STORE, JSON.stringify(sel)); } catch (e) {} };
+const money = n => '$' + Math.round(n).toLocaleString('en-US');
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+function groupTotal(g, base) {
+  if (g.mode === 'one') { const o = g.o.find(o => o.id === sel[g.id]); return o ? o.p : 0; }
+  return g.o.filter(o => sel[g.id].includes(o.id)).reduce((s, o) => s + (o.dyn === 'buffer' ? base * 0.10 : o.p), 0);
+}
+function compute() {
+  let inside = 0;
+  G.filter(g => !g.outside && g.id !== 'misc').forEach(g => { inside += groupTotal(g); });
+  // Abu Dhabi day only counts if stopover taken
+  if (sel.stopover === 'skip') inside -= groupTotal(G.find(g => g.id === 'auh'));
+  const base = inside;
+  const misc = groupTotal(G.find(g => g.id === 'misc'), base);
+  inside += misc;
+  const outside = groupTotal(G.find(g => g.id === 'medical'));
+  return { inside, outside, base };
+}
+function render() {
+  const { inside, outside, base } = compute();
+  document.getElementById('totalV').textContent = money(inside);
+  const diff = BUDGET - inside;
+  document.getElementById('totalVs').innerHTML = 'Budget $3,500 · ' + (diff >= 0 ? '<b class="ok">' + money(diff) + ' under</b>' : '<b class="over">' + money(-diff) + ' over</b>') + ' · plus medical ' + money(outside) + ' outside the budget';
+  const recTotal = (() => { const keep = sel; sel = {}; G.forEach(g => { sel[g.id] = g.mode === 'one' ? (g.o.find(o => o.tag === 'rec')?.id || g.o[0].id) : g.o.filter(o => o.on).map(o => o.id); }); const r = compute().inside; sel = keep; return r; })();
+  const s = recTotal - inside;
+  document.getElementById('saveline').innerHTML = s > 0 ? 'Dad’s meter: your choices are <b>' + money(s) + ' cheaper</b> than the recommended set-up.' : (s < 0 ? 'Your choices are <b>' + money(-s) + ' more</b> than the recommended set-up — that is fine if it buys comfort.' : 'These are the recommended choices. Tap any option to see what changes.');
+  let h = '';
+  G.forEach(g => {
+    const disabled = g.id === 'auh' && sel.stopover === 'skip';
+    h += '<section class="group ' + (g.outside ? 'medical' : '') + '" ' + (disabled ? 'style="opacity:.5"' : '') + '><h2>' + esc(g.title) + '<span class="gsum">' + (g.outside ? 'outside budget · ' : '') + money(groupTotal(g, base)) + '</span></h2>' + (g.help ? '<p class="help">' + esc(g.help) + '</p>' : '') + (disabled ? '<p class="help"><b>Not counted</b> because you chose to skip Abu Dhabi.</p>' : '') + '<div class="options">';
+    g.o.forEach(o => {
+      const on = g.mode === 'one' ? sel[g.id] === o.id : sel[g.id].includes(o.id);
+      const price = o.dyn === 'buffer' ? money(base * 0.10) : (o.p === 0 ? 'Free' : money(o.p));
+      h += '<button type="button" class="opt priced ' + (g.mode === 'one' ? 'radio' : '') + '" role="' + (g.mode === 'one' ? 'radio' : 'checkbox') + '" aria-checked="' + on + '" data-g="' + g.id + '" data-o="' + o.id + '"><span class="box"></span><span><span class="lbl">' + esc(o.l) + (o.tag === 'rec' ? '<span class="tag">Recommended</span>' : '') + (o.tag === 'frugal' ? '<span class="tag frugal">Saves money</span>' : '') + '</span>' + (o.s ? '<span class="sub">' + esc(o.s) + '</span>' : '') + '</span><span class="price">' + price + '</span></button>';
+    });
+    h += '</div></section>';
+  });
+  document.getElementById('groups').innerHTML = h;
+  document.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
+    const g = G.find(x => x.id === b.dataset.g), o = b.dataset.o;
+    if (g.mode === 'one') sel[g.id] = o;
+    else { const arr = sel[g.id].slice(); const i = arr.indexOf(o); if (i >= 0) arr.splice(i, 1); else { arr.push(o); if (o === 'rooftop') { const j = arr.indexOf('cruise'); if (j >= 0) arr.splice(j, 1); } if (o === 'cruise') { const j = arr.indexOf('rooftop'); if (j >= 0) arr.splice(j, 1); } } sel[g.id] = arr; }
+    save(); const y = window.scrollY; render(); window.scrollTo(0, y);
+  }));
+}
+render();
+
+const toastEl = document.getElementById('toast');
+function toast(msg) { toastEl.textContent = msg; toastEl.classList.add('show'); setTimeout(() => toastEl.classList.remove('show'), 2200); }
+document.getElementById('sendBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('sendBtn'), st = document.getElementById('sendStatus');
+  btn.disabled = true; st.textContent = 'Sending…';
+  const { inside, outside } = compute();
+  const answers = {}; const labels = {};
+  G.forEach(g => { const v = g.mode === 'one' ? g.o.find(o => o.id === sel[g.id])?.l : g.o.filter(o => sel[g.id].includes(o.id)).map(o => o.l); answers['cost_' + g.id] = v; labels['cost_' + g.id] = g.title + ' (' + money(groupTotal(g, compute().base)) + ')'; });
+  answers.total_inside = money(inside); labels.total_inside = 'Total for both (inside budget)';
+  answers.total_medical = money(outside); labels.total_medical = 'Medical (outside budget)';
+  let who = 'unknown'; try { who = (JSON.parse(localStorage.getItem('ptrip.answers.v1') || '{}') || {}).who || 'unknown'; } catch (e) {}
+  const payload = { token: 'ptrip_2026_kx7Qm9', who, section: 'costs', answers, labels, sentAt: new Date().toISOString() };
+  try {
+    const body = new URLSearchParams(); body.set('payload', JSON.stringify(payload));
+    const r = await fetch('https://n8n.americanlifeteam.com/webhook/parents-trip-answers', { method: 'POST', body });
+    const j = await r.json().catch(() => ({}));
+    if (r.ok && j.ok) { st.textContent = 'Sent. Vince has your choices.'; btn.textContent = 'Sent ✓'; toast('Sent to Vince'); }
+    else throw new Error(j.error || ('HTTP ' + r.status));
+  } catch (e) { st.textContent = 'It did not go through (' + e.message + '). Try again in a minute.'; btn.disabled = false; }
+});
+</script>
+</body>
+</html>
