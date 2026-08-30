@@ -62,9 +62,13 @@ const BUDGET = 3500;
 // Each group: id, title, help, mode (one|many), options [{id, l, s, p (USD for two), tag}]
 const G = [
   { id: 'flights', title: 'The big flights', help: 'Atlanta to Bangkok and back, both of you. Etihad is the cheapest AND the only one with a free stopover hotel.', mode: 'one',
-    o: [ { id: 'etihad', l: 'Etihad through Abu Dhabi', s: 'Thu 9:30 PM out, home Sat 4:30 PM. One free hotel night in Abu Dhabi included.', p: 1841, tag: 'rec' },
+    o: [ { id: 'etihad', l: 'Etihad through Abu Dhabi', s: 'Thu 9:30 PM out, home Sat 4:30 PM. One free hotel night in Abu Dhabi included. Price checked 30 Aug; was $1,841 the day before.', p: 1921, tag: 'rec' },
          { id: 'united', l: 'United through San Francisco', s: 'No stopover, 2 stops, 27 hours each way.', p: 2062 },
          { id: 'qatar', l: 'Qatar Airways through New York and Doha', s: 'Doha instead of Abu Dhabi; 3 flights each way.', p: 2532 } ] },
+  { id: 'bags', title: 'Suitcases on the big flights', help: 'The cheapest Etihad ticket (“Economy Basic”) allows only a 7 kg carry-on — no suitcase at all. The next ticket up (“Value”) includes two 50-lb suitcases each. For a nine-day trip you need the suitcase.', mode: 'one',
+    o: [ { id: 'value', l: 'Value fare — two suitcases each, included', s: 'Estimated $280 more for both than Basic; the exact difference shows on etihad.com when booking.', p: 280, tag: 'rec' },
+         { id: 'paybag', l: 'Basic fare, pay for one suitcase each', s: 'About $140 per bag each way when added online — usually MORE than upgrading to Value.', p: 560 },
+         { id: 'carryon', l: 'Basic fare, carry-on only', s: 'Nine days with a 7 kg bag each. Not realistic for this trip.', p: 0, tag: 'frugal' } ] },
   { id: 'stopover', title: 'The night in Abu Dhabi', help: 'With Etihad the hotel night is free. You only pay if you want to choose your own hotel or skip the city.', mode: 'one',
     o: [ { id: 'free', l: 'Etihad’s free stopover hotel', s: 'A 3- or 4-star hotel from their list. Clean, central.', p: 0, tag: 'frugal' },
          { id: 'novotel', l: 'Pick our own: Novotel Abu Dhabi Gate', s: '4-star, rated 4.7 by 13,800 guests, next to the Grand Mosque.', p: 79, tag: 'rec' },
