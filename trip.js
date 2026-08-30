@@ -170,9 +170,9 @@ const CATALOG = [
     { id: 'auh_big', l: 'Camels, the mosque, the Louvre and oud', s: 'The full day, at a slower pace, with time to choose a bottle of oud properly.', p: 300 },
     { id: 'auh_dubai', l: 'Drive to Dubai for the day', s: 'Not recommended: the Burj Khalifa deck is closed for renovation, the fountains do not run before 4 PM, and 3 to 4 of the 6 hours are in a car.', p: 447 } ] },
   { id: 'oud', title: 'Abu Dhabi: Dad’s oud and Mom’s market', mode: 'many', o: [
-    { id: 'souk_visit', l: 'The perfume and gold souk at Madinat Zayed', s: 'About 70 shops, open till 10:30 PM. Free to wander, and they blend to order while you wait.', p: 0 },
-    { id: 'oud_bottle', l: 'A real bottle of oud', s: 'Genuine oud is $80 to $110 for a small bottle. Anything at $15 is not oud.', p: 95 },
-    { id: 'oud_gift', l: 'Attar and a gift set for home', s: 'The good affordable houses: Ajmal, Rasasi, Swiss Arabian.', p: 40 } ] },
+    { id: 'souk_visit', l: 'Both markets: Mina Zayed at 8, Madinat Zayed at 9', s: 'Free. The open-air date and spice market while it is cool, then the indoor perfume and gold souk. All 61 jewellers on one flat floor.', p: 0 },
+    { id: 'oud_bottle', l: 'A real bottle of oud', s: 'Genuine oud runs $39 to $65 a millilitre, so a small bottle is $70 to $120. Anything at $14 a bottle is not oud. Legal limit 24 ml each.', p: 95 },
+    { id: 'oud_gift', l: 'Attar, incense and dates to bring home', s: 'Ajmal, Rasasi and Swiss Arabian are the honest affordable houses. Dates are at peak harvest that week. No charcoal on the plane.', p: 40 } ] },
 
   { id: 'bkk_sight', title: 'Bangkok: the one big sight', mode: 'one', o: [
     { id: 'free_temples', l: 'The near-free temples, and Museum Siam', s: 'Wat Saket’s golden mount, Wat Traimit’s solid gold Buddha. Museum Siam is free at 60 and over with a passport.', p: 12 },
