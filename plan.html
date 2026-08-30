@@ -11,175 +11,191 @@
   .day .pic { border-radius: var(--r); overflow: hidden; background: var(--bg-2); }
   .day .pic img { width: 100%; height: 230px; object-fit: cover; }
   .day .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-  .day .date { font-size: 16px; color: var(--ink-2); }
   .day .cost { font-family: "Outfit", sans-serif; font-weight: 600; color: var(--accent-2); white-space: nowrap; }
   .day .one { font-size: 20px; }
   .day .one b { font-family: "Outfit", sans-serif; font-weight: 600; }
   .day ul { margin: 0; padding-left: 22px; display: grid; gap: 6px; font-size: 18px; }
   .day details { border: 1px solid var(--line); border-radius: var(--r); padding: 0 16px; }
-  .day details:last-of-type { border-bottom: 1px solid var(--line); }
   .day summary { font-size: 18px; padding: 14px 0; }
   .tl { display: grid; gap: 10px; font-size: 17px; }
   .tl div { display: grid; grid-template-columns: 78px 1fr; gap: 10px; }
   .tl .t { font-family: "Outfit", sans-serif; font-weight: 600; color: var(--accent-2); font-size: 16px; }
-  .divider { border: 0; border-top: 1px solid var(--line); margin: 0; }
   .hlist { display: grid; gap: 14px; }
-  .hlist .h { display: grid; grid-template-columns: 1fr; gap: 4px; }
-  .hlist .h b { font-family: "Outfit", sans-serif; font-weight: 600; font-size: 19px; }
+  .hlist .h b { font-family: "Outfit", sans-serif; font-weight: 600; font-size: 19px; display: block; }
   .hlist .h span { font-size: 17px; color: var(--ink-2); }
 </style>
 </head>
 <body>
 <div class="nav"><div class="in"><a class="home" href="index.html">← Your trip</a><span class="where">The plan</span></div></div>
-<main class="page">
-  <header style="display:grid;gap:10px">
-    <h1>Nine days, one thing a day.</h1>
-    <p class="small">Prices are for both of you. Every day has a rest built in. Tap “See the day” for the times.</p>
-  </header>
+<main class="page" id="view"></main>
+<script src="trip.js"></script>
+<script>
+const A = getAnswers(), D = decide(A);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const money = n => '$' + Math.round(n).toLocaleString('en-US');
 
-  <section class="notice">
-    <p>Days 2, 3 and 10 are in Abu Dhabi, which the US government currently says to “reconsider”. The route can avoid the Middle East for about $280 more. <a href="guide.html#safety">The three choices.</a></p>
-  </section>
+function days(d) {
+  const L = [];
+  L.push({ date: 'Thursday 17', title: 'Leave home.', img: 'img/etihad_a350.jpg', cost: 60,
+    one: 'the 9:30 PM Etihad flight to Abu Dhabi. 14 hours, dinner and breakfast on board.',
+    bullets: [
+      'Leave Marietta at 6 PM. Be at the counter by 6:45.',
+      d.wheelchair ? 'Wheelchair help is booked. Say your name at the Etihad counter and someone meets you.' : 'Ask for wheelchair help at the counter if you want it. It is free and skips the long walk.',
+      d.seat === 'aisle' ? 'Two aisle seats, so you can get up without climbing over anyone.' : d.seat === 'window' ? 'Two window seats, so you can lean and sleep.' : 'Aisle seats. Walk to the back every two hours.'
+    ],
+    why: d.wheelchair ? 'a wheelchair at the airports, please' : (d.seat ? 'you prefer the ' + d.seat : '') });
 
-  <!-- Day 1 -->
-  <article class="day">
-    <div class="pic"><img src="img/etihad_a350.jpg" alt=""></div>
-    <div class="head"><h2>Thursday 17. Leave home.</h2><span class="cost">$60</span></div>
-    <p class="one"><b>The one thing:</b> the 9:30 PM Etihad flight to Abu Dhabi, 14 hours, dinner and breakfast on board.</p>
-    <ul><li>Leave Marietta at 6 PM. Ask for wheelchair help at the counter if you want it. It is free.</li><li>Aisle seats. Walk every two hours. Sleep when the lights go down.</li></ul>
-  </article>
+  if (d.skipAUH) {
+    L.push({ date: 'Friday 18', title: 'Two hours in Abu Dhabi, then on.', img: 'img/zayed_airport.jpg', cost: 20,
+      one: 'nothing. You land at 7:20 PM, stay inside the airport, and fly on at 9:10 PM.',
+      bullets: ['No passport queue, no hotel, no taxi. Stretch your legs in a new, quiet terminal.', 'Dinner at the airport. Camel-milk ice cream at the Majlis café if you want the photo.'],
+      why: 'no, straight to Bangkok' });
+    L.push({ date: 'Saturday 19', title: 'Bangkok. Sleep first.', img: 'img/bts_skytrain.jpg', cost: 60,
+      one: 'nothing. You land at 6:45 AM after two nights of flying.',
+      bullets: ['Metered taxi from the Level 1 queue, $15 to $20. Hotel by 9. Sleep until the afternoon.',
+        'Lunch at Pier 21, the spotless $2-a-plate food court in the mall one stop away.',
+        'Early dinner, bed by 9. Your body still thinks it is the middle of the night.'] });
+    L.push({ date: 'Sunday 20', title: 'A free day in Bangkok.', img: d.wantsRiver ? 'img/chao_phraya.jpg' : 'img/night_bazaar.jpg', cost: 70,
+      one: d.wantsRiver ? 'the river. A 15-cent public boat past the temples, then a riverside lunch.' : 'a slow look around. Markets, a mall out of the heat, an early dinner.',
+      bullets: ['This day exists because you skipped Abu Dhabi. It is the rest the long flights took away.',
+        'Nothing is booked. If you are tired, the pool is the plan.',
+        'No food after 7 PM tonight. The check-up is tomorrow morning.'],
+      why: 'no, straight to Bangkok' });
+  } else {
+    L.push({ date: 'Friday 18', title: 'Land, sleep.', img: 'img/zayed_airport.jpg', cost: 25,
+      one: 'a real bed. The airline pays for the hotel.',
+      bullets: ['Land 7:20 PM. Passport stamp at the counter, free. Ask for the assistance lane.',
+        'Taxi from the rank at the door, $15 to $27.',
+        'Say “Etihad stopover” and your surname at the hotel. The room is already paid.'] });
+    if (d.lowEnergyAUH) {
+      L.push({ date: 'Saturday 19', title: 'The white mosque, then rest.', img: 'img/grand_mosque.jpg', cost: 136,
+        one: 'Sheikh Zayed Grand Mosque at 9 AM, before the heat. Free. Golf carts for seniors, so no long walk.',
+        bullets: ['Coffee at the souk five minutes away, with the mosque across the water. In the shade.',
+          'Back to the hotel at 11:45 for lunch and a nap. The room is yours until 9 PM.',
+          'One museum in the afternoon, slowly. The Louvre, air-conditioned, with a café in the middle.',
+          'Airport at 5:35 PM. Flight to Bangkok 9:10 PM.'],
+        why: d.hot ? 'keep me in air conditioning' : d.shortWalk ? 'you can walk 5 to 10 minutes at a time' : 'mornings out, afternoons in',
+        tl: [['8:00','Breakfast. A big glass of water each.'],['9:00','Grand Mosque, 75 minutes. Ask for the golf cart.'],['10:20','Souk Qaryat Al Beri. Iced coffee, photos from the shade.'],['11:45','Hotel. Lunch and a real nap in the air conditioning.'],['3:00','Louvre Abu Dhabi. Two hours, sitting when you want. $15 each.'],['5:35','Taxi to the airport.']] });
+    } else {
+      L.push({ date: 'Saturday 19', title: 'The white mosque.', img: 'img/grand_mosque.jpg', cost: 188,
+        one: 'Sheikh Zayed Grand Mosque at 9 AM sharp, before the heat. Free. Golf carts for seniors.',
+        bullets: ['Then indoors all day: the palace, an Emirati lunch, the Louvre museum.',
+          'It will be 100 to 105°F. Long loose clothes, a scarf for Stella, water in the bag.',
+          'Airport by 6:30 PM. Flight to Bangkok 9:10 PM.'],
+        tl: [['8:45','Taxi to the mosque, $10 to $15.'],['9:00','Grand Mosque, 90 minutes. Courtyard first.'],['10:40','Qasr Al Watan, the presidential palace. Air-conditioned. $17 each.'],['12:45','Lunch at Al Mrzab. Dates and Arabic coffee come free.'],['2:20','Louvre Abu Dhabi, open till 8:30 PM. $15 each.'],['5:20','Hotel for the bags, then the airport.']] });
+    }
+    L.push({ date: 'Sunday 20', title: 'Bangkok. Sleep first.', img: 'img/bts_skytrain.jpg', cost: 60,
+      one: 'nothing. The room is booked from Saturday night, so it is ready when you land at 6:45 AM.',
+      bullets: ['Metered taxi from the Level 1 queue, $15 to $20. Hotel by 9. Sleep till 1.',
+        'Lunch at Pier 21, the spotless $2-a-plate food court in the mall.',
+        d.acFood ? 'Dinner at Baan Khanitha: white tablecloths, air conditioning, everything mild.' : 'Dinner at Cabbages & Condoms, a lantern garden with gentle food.',
+        'Bed by 9. No food after 7 PM tonight.'],
+      why: d.acFood ? 'you prefer restaurants with air conditioning' : '' });
+  }
 
-  <!-- Day 2 -->
-  <article class="day">
-    <div class="pic"><img src="img/zayed_airport.jpg" alt=""></div>
-    <div class="head"><h2>Friday 18. Land, sleep.</h2><span class="cost">$25</span></div>
-    <p class="one"><b>The one thing:</b> a real bed. The airline pays for the hotel.</p>
-    <ul><li>Land 7:20 PM. Passport stamp at the counter, free. Ask for the assistance lane.</li><li>Taxi from the rank at the door, $15 to $27.</li><li>Say “Etihad stopover” and your surname at the hotel. Bed.</li></ul>
-  </article>
+  const medBullets = [];
+  if (d.checkup === 'neither') medBullets.push('No check-ups, so the morning is free. A slow start and a walk in the park behind the hotel.');
+  else if (d.checkup === 'me') medBullets.push('7 AM at Bumrungrad for one of you, fasting since last night. Done by early afternoon. The other one has a slow morning.');
+  else medBullets.push('7 AM at Bumrungrad, both of you, fasting since last night. Blood first, then breakfast, then the rest. Results the same afternoon.');
+  if (d.dental) {
+    if (d.implant) medBullets.push('2 PM the dental hospital. An implant cannot be finished on this trip: the post has to heal for months. They will place it or pull the tooth now, and you finish at home or next visit.');
+    else if (d.dental === 'root') medBullets.push('2 PM the dental hospital across the road. A root canal is about $520. Ask them to confirm you are safe to fly Wednesday.');
+    else if (d.dental === 'extraction') medBullets.push('2 PM the dental hospital across the road. Pulling a tooth is under $65 and takes one visit. Monday morning is better than afternoon if they can.');
+    else medBullets.push('2 PM the dental hospital across the road. The tooth is prepared today and the finished crown is fitted Wednesday morning. About $680 to $830.');
+  } else medBullets.push('2 PM the dental hospital across the road. Send them the x-rays first so they can quote a price before you fly.');
+  medBullets.push(d.slow ? 'Nothing else today. The pool, then an early dinner near the hotel.' : 'If there is energy: Jim Thompson House, teak houses and a shaded garden, $8 each. If not, the pool.');
+  L.push({ date: 'Monday 21', title: 'Hospital, dentist.', img: 'img/chao_phraya.jpg', cost: 70,
+    one: d.checkup === 'neither' ? 'the dentist. Bumrungrad is one minute from the hotel if you change your mind about the check-up.' : 'the check-ups at Bumrungrad, one minute’s walk from the hotel. Like Emory, but done in one day.',
+    bullets: medBullets,
+    why: d.implant ? 'an implant' : (d.checkup === 'neither' ? 'neither of us wants the check-up' : '') });
 
-  <!-- Day 3 -->
-  <article class="day">
-    <div class="pic"><img src="img/grand_mosque.jpg" alt=""></div>
-    <div class="head"><h2>Saturday 19. The white mosque.</h2><span class="cost">$188</span></div>
-    <p class="one"><b>The one thing:</b> Sheikh Zayed Grand Mosque at 9 AM sharp, before the heat. Free. Golf carts for seniors.</p>
-    <ul><li>Then indoors all day: the palace, an Emirati lunch, the Louvre museum.</li><li>It will be 100 to 105°F. Long loose clothes, a scarf for Stella, water in the bag.</li><li>Airport by 6:30 PM. Flight to Bangkok 9:10 PM.</li></ul>
-    <details><summary>See the day</summary><div class="body tl">
-      <div><span class="t">8:45</span><span>Taxi to the mosque, $10 to $15.</span></div>
-      <div><span class="t">9:00</span><span>Grand Mosque, 90 minutes. Courtyard first.</span></div>
-      <div><span class="t">10:40</span><span>Qasr Al Watan, the presidential palace. Air-conditioned. $17 each.</span></div>
-      <div><span class="t">12:45</span><span>Lunch at Al Mrzab. Dates and Arabic coffee come free. $14 to $27 each.</span></div>
-      <div><span class="t">2:20</span><span>Louvre Abu Dhabi, open till 8:30 PM. $15 each. Café inside.</span></div>
-      <div><span class="t">5:20</span><span>Taxi to the hotel for the bags, then the airport. Camel-milk ice cream at the Majlis café inside.</span></div>
-      <div><span class="t">Tired?</span><span>Mosque, coffee at the souk across the water, nap at the hotel till 2:30, then only the Louvre. $136.</span></div>
-    </div></details>
-  </article>
+  const bd = { rooftop: ['a rooftop table facing Wat Arun as the lights come on', 'img/wat_arun.jpg', 62],
+               cruise: ['a dinner cruise on the river with music', 'img/chao_phraya.jpg', 60],
+               chinatown: ['street food in Chinatown under the neon', 'img/yaowarat.jpg', 25],
+               quiet: ['a quiet, good restaurant near the hotel', 'img/pad_thai.jpg', 50] }[d.birthday];
+  const tueB = ['Shoulders and knees covered. Slip-on shoes. Anyone who says “the palace is closed today” is lying.'];
+  if (d.wantsMassage) tueB.push('Foot massage in the temple’s own pavilion, 30 minutes each, in the shade.');
+  tueB.push(d.hot ? 'Out of the heat 1:45 to 4 in the air-conditioned museum next door, or back at the hotel.' : 'A break out of the sun in the middle of the day.');
+  tueB.push('<b>Birthday dinner:</b> ' + bd[0] + '. Booked ahead.');
+  L.push({ date: 'Tuesday 22', title: 'The palace and the birthday.', img: 'img/wat_pho.jpg', cost: 116 + bd[2],
+    one: 'the Grand Palace at opening, then the giant reclining Buddha, then the ferry to Wat Arun. All within one square kilometre.',
+    bullets: tueB, why: d.birthday !== 'rooftop' ? 'the birthday dinner you chose' : '',
+    tl: [['7:35','Taxi app to the Grand Palace, $5 to $7.'],['8:30','Grand Palace and the Emerald Buddha. $15 each.'],['10:40','Walk 10 minutes to Wat Pho, the reclining Buddha. $9 each.'],['12:30','Lunch, air-conditioned, 100 m away.'],['1:45', d.hot ? 'Museum or hotel. Out of the sun.' : 'Museum Siam, $6 each, or a café by the pier.'],['4:00','Ferry to Wat Arun, 15 cents. Birthday photo in Thai dress, from $6.'],['5:15','Dinner: ' + bd[0] + '.']] });
 
-  <!-- Day 4 -->
-  <article class="day">
-    <div class="pic"><img src="img/bts_skytrain.jpg" alt=""></div>
-    <div class="head"><h2>Sunday 20. Bangkok. Sleep first.</h2><span class="cost">$60</span></div>
-    <p class="one"><b>The one thing:</b> nothing. The room is booked from Saturday night, so it is ready when you land at 6:45 AM.</p>
-    <ul><li>Metered taxi from the Level 1 queue, $15 to $20 all in. Hotel by 9. Sleep till 1.</li><li>Lunch at Pier 21, the spotless $2-a-plate food court in the Terminal 21 mall.</li><li>Dinner at Cabbages &amp; Condoms, a lantern garden with mild food. Bed by 9. No food after 7 PM.</li></ul>
-  </article>
+  L.push({ date: 'Wednesday 23', title: 'Crown on, fly north.', img: 'img/night_bazaar.jpg', cost: 110,
+    one: 'the 5:35 PM flight to Chiang Mai. 85 minutes, same airport, no cross-town transfer.',
+    bullets: [d.implant ? '9 AM the dentist checks the site and clears you to fly.' : '9 AM the dentist: the crown is fitted. Collect the printed check-up report on the way back.',
+      'Leave the hotel 2:30 PM. Taxi $13 to $18.',
+      'In Chiang Mai, turn left in arrivals for the official taxi counter, $5. Dinner at the clean Anusarn food court, five minutes from the hotel.'] });
 
-  <!-- Day 5 -->
-  <article class="day">
-    <div class="pic"><img src="img/chao_phraya.jpg" alt=""></div>
-    <div class="head"><h2>Monday 21. Hospital, dentist.</h2><span class="cost">$70</span></div>
-    <p class="one"><b>The one thing:</b> the check-ups at Bumrungrad, one minute’s walk from the hotel. Like Emory, but done in one day.</p>
-    <ul><li>7 AM, fasting since last night. Blood first, then breakfast, then the rest. Results the same afternoon.</li><li>2 PM the dental hospital across the road. Tooth prepared today, crown fitted Wednesday.</li><li>Dinner at Baan Khanitha, white tablecloths, air conditioning, everything can be made mild.</li></ul>
-  </article>
+  if (d.elephants) {
+    L.push({ date: 'Thursday 24', title: 'Elephants.', img: 'img/elephant_nature_park.jpg', cost: 210,
+      one: 'Elephant Nature Park, a rescue sanctuary. You walk beside them on a flat path and feed them. No riding, no shows. $77 each.',
+      bullets: ['Pick-up at 7:30, back by 2:15. Closed shoes, a hat, a light rain jacket.',
+        'Rest 2:15 to 4:30. The afternoon shower comes then anyway.',
+        '4:30 the two great Old City temples in golden light, then dinner at Huen Phen, the northern-Thai house.'],
+      why: 'yes to the elephants, even if muddy',
+      tl: [['7:30','Sanctuary minibus at the hotel.'],['9:30','Arrive. A slow hour walking with the herd, then the feeding platform.'],['12:00','Big vegetarian lunch at the park.'],['2:15','Back at the hotel. Pool, air conditioning, nap.'],['4:30','Wat Phra Singh, then Wat Chedi Luang. Monks chat at the orange tables till 6.'],['6:15','Huen Phen, 5 minutes on foot. $8 to $11 each.']] });
+  } else {
+    L.push({ date: 'Thursday 24', title: 'The mountain temple.', img: 'img/doi_suthep.jpg', cost: 56,
+      one: 'Doi Suthep, the golden temple on the mountain above the city, at 7 AM before the clouds come in.',
+      bullets: [d.noStairs ? 'The little cable car goes up the last stretch for 60 cents, so you skip all 306 steps.' : 'A cable car up the last stretch for 60 cents, or 306 steps with handrails if you fancy it.',
+        'A driver takes you up and waits, about $25 for the two of you.',
+        'Back by 10:30, then khao soi at Khun Yai. A dollar a bowl, the one every guide sends you to. Open 10 to 2 only.',
+        'Rest in the afternoon, temples at 4:30, dinner at Huen Phen.'],
+      why: d.elephants === false && A.elephants ? (A.elephants === 'no' ? 'no to the elephants' : 'the elephants only if it is easy') : '',
+      tl: [['7:00','Taxi app up the mountain, about $9.'],['7:40','Cable car up. The terrace and the city view before the cloud.'],['10:30','Back down.'],['11:15','Khao Soi Khun Yai. $1 a bowl.'],['12:15','Hotel. Rest until 4:30.'],['4:30','Wat Phra Singh and Wat Chedi Luang in golden light.'],['6:15','Huen Phen. $8 to $11 each.']] });
+  }
 
-  <!-- Day 6 -->
-  <article class="day">
-    <div class="pic"><img src="img/wat_pho.jpg" alt=""></div>
-    <div class="head"><h2>Tuesday 22. The palace and the birthday.</h2><span class="cost">$178</span></div>
-    <p class="one"><b>The one thing:</b> the Grand Palace at opening, then the giant reclining Buddha, then the ferry to Wat Arun. All within one square kilometre.</p>
-    <ul><li>Shoulders and knees covered. Slip-on shoes. Anyone who says “the palace is closed today” is lying.</li><li>Foot massage in the temple pavilion. Out of the heat 2 to 4 in the museum.</li><li><b>Birthday dinner</b> on the Supanniga rooftop facing Wat Arun as the lights come on. Mooncakes for the cake.</li></ul>
-    <details><summary>See the day</summary><div class="body tl">
-      <div><span class="t">7:35</span><span>Taxi app to the Grand Palace, $5 to $7.</span></div>
-      <div><span class="t">8:30</span><span>Grand Palace and the Emerald Buddha. $15 each.</span></div>
-      <div><span class="t">10:40</span><span>Walk 10 minutes to Wat Pho. $9 each. Foot massage $8 to $16 each.</span></div>
-      <div><span class="t">12:30</span><span>Lunch downstairs at Supanniga, air-conditioned.</span></div>
-      <div><span class="t">1:45</span><span>Museum Siam, air-conditioned, $6 each. Or back to the hotel to rest.</span></div>
-      <div><span class="t">4:00</span><span>Ferry to Wat Arun, 15 cents. Thai-dress birthday portrait, from $6.</span></div>
-      <div><span class="t">5:15</span><span>Rooftop table, booked. Sunset 6:15. $62 for two.</span></div>
-      <div><span class="t">Plan B</span><span>Chinatown instead: T&amp;K Seafood at 5 PM, then the neon walk. $25.</span></div>
-    </div></details>
-  </article>
+  L.push({ date: 'Friday 25', title: 'A quiet morning, then home.', img: 'img/wat_chedi_luang.jpg', cost: 40,
+    one: 'at 6:40 AM, giving rice and fruit to the monks as they pass the Three Kings square. Then a candle at Wat Chedi Luang for a first-trip wish. Under $5.',
+    bullets: [d.wantsMarkets ? 'Or, for Cajetan: Warorot market, open since 5 AM. Dried mango, herb sausage, a $3 scarf.' : 'Photos in the empty square at first light. This is the picture people remember.',
+      'Late check-out 11:30. Car to the airport 11:20, $11.',
+      'Thai Airways 1:40 PM to Bangkok, then six hours there before the 9 PM night flight.'] });
 
-  <!-- Day 7 -->
-  <article class="day">
-    <div class="pic"><img src="img/night_bazaar.jpg" alt=""></div>
-    <div class="head"><h2>Wednesday 23. Crown on, fly north.</h2><span class="cost">$110</span></div>
-    <p class="one"><b>The one thing:</b> the 5:35 PM flight to Chiang Mai, 85 minutes, same airport.</p>
-    <ul><li>9 AM dentist: the crown is fitted. Collect the printed check-up report.</li><li>Leave the hotel 2:30 PM. Taxi $13 to $18.</li><li>In Chiang Mai, turn left in arrivals for the official taxi counter, $5. Dinner at the clean Anusarn food court.</li></ul>
-  </article>
+  L.push({ date: 'Saturday 26', title: 'Home.', img: 'img/zayed_airport.jpg', cost: d.layover === 'terminal' ? 0 : d.layover === 'lounge' ? 100 : 125,
+    one: d.layover === 'terminal' ? 'the wait. Eight hours in the Abu Dhabi terminal from 12:30 AM. It is new and quiet, but they are chairs.' : d.layover === 'lounge' ? 'a lounge with recliners, showers and food, $50 each, from 12:30 AM.' : 'six hours in a real bed at the hotel inside the Abu Dhabi terminal, 12:30 to 9 AM.',
+    bullets: ['9:20 AM flight to Atlanta. 16 hours, lands 4:30 PM the same day.',
+      'Open the free Mobile Passport Control app before landing. It skips most of the queue.',
+      'Home by about 6:30 PM.'],
+    why: d.layover === 'terminal' ? 'rest in the terminal, free' : d.layover === 'lounge' ? 'a lounge with recliners' : 'a room inside the airport' });
+  return L;
+}
 
-  <!-- Day 8 -->
-  <article class="day">
-    <div class="pic"><img src="img/elephant_nature_park.jpg" alt=""></div>
-    <div class="head"><h2>Thursday 24. Elephants.</h2><span class="cost">$210</span></div>
-    <p class="one"><b>The one thing:</b> Elephant Nature Park, a rescue sanctuary. You walk beside them on a flat path and feed them. No riding, no shows. $77 each, pick-up at 7:30, back by 2:15.</p>
-    <ul><li>Rest 2:15 to 4:30. The afternoon shower comes then anyway.</li><li>4:30 the two great Old City temples in golden light, then dinner at Huen Phen, the northern-Thai house.</li><li>Rather see the mountain? Doi Suthep at 7 AM, cable car up (60 cents), khao soi at 11. $25 instead of $154.</li></ul>
-    <details><summary>See the day</summary><div class="body tl">
-      <div><span class="t">7:30</span><span>Sanctuary minibus at the hotel. Closed shoes, hat, rain jacket.</span></div>
-      <div><span class="t">2:15</span><span>Back. Pool, air conditioning, nap.</span></div>
-      <div><span class="t">4:30</span><span>Taxi app $2 to Wat Phra Singh. Walk 10 minutes to Wat Chedi Luang. Monks chat at the orange tables till 6.</span></div>
-      <div><span class="t">6:15</span><span>Huen Phen, 5 minutes on foot. Gentle pork curry, herb sausage. $8 to $11 each.</span></div>
-      <div><span class="t">8:00</span><span>Optional: Night Bazaar lanterns and a $7 foot massage. Or bed.</span></div>
-    </div></details>
-  </article>
-
-  <!-- Day 9 -->
-  <article class="day">
-    <div class="pic"><img src="img/wat_chedi_luang.jpg" alt=""></div>
-    <div class="head"><h2>Friday 25. A quiet morning, then home.</h2><span class="cost">$40</span></div>
-    <p class="one"><b>The one thing:</b> at 6:40 AM, give rice and fruit to the monks passing the Three Kings square. Then light a candle at Wat Chedi Luang for a first-trip wish. Under $5.</p>
-    <ul><li>Late check-out 11:30. Car to the airport 11:20, $11.</li><li>Thai Airways 1:40 PM to Bangkok. Six hours there, then the 9 PM night flight to Abu Dhabi.</li></ul>
-  </article>
-
-  <!-- Day 10 -->
-  <article class="day">
-    <div class="pic"><img src="img/zayed_airport.jpg" alt=""></div>
-    <div class="head"><h2>Saturday 26. Home.</h2><span class="cost">$125</span></div>
-    <p class="one"><b>The one thing:</b> six hours in a real bed at the hotel inside the Abu Dhabi terminal, 12:30 to 9 AM. The best $125 in the plan.</p>
-    <ul><li>9:20 AM flight to Atlanta, 16 hours, lands 4:30 PM the same day.</li><li>Open the free Mobile Passport Control app before landing. Home by 6:30.</li></ul>
-  </article>
-
-  <hr class="divider">
-
-  <details>
-    <summary>Where you sleep</summary>
-    <div class="body hlist">
-      <div class="h"><b>Bangkok: Ad Lib, $85 a night</b><span>Rated 9.1. One minute to the hospital. Pool. Free tuk-tuk to the train.</span></div>
-      <div class="h"><b>Bangkok, bigger: DoubleTree by Hilton, $105</b><span>Rated 8.8. Large rooms, big breakfast, same street as the dentist.</span></div>
-      <div class="h"><b>Chiang Mai: THEE Vijit Lanna, $68</b><span>Elevator, two pools, at the Old City gate. Sends a car to the airport.</span></div>
-      <div class="h"><b>Chiang Mai, nicer: Meliá, $112</b><span>Rated 9.0. Rooftop pool, very quiet rooms.</span></div>
-      <div class="h"><b>Abu Dhabi: the free Etihad hotel</b><span>Ask for Aloft. If only basic ones show, Khalidiya Palace, $99, rated 9.0.</span></div>
-    </div>
-  </details>
-  <details>
-    <summary>Things to skip</summary>
-    <div class="body"><ul class="dots">
-      <li>Tuk-tuk rides. A photo in a parked one, yes.</li>
-      <li>Anyone saying a temple is closed, and any shop a driver takes you to.</li>
-      <li>The far-away floating market. Two hours each way in boat fumes.</li>
-      <li>Elephant shows and tiger selfies.</li>
-      <li>The river dinner cruise. Same view from the rooftop table, sitting still.</li>
-      <li>The cash machine’s offer to charge in dollars. Always choose baht.</li>
-    </ul></div>
-  </details>
-  <details>
-    <summary>Book by these dates</summary>
-    <div class="body"><ul class="dots">
-      <li><b>First:</b> decide the route. Then Etihad on etihad.com, “Value” fare (suitcases included), stopover added the same day. Insurance the same week.</li>
-      <li><b>By 8 September:</b> the rooftop birthday table and the elephant sanctuary. Both sell out.</li>
-      <li><b>By 12 September:</b> the check-ups. Email the dentist the US x-rays now for a written price.</li>
-      <li><b>Two weeks out:</b> hotels with free cancellation. Bangkok from Saturday night.</li>
-      <li><b>17 to 19 September:</b> the free Thailand arrival form online. Vince can do it.</li>
-    </ul></div>
-  </details>
-</main>
+function render() {
+  const list = days(D);
+  let h = '<header style="display:grid;gap:10px"><h1>' + (D.answered ? 'Your plan.' : 'Nine days, one thing a day.') + '</h1><p class="small">Prices are for both of you. Every day has a rest built in. Tap “See the day” for the times.</p></header>';
+  h += personalBanner(A);
+  if (!D.skipAUH) h += '<section class="notice"><p>Days 2, 3 and 10 are in Abu Dhabi, which the US government currently says to “reconsider”. The route can avoid the Middle East for about $280 more. <a href="guide.html#safety">The three choices.</a></p></section>';
+  list.forEach(d => {
+    h += '<article class="day"><div class="pic"><img src="' + d.img + '" alt=""></div>';
+    h += '<div class="head"><h2>' + esc(d.date) + '. ' + esc(d.title) + '</h2><span class="cost">' + money(d.cost) + '</span></div>';
+    if (d.why) h += why(esc(d.why));
+    h += '<p class="one"><b>The one thing:</b> ' + d.one + '</p>';
+    h += '<ul>' + d.bullets.map(b => '<li>' + b + '</li>').join('') + '</ul>';
+    if (d.tl) h += '<details><summary>See the day</summary><div class="body tl">' + d.tl.map(r => '<div><span class="t">' + r[0] + '</span><span>' + r[1] + '</span></div>').join('') + '</div></details>';
+    h += '</article>';
+  });
+  h += '<hr style="border:0;border-top:1px solid var(--line);margin:0">';
+  const bkkHotel = D.frugal && !D.nearHospital ? 'adlib3' : (D.comfort && D.wantsPool ? 'doubletree' : 'adlib');
+  const hotels = {
+    adlib: ['Bangkok: Ad Lib, $85 a night', 'Rated 9.1. One minute to the hospital. Pool. Free tuk-tuk to the train.'],
+    adlib3: ['Bangkok: Ad Lib, 3 nights, $85 a night', 'Rated 9.1, one minute to the hospital. You arrive Sunday morning before the room is ready, so there is a wait in the lobby.'],
+    doubletree: ['Bangkok: DoubleTree by Hilton, $105', 'Rated 8.8. Big rooms, big breakfast, a pool, same street as the dentist.']
+  }[bkkHotel];
+  const cnxHotel = D.comfort && D.wantsQuiet ? ['Chiang Mai: Meliá, $112', 'Rated 9.0. Rooftop pool, very quiet rooms.'] : ['Chiang Mai: THEE Vijit Lanna, $68', 'Elevator, two pools, at the Old City gate. Sends a car to the airport.'];
+  h += '<details open><summary>Where you sleep</summary><div class="body hlist">';
+  h += '<div class="h"><b>' + hotels[0] + '</b><span>' + hotels[1] + '</span></div>';
+  h += '<div class="h"><b>' + cnxHotel[0] + '</b><span>' + cnxHotel[1] + '</span></div>';
+  if (!D.skipAUH) h += '<div class="h"><b>Abu Dhabi: the free Etihad hotel</b><span>Ask for Aloft. If only basic ones show, Khalidiya Palace, $99, rated 9.0.</span></div>';
+  h += '</div></details>';
+  h += '<details><summary>Things to skip</summary><div class="body"><ul class="dots"><li>Tuk-tuk rides. A photo in a parked one, yes.</li><li>Anyone saying a temple is closed, and any shop a driver takes you to.</li><li>The far-away floating market. Two hours each way in boat fumes.</li><li>Elephant shows and tiger selfies.</li>' + (D.birthday === 'cruise' ? '' : '<li>The river dinner cruise. The same view from a rooftop table, sitting still.</li>') + '<li>The cash machine’s offer to charge in dollars. Always choose baht.</li></ul></div></details>';
+  h += '<details><summary>Book by these dates</summary><div class="body"><ul class="dots"><li><b>First:</b> decide the route. Then Etihad on etihad.com, “Value” fare so suitcases are included. Insurance the same week.</li>' + (D.birthday === 'rooftop' ? '<li><b>By 8 September:</b> the rooftop birthday table. It goes a month out.</li>' : '') + (D.elephants ? '<li><b>By 8 September:</b> the elephant sanctuary. It sells out.</li>' : '') + (D.checkup !== 'neither' ? '<li><b>By 12 September:</b> the check-ups.</li>' : '') + '<li><b>Now:</b> email the dentist the US x-rays for a written price.</li>' + (D.passportCheck ? '<li><b>Today:</b> check both passport expiry dates. You said you were not sure.</li>' : '') + '<li><b>17 to 19 September:</b> the free Thailand arrival form. Vince can do it.</li></ul></div></details>';
+  h += '<a class="btn big" href="costs.html" style="margin-top:8px">See what it costs</a>';
+  document.getElementById('view').innerHTML = h;
+  markStamp(A);
+}
+render();
+</script>
 </body>
 </html>

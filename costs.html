@@ -14,9 +14,8 @@
   .group { display: grid; gap: 10px; }
   .group h2 { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 24px; }
   .group h2 span { font-family: "Atkinson Hyperlegible", sans-serif; font-size: 17px; color: var(--ink-2); font-weight: 400; white-space: nowrap; }
-  .group .off { opacity: .45; }
+  .group.off { opacity: .45; }
   .tag { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; margin-left: 6px; vertical-align: middle; background: var(--accent-wash); color: var(--accent-2); }
-  .tag.frugal { background: #FFF3D6; color: #7A5410; }
   .meter { background: var(--bg-2); border-radius: var(--r); padding: 14px 18px; font-size: 18px; }
   .meter b { font-family: "Outfit", sans-serif; font-weight: 600; }
 </style>
@@ -26,128 +25,86 @@
 <main class="page">
   <header style="display:grid;gap:10px">
     <h1>Tap the choices. Watch the total.</h1>
-    <p class="small">Every price is for the two of you. Blue tags are the comfortable choice. Yellow tags save money. Your choices are saved on this device.</p>
+    <p class="small">Every price is for the two of you. The ticked ones come from your answers. Tap anything to change it.</p>
   </header>
-
+  <div id="persBox"></div>
   <div class="total"><span class="k">Total for both</span><span class="v" id="totalV">$0</span><span class="vs" id="totalVs"></span></div>
   <div class="meter" id="saveline"></div>
   <div id="groups" style="display:grid;gap:36px"></div>
-
   <section style="display:grid;gap:12px">
     <h2>Send your choices to Vince</h2>
     <button class="btn big" id="sendBtn" type="button">Send to Vince</button>
     <p class="small" id="sendStatus">Nothing is booked by sending. Vince reads your choices and books with you.</p>
+    <a class="btn secondary big" href="plan.html">See your plan</a>
   </section>
 </main>
 <div class="toast" id="toast" role="status"></div>
-
+<script src="trip.js"></script>
 <script>
-const BUDGET = 3500;
-const G = [
-  { id: 'flights', title: 'The big flights', mode: 'one',
-    o: [ { id: 'etihad', l: 'Etihad through Abu Dhabi', s: 'Cheapest. One free hotel night. Under a US travel warning.', p: 1921, tag: 'rec', img: 'img/grand_mosque.jpg' },
-         { id: 'united', l: 'United through San Francisco', s: 'Avoids the Middle East. Two stops, 27 hours. Bags included.', p: 2198, img: 'img/bts_skytrain.jpg' } ] },
-  { id: 'bags', title: 'Suitcases on Etihad', mode: 'one',
-    o: [ { id: 'value', l: 'Value fare, two suitcases each', s: 'About $280 more than the basic fare.', p: 280, tag: 'rec' },
-         { id: 'carryon', l: 'Basic fare, carry-on only', s: 'Nine days with a small bag each. Not realistic.', p: 0, tag: 'frugal' } ] },
-  { id: 'stopover', title: 'The night in Abu Dhabi', mode: 'one',
-    o: [ { id: 'free', l: 'The free Etihad hotel', s: 'Ask for Aloft, a modern 4-star. Room only. $14 in fees.', p: 14, tag: 'rec' },
-         { id: 'rayhaan', l: 'Pick our own: Khalidiya Palace', s: '5-star on the beach, rated 9.0.', p: 99 },
-         { id: 'skip', l: 'Skip the city, fly straight through', s: 'Two hours in the airport.', p: 0 } ] },
-  { id: 'domestic', title: 'Bangkok to Chiang Mai and back', mode: 'one',
-    o: [ { id: 'mix', l: 'Vietjet there, Thai Airways back', s: 'Bags included on the way back, when it matters.', p: 237, tag: 'rec' },
-         { id: 'vietjet', l: 'Vietjet both ways', s: 'Pay for bags at booking.', p: 200, tag: 'frugal' } ] },
-  { id: 'bkk', title: 'Bangkok hotel, 4 nights', mode: 'one',
-    o: [ { id: 'adlib', l: 'Ad Lib Bangkok', s: 'Rated 9.1. One minute to the hospital. Pool.', p: 340, tag: 'rec', img: 'img/chao_phraya.jpg' },
-         { id: 'doubletree', l: 'DoubleTree by Hilton', s: 'Rated 8.8. Big rooms, big breakfast, same street as the dentist.', p: 420 },
-         { id: 'adlib3', l: 'Ad Lib, 3 nights', s: 'Saves the Saturday night. You wait in the lobby for the room on Sunday morning.', p: 255, tag: 'frugal' } ] },
-  { id: 'cnx', title: 'Chiang Mai hotel, 2 nights', mode: 'one',
-    o: [ { id: 'vijit', l: 'THEE Vijit Lanna', s: 'Elevator, two pools, at the Old City gate.', p: 139, tag: 'rec', img: 'img/wat_phra_singh.jpg' },
-         { id: 'melia', l: 'Meliá Chiang Mai', s: 'Rated 9.0. Rooftop pool, very quiet.', p: 224 } ] },
-  { id: 'food', title: 'Food for six days', mode: 'one',
-    o: [ { id: 'mixfood', l: 'Stalls at lunch, restaurants at dinner', s: 'About $40 a day.', p: 240, tag: 'rec', img: 'img/pad_thai.jpg' },
-         { id: 'ac', l: 'Restaurants with air conditioning', s: 'About $60 a day.', p: 360 },
-         { id: 'street', l: 'Mostly markets and stalls', s: 'About $25 a day.', p: 150, tag: 'frugal' } ] },
-  { id: 'bkkdo', title: 'Bangkok', mode: 'many',
-    o: [ { id: 'palace', l: 'Grand Palace, Wat Pho, Wat Arun', s: 'Tickets and the ferry.', p: 50, on: true, img: 'img/wat_pho.jpg' },
-         { id: 'watpho_massage', l: 'Foot massage at Wat Pho', s: '30 minutes each, in the shade.', p: 24, on: true },
-         { id: 'supanniga', l: 'Birthday: rooftop table facing Wat Arun', s: 'The $62 table minimum is the dinner.', p: 62, on: true, img: 'img/wat_arun.jpg' },
-         { id: 'chinatown', l: 'Birthday: Chinatown street food instead', s: 'Loud, bright, hot.', p: 25, img: 'img/yaowarat.jpg' },
-         { id: 'costume', l: 'Thai-dress portrait at Wat Arun', s: 'The birthday photo.', p: 12, on: true },
-         { id: 'museumsiam', l: 'Museum Siam, the hot hours', s: 'Air-conditioned, next to the palace.', p: 12, on: true } ] },
-  { id: 'cnxdo', title: 'Chiang Mai', mode: 'many',
-    o: [ { id: 'elephants', l: 'Elephant Nature Park, half day', s: 'Rescued elephants, flat path, no riding. $77 each.', p: 154, on: true, img: 'img/elephant_nature_park.jpg' },
-         { id: 'suthep', l: 'Doi Suthep with a driver', s: 'The mountain temple. Cable car up.', p: 30, on: true, img: 'img/doi_suthep.jpg' },
-         { id: 'cnxmassage', l: 'Thai massage, one hour each', s: '', p: 25, on: true } ] },
-  { id: 'auh', title: 'The Abu Dhabi day', mode: 'many',
-    o: [ { id: 'louvre', l: 'Louvre Abu Dhabi', s: 'Air-conditioned, world art.', p: 30, on: true, img: 'img/louvre_ad.jpg' },
-         { id: 'qasr', l: 'Qasr Al Watan palace', s: 'Gold and marble, air-conditioned.', p: 30, on: true, img: 'img/qasr_al_watan.jpg' },
-         { id: 'auhtaxi', l: 'Taxis and meals for the day', s: '', p: 115, on: true } ] },
-  { id: 'transport', title: 'Getting around Thailand', mode: 'one',
-    o: [ { id: 'mixtx', l: 'Skytrain, boats, taxi app when tired', s: 'Includes the airport rides.', p: 100, tag: 'rec' },
-         { id: 'taxi', l: 'Taxi app for everything', s: 'Door to door.', p: 160 } ] },
-  { id: 'phone', title: 'Phone service', mode: 'one',
-    o: [ { id: 'esim1', l: 'One eSIM, shared', s: 'Dad’s phone shares its internet with Mom’s.', p: 25, tag: 'frugal' },
-         { id: 'esim2', l: 'One eSIM each', s: 'Both phones work on their own.', p: 50, tag: 'rec' },
-         { id: 'roam', l: 'Our US plan abroad', s: 'About $12 a day per phone.', p: 200 } ] },
-  { id: 'insurance', title: 'Travel insurance', mode: 'one',
-    o: [ { id: 'ins', l: 'Yes', s: 'Medical and a flight home if needed. Medicare covers nothing abroad.', p: 200, tag: 'rec' },
-         { id: 'noins', l: 'No', s: 'Not recommended at 70.', p: 0 } ] },
-  { id: 'layover', title: 'The 8-hour night at Abu Dhabi airport, going home', mode: 'one',
-    o: [ { id: 'airhotel', l: 'A room inside the terminal', s: 'A real bed for six hours.', p: 125, tag: 'rec' },
-         { id: 'wait', l: 'Rest in the terminal', s: 'Free. Chairs at 2 AM.', p: 0, tag: 'frugal' } ] },
-  { id: 'misc', title: 'Odds and ends', mode: 'many',
-    o: [ { id: 'tips', l: 'Tips, snacks, small gifts', s: '', p: 60, on: true },
-         { id: 'buffer', l: 'A 10% cushion for surprises', s: 'Money you probably bring home.', p: 0, dyn: 'buffer' } ] },
-  { id: 'medical', title: 'Medical, outside the $3,500', mode: 'many', outside: true,
-    o: [ { id: 'chk_bkh', l: 'Check-ups for both at Bangkok Hospital', s: 'The version built for your age. $969 him, $1,077 her.', p: 2046, on: true, tag: 'rec' },
-         { id: 'chk_70', l: 'Check-ups for both at Bumrungrad', s: 'Same tests, walking distance, more expensive. $1,412 him, $1,422 her.', p: 2834 },
-         { id: 'chk_basic', l: 'Basic check-ups for both at Bumrungrad', s: 'Skips PSA, mammogram, bone density. $500 him, $637 her.', p: 1137 },
-         { id: 'dental_crown', l: 'Dad’s crown', s: 'Two visits. 2-year warranty.', p: 677, on: true },
-         { id: 'dental_rct', l: 'Dad’s root canal instead', s: 'The dentist decides if flying two days later is fine.', p: 523 } ] }
-];
-const STORE = 'ptrip.costs.v2';
-let sel = {}; try { sel = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) {}
-G.forEach(g => { if (sel[g.id] == null) sel[g.id] = g.mode === 'one' ? (g.o.find(o => o.tag === 'rec')?.id || g.o[0].id) : g.o.filter(o => o.on).map(o => o.id); });
-const save = () => { try { localStorage.setItem(STORE, JSON.stringify(sel)); } catch (e) {} };
-const money = n => '$' + Math.round(n).toLocaleString('en-US');
+const A = getAnswers(), D = decide(A), G = CATALOG;
+const seeded = costChoices(D);
+const nowStamp = stamp(A);
+let sel = null;
+try { const saved = JSON.parse(localStorage.getItem(COSTS_KEY) || 'null'); if (saved && localStorage.getItem('ptrip.coststamp') === nowStamp) sel = saved; } catch (e) {}
+if (!sel) sel = JSON.parse(JSON.stringify(seeded));
+G.forEach(g => { if (sel[g.id] == null) sel[g.id] = g.mode === 'one' ? g.o[0].id : []; });
+const save = () => { try { localStorage.setItem(COSTS_KEY, JSON.stringify(sel)); localStorage.setItem('ptrip.coststamp', nowStamp); } catch (e) {} };
+const money = fmtMoney;
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const etihad = () => sel.flights === 'etihad';
-function offGroup(id) { return (['bags', 'stopover', 'layover'].includes(id) && !etihad()) || (id === 'auh' && (!etihad() || sel.stopover === 'skip')); }
-function groupTotal(g, base) {
-  if (offGroup(g.id)) return 0;
-  if (g.mode === 'one') { const o = g.o.find(o => o.id === sel[g.id]); return o ? o.p : 0; }
-  return g.o.filter(o => sel[g.id].includes(o.id)).reduce((s, o) => s + (o.dyn === 'buffer' ? base * 0.10 : o.p), 0);
+const off = id => groupOff(id, sel);
+const gTotal = (g, base) => groupTotal(g, sel, base);
+const isSeeded = (g, o) => { const v = seeded[g.id]; return g.mode === 'one' ? v === o.id : Array.isArray(v) && v.includes(o.id); };
+function seededTotal() { const keep = sel; sel = seeded; const r = totals(sel).inside; sel = keep; return r; }
+function reasonFor(id) {
+  return ({
+    flights: D.skipAUH ? '' : '',
+    stopover: D.skipAUH ? 'no, straight through to Bangkok' : (A.stopover === 'yes' ? 'yes, one night in Abu Dhabi' : ''),
+    bkk: D.nearHospital ? 'walking distance to the hospital matters' : (D.comfort && D.wantsPool ? 'you would pay more for the nicer place, and you want a pool' : (D.frugal ? 'you would rather save it for food and outings' : '')),
+    cnx: D.comfort && D.wantsQuiet ? 'quiet at night matters' : '',
+    food: D.acFood ? 'you prefer restaurants with air conditioning' : (D.streetFood ? 'yes, take me to the night market' : (D.frugal ? 'you would rather save it' : '')),
+    transport: D.noStairs ? 'please avoid stairs' : (D.hot ? 'keep me in air conditioning' : ''),
+    phone: D.tmobile ? 'you are with T-Mobile, so this is already included' : (D.phoneUnsure ? 'you are not sure which phone you have' : ''),
+    layover: A.layover_home ? 'what you chose for the night at the airport' : '',
+    cnxdo: D.elephants ? 'yes to the elephants' : (A.elephants ? 'the elephants only if it is easy' : ''),
+    bkkdo: A.birthday ? 'the birthday dinner you chose' : '',
+    medical: (A.checkup || A.dental_type) ? 'what you said about the check-up and the dentist' : '',
+    auh: D.lowEnergyAUH ? 'you would rather take the Abu Dhabi day slowly' : ''
+  })[id] || '';
 }
-function compute() {
-  let base = 0; G.filter(g => !g.outside && g.id !== 'misc').forEach(g => { base += groupTotal(g); });
-  const inside = base + groupTotal(G.find(g => g.id === 'misc'), base);
-  return { inside, outside: groupTotal(G.find(g => g.id === 'medical')), base };
-}
-function recommended() { const keep = sel; sel = {}; G.forEach(g => { sel[g.id] = g.mode === 'one' ? (g.o.find(o => o.tag === 'rec')?.id || g.o[0].id) : g.o.filter(o => o.on).map(o => o.id); }); const r = compute().inside; sel = keep; return r; }
 function render() {
-  const { inside, outside, base } = compute();
+  const { inside, outside, base } = totals(sel);
   document.getElementById('totalV').textContent = money(inside);
   const diff = BUDGET - inside;
   document.getElementById('totalVs').textContent = (diff >= 0 ? money(diff) + ' under the $3,500 budget' : money(-diff) + ' over the $3,500 budget') + ' · medical ' + money(outside) + ' on top';
-  const s = recommended() - inside;
-  document.getElementById('saveline').innerHTML = s > 0 ? 'Dad’s meter: <b>' + money(s) + ' cheaper</b> than the comfortable set-up.' : (s < 0 ? '<b>' + money(-s) + ' more</b> than the comfortable set-up. Fine if it buys comfort.' : 'These are the comfortable choices. Tap anything to change it.');
+  const s = seededTotal() - inside;
+  document.getElementById('saveline').innerHTML = !D.answered
+    ? 'These are the standard choices. <a href="questions.html">Answer the questions</a> and they change to match you.'
+    : (s > 0 ? '<b>' + money(s) + ' cheaper</b> than what your answers picked.' : (s < 0 ? '<b>' + money(-s) + ' more</b> than what your answers picked.' : 'This is what your answers picked. Tap anything to change it.'));
   let h = '';
   G.forEach(g => {
-    const off = offGroup(g.id);
-    h += '<section class="group' + (off ? ' off' : '') + '"><h2>' + esc(g.title) + '<span>' + (off ? 'not counted' : (g.outside ? 'outside · ' : '') + money(groupTotal(g, base))) + '</span></h2><div class="options">';
+    const isOff = off(g.id), rsn = reasonFor(g.id);
+    h += '<section class="group' + (isOff ? ' off' : '') + '"><h2>' + esc(g.title) + '<span>' + (isOff ? 'not counted' : (g.outside ? 'outside · ' : '') + money(gTotal(g, base))) + '</span></h2>';
+    if (rsn && !isOff && D.answered) h += why(esc(rsn));
+    h += '<div class="options">';
     g.o.forEach(o => {
-      const on = g.mode === 'one' ? sel[g.id] === o.id : sel[g.id].includes(o.id);
+      const on = g.mode === 'one' ? sel[g.id] === o.id : (sel[g.id] || []).includes(o.id);
       const price = o.dyn === 'buffer' ? money(base * 0.10) : (o.p === 0 ? 'Free' : money(o.p));
-      h += '<button type="button" class="opt priced' + (g.mode === 'many' ? ' check' : '') + '" role="' + (g.mode === 'one' ? 'radio' : 'checkbox') + '" aria-checked="' + on + '" data-g="' + g.id + '" data-o="' + o.id + '"><span class="box"></span><span><span class="lbl">' + esc(o.l) + (o.tag === 'rec' ? '<span class="tag">Comfort</span>' : '') + (o.tag === 'frugal' ? '<span class="tag frugal">Saves</span>' : '') + '</span>' + (o.s ? '<span class="sub">' + esc(o.s) + '</span>' : '') + '</span><span class="price">' + price + '</span></button>';
+      h += '<button type="button" class="opt priced' + (g.mode === 'many' ? ' check' : '') + '" role="' + (g.mode === 'one' ? 'radio' : 'checkbox') + '" aria-checked="' + on + '" data-g="' + g.id + '" data-o="' + o.id + '"><span class="box"></span><span><span class="lbl">' + esc(o.l) + (D.answered && isSeeded(g, o) ? '<span class="tag">Your answers</span>' : '') + '</span>' + (o.s ? '<span class="sub">' + esc(o.s) + '</span>' : '') + '</span><span class="price">' + price + '</span></button>';
     });
     h += '</div></section>';
   });
   document.getElementById('groups').innerHTML = h;
+  document.getElementById('persBox').innerHTML = personalBanner(A);
+  markStamp(A);
   document.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
     const g = G.find(x => x.id === b.dataset.g), o = b.dataset.o;
     if (g.mode === 'one') sel[g.id] = o;
-    else { const arr = sel[g.id].slice(); const i = arr.indexOf(o); if (i >= 0) arr.splice(i, 1); else { arr.push(o); const bday = ['supanniga', 'chinatown']; if (bday.includes(o)) bday.filter(x => x !== o).forEach(x => { const j = arr.indexOf(x); if (j >= 0) arr.splice(j, 1); }); const chk = ['chk_bkh', 'chk_70', 'chk_basic']; if (chk.includes(o)) chk.filter(x => x !== o).forEach(x => { const j = arr.indexOf(x); if (j >= 0) arr.splice(j, 1); }); const den = ['dental_crown', 'dental_rct']; if (den.includes(o)) den.filter(x => x !== o).forEach(x => { const j = arr.indexOf(x); if (j >= 0) arr.splice(j, 1); }); } sel[g.id] = arr; }
+    else {
+      const arr = (sel[g.id] || []).slice(), i = arr.indexOf(o);
+      if (i >= 0) arr.splice(i, 1);
+      else { arr.push(o); EXCLUSIVE.forEach(set => { if (set.includes(o)) set.filter(x => x !== o).forEach(x => { const j = arr.indexOf(x); if (j >= 0) arr.splice(j, 1); }); }); }
+      sel[g.id] = arr;
+    }
     save(); const y = window.scrollY; render(); window.scrollTo(0, y);
   }));
 }
@@ -155,14 +112,17 @@ render();
 const toastEl = document.getElementById('toast');
 function toast(m) { toastEl.textContent = m; toastEl.classList.add('show'); setTimeout(() => toastEl.classList.remove('show'), 2000); }
 document.getElementById('sendBtn').addEventListener('click', async () => {
-  const btn = document.getElementById('sendBtn'), st = document.getElementById('sendStatus'); btn.disabled = true; st.textContent = 'Sending…';
-  const { inside, outside, base } = compute(); const answers = {}, labels = {};
-  G.forEach(g => { answers['cost_' + g.id] = offGroup(g.id) ? 'not counted' : (g.mode === 'one' ? g.o.find(o => o.id === sel[g.id])?.l : g.o.filter(o => sel[g.id].includes(o.id)).map(o => o.l)); labels['cost_' + g.id] = g.title + ' (' + money(groupTotal(g, base)) + ')'; });
-  answers.total_inside = money(inside); labels.total_inside = 'Total for both'; answers.total_medical = money(outside); labels.total_medical = 'Medical, outside';
-  let who = 'unknown'; try { who = (JSON.parse(localStorage.getItem('ptrip.answers.v2') || localStorage.getItem('ptrip.answers.v1') || '{}') || {}).who || 'unknown'; } catch (e) {}
+  const btn = document.getElementById('sendBtn'), st = document.getElementById('sendStatus');
+  btn.disabled = true; st.textContent = 'Sending…';
+  const { inside, outside, base } = totals(sel), answers = {}, labels = {};
+  G.forEach(g => { answers['cost_' + g.id] = off(g.id) ? 'not counted' : (g.mode === 'one' ? (g.o.find(o => o.id === sel[g.id]) || {}).l : g.o.filter(o => (sel[g.id] || []).includes(o.id)).map(o => o.l)); labels['cost_' + g.id] = g.title + ' (' + money(gTotal(g, base)) + ')'; });
+  answers.total_inside = money(inside); labels.total_inside = 'Total for both';
+  answers.total_medical = money(outside); labels.total_medical = 'Medical, outside';
   try {
-    const body = new URLSearchParams(); body.set('payload', JSON.stringify({ token: 'ptrip_2026_kx7Qm9', who, section: 'costs', answers, labels, sentAt: new Date().toISOString() }));
-    const r = await fetch('https://n8n.americanlifeteam.com/webhook/parents-trip-answers', { method: 'POST', body }); const j = await r.json().catch(() => ({}));
+    const body = new URLSearchParams();
+    body.set('payload', JSON.stringify({ token: 'ptrip_2026_kx7Qm9', who: A.who || 'unknown', section: 'costs', answers, labels, sentAt: new Date().toISOString() }));
+    const r = await fetch('https://n8n.americanlifeteam.com/webhook/parents-trip-answers', { method: 'POST', body });
+    const j = await r.json().catch(() => ({}));
     if (r.ok && j.ok) { st.textContent = 'Sent. Vince has your choices.'; btn.textContent = 'Sent'; toast('Sent to Vince'); } else throw new Error(j.error || ('HTTP ' + r.status));
   } catch (e) { st.textContent = 'It did not go through (' + e.message + '). Try again in a minute.'; btn.disabled = false; }
 });

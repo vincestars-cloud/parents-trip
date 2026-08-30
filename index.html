@@ -18,8 +18,10 @@
     </div>
   </section>
 
+  <div id="persBox"></div>
+
   <nav class="tiles" aria-label="Sections">
-    <a class="tile" href="questions.html"><img src="img/pad_thai.jpg" alt=""><div class="t"><h3>1. Answer the questions</h3><p>How you like to fly, sleep and eat. About 15 minutes. Vince gets your answers.</p></div></a>
+    <a class="tile" href="questions.html"><img src="img/pad_thai.jpg" alt=""><div class="t"><h3>1. Answer the questions</h3><p id="qBlurb">How you like to fly, sleep and eat. About 15 minutes. Your answers change the plan and the prices on pages 2 and 3.</p></div></a>
     <a class="tile" href="plan.html"><img src="img/grand_mosque.jpg" alt=""><div class="t"><h3>2. The plan, day by day</h3><p>One main thing each day, with pictures and prices.</p></div></a>
     <a class="tile" href="costs.html"><img src="img/night_bazaar.jpg" alt=""><div class="t"><h3>3. What it costs</h3><p>Tap the choices. Watch the total change.</p></div></a>
     <a class="tile" href="guide.html"><img src="img/bts_skytrain.jpg" alt=""><div class="t"><h3>4. The practical guide</h3><p>Phones, money, taxis, the hospital, what to pack.</p></div></a>
@@ -30,5 +32,11 @@
     <p>The US government currently says “reconsider travel” to Abu Dhabi because of the conflict with Iran. The plan can go through Abu Dhabi (cheapest, one free hotel night) or avoid the Middle East for about $280 more. <a href="guide.html#safety">The three choices, in plain words.</a></p>
   </section>
 </main>
+<script src="trip.js"></script>
+<script>
+  const A = getAnswers(), n = answeredCount(A);
+  document.getElementById('persBox').innerHTML = personalBanner(A);
+  if (n) { const t = totals(costChoices(decide(A))); document.getElementById('qBlurb').textContent = n + ' of 29 answered. Your plan and prices below match them.'; }
+</script>
 </body>
 </html>
