@@ -3,211 +3,181 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Practical Guide — Cajetan &amp; Stella's Trip</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Sora:wght@600;700&display=swap">
+<title>Practical Guide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Outfit:wght@500;600&display=swap">
 <link rel="stylesheet" href="style.css">
 <style>
-  .toc { display: flex; flex-wrap: wrap; gap: 8px; }
-  .toc a { background: var(--panel); border: 1px solid var(--rule); border-radius: 999px; padding: 8px 14px; text-decoration: none; color: var(--ink); font-weight: 700; font-size: 16px; }
-  section.g { display: grid; gap: 14px; scroll-margin-top: 70px; }
-  .alert { background: var(--warn-wash); border: 2px solid var(--warn); border-radius: 12px; padding: 18px 20px; display: grid; gap: 10px; }
-  .alert h2 { color: var(--warn); }
-  .alert p { max-width: none; }
-  .kv { display: grid; gap: 0; border-top: 1px solid var(--rule); }
-  .kv div { display: grid; grid-template-columns: 150px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--rule); font-size: 18px; }
-  .kv .k { font-family: "Sora", sans-serif; font-weight: 700; font-size: 16px; color: var(--accent-ink); }
+  .three { display: grid; gap: 10px; }
+  .three div { border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; }
+  .three b { font-family: "Outfit", sans-serif; font-weight: 600; display: block; margin-bottom: 2px; }
+  .three span { font-size: 17px; color: var(--ink-2); }
   table { border-collapse: collapse; width: 100%; font-size: 17px; }
-  th, td { text-align: left; padding: 9px 10px 9px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
-  th { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  td { padding: 8px 10px 8px 0; vertical-align: top; border-bottom: 1px solid var(--line); }
+  td:first-child { font-family: "Outfit", sans-serif; font-weight: 600; white-space: nowrap; }
   .tablewrap { overflow-x: auto; min-width: 0; }
-  .page > * { min-width: 0; }
-  ol.steps, ul.plain { margin: 0; padding-left: 22px; display: grid; gap: 10px; }
-  ol.steps li, ul.plain li { max-width: 66ch; }
-  .phrase { font-family: "Sora", sans-serif; }
-  @media (max-width: 480px) { .kv div { grid-template-columns: 1fr; gap: 2px; } }
 </style>
 </head>
 <body>
-<div class="topbar"><div class="in"><a class="home" href="index.html">← Your trip</a><span class="step">Practical guide</span></div></div>
+<div class="nav"><div class="in"><a class="home" href="index.html">← Your trip</a><span class="where">Practical guide</span></div></div>
 <main class="page">
-  <header style="display:grid;gap:12px">
-    <div class="eyebrow">Everything that is not sightseeing</div>
-    <h1>The practical guide</h1>
-    <p class="help">Phones, money, taxis, the airports, the hospital, what to pack and what to say — with comparisons to things you already know. Read it once now and once the week before you fly.</p>
-    <nav class="toc" aria-label="Sections"><a href="#safety">Read first</a><a href="#before">Before you fly</a><a href="#phone">Phones</a><a href="#money">Money</a><a href="#around">Getting around</a><a href="#airports">The airports</a><a href="#hospital">Hospital &amp; dentist</a><a href="#heat">Heat, rain, walking</a><a href="#dress">What to wear</a><a href="#scams">Tricks to ignore</a><a href="#phrases">Ten phrases</a><a href="#pack">Packing</a><a href="#emergency">Emergency numbers</a></nav>
+  <header style="display:grid;gap:10px">
+    <h1>The practical guide.</h1>
+    <p class="small">Tap a heading to open it. Read it once now and once the week before you fly.</p>
   </header>
 
-  <section class="alert" id="safety">
-    <div class="eyebrow">Read first · updated 30 August 2026</div>
-    <h2>The United States government says: think twice before going to the United Arab Emirates right now</h2>
-    <p>Since fighting began between the United States and Iran in February 2026, the US State Department has kept the UAE (which includes Abu Dhabi) at its second-highest warning, <b>“Level 3 — Reconsider Travel”</b>, most recently confirmed on 29 August. The reasons it gives: an ongoing risk of Iranian drone and missile attacks, threats against places connected to the United States, and airlines flying “on a limited schedule, with some cancellations.” Thailand is at the lowest level, “Exercise normal precautions.”</p>
-    <p>What this means in plain terms: Etihad is flying its normal Atlanta–Abu Dhabi–Bangkok schedule today and nothing on the ground in Abu Dhabi is closed. But the US government is telling its citizens that the risk there is higher than normal, and a flight through Abu Dhabi could be delayed or cancelled with little warning. Travel insurance does not pay out for war, and usually not for a warning being raised.</p>
-    <p><b>Your three choices, which Vince will talk through with you:</b></p>
-    <ol class="steps">
-      <li><b>Keep the plan</b> — Etihad through Abu Dhabi with the one-night stop. Cheapest ($1,921 + bags), one free hotel night, a third country seen. Highest exposure to the warning.</li>
-      <li><b>Etihad, but no stop</b> — the same tickets with a 2-hour connection in the Abu Dhabi airport each way. Same price, no day in the city. You still pass through the UAE twice.</li>
-      <li><b>Avoid the Middle East entirely</b> — United Airlines from Atlanta through San Francisco and Hong Kong to Bangkok. About $2,198 for both, two stops each way, a longer journey (27 hours), no free hotel, no third country. Zero exposure to the warning.</li>
-    </ol>
-    <p>None of these is wrong. Many people are flying through the Gulf this month without incident. The point of putting it here first is that you decide with the facts, not after the tickets are bought. Sources: the <a href="https://ae.usembassy.gov/travel-advisory-united-arab-emirates-level-3-reconsider-travel-august-29-2026/">US Embassy in the UAE</a> and <a href="https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories/united-arab-emirates-travel-advisory.html">travel.state.gov</a>.</p>
-  </section>
-
-  <section class="g" id="before">
-    <h2>Before you fly — the checklist</h2>
-    <ol class="steps">
-      <li><b>Passports.</b> Both must be valid until at least <b>20 March 2027</b> (six months after you land). Look at the “Date of expiration” line now. If either expires before then, renewal takes 4–6 weeks; expedited is faster.</li>
-      <li><b>Travel insurance, bought the same week as the flights.</b> Medicare pays nothing outside the United States — not the hospital, not the dentist, not an ambulance, not a flight home. Buy a plan with at least $100,000 of medical cover and $250,000 for an emergency flight home. Two that meet that at the cheap end for your ages: <b>IMG iTravelInsured Choice</b> or <b>Trawick Safe Travels Voyager</b>, roughly $105–140 each. Buy within 14–21 days of paying for the first flight so your existing conditions are covered — that deadline is the whole reason to do it early. (The Allianz and Travel Guard plans your bank may offer only cover $50,000 of medical — not enough at 70.)</li>
-      <li><b>Two shots.</b> The CDC recommends Hepatitis A and typhoid for Thailand. Hepatitis A takes about two weeks to work. Any pharmacy or the county health department; call now.</li>
-      <li><b>The Thailand arrival form (TDAC).</b> Free, online, done in the three days before you land — so <b>Thursday 17 to Sunday 20 September</b>. Only at <a href="https://tdac.immigration.go.th">tdac.immigration.go.th</a> (other websites charge for the same thing). You enter both passports, flight EY 402, arrival 20 September, and the hotel address; a QR code comes by email; you show it with the passport. Vince can do it for you.</li>
-      <li><b>Your medicines.</b> Enough for the trip plus a week, in the original bottles, with a printed list of names and doses. The UAE bans some common US medicines (codeine painkillers, some sleeping pills) — give Vince the list so he can check it against the UAE Ministry of Health’s list before you fly.</li>
-      <li><b>Money set-up.</b> Open a <b>Charles Schwab Investor Checking</b> account now (it takes 1–2 weeks to get the card): it refunds every foreign cash-machine fee and charges nothing extra abroad. Tell your other card companies the dates and countries.</li>
-      <li><b>Apps on the phone.</b> <b>Grab</b> (the taxi app — set it up at home; the verification code for a US number comes through WhatsApp, so have WhatsApp installed), <b>Airalo</b> (phone service, below), <b>Mobile Passport Control</b> (the free US customs app that skips most of the line at Atlanta on the way home), and <b>WhatsApp</b> for the family.</li>
-      <li><b>Help at the airport.</b> <b>TSA Cares</b>, (855) 787-2227, at least 72 hours before: a support person meets you at Atlanta security. And when booking, tick “wheelchair assistance” on Etihad if you want it — it is free, and it also means no walking to the far gates.</li>
-      <li><b>Copies.</b> Photos on the phone of both passports, the insurance card, the hotel bookings and the dentist’s plan; one paper copy of each in the suitcase.</li>
-    </ol>
-  </section>
-
-  <section class="g" id="phone">
-    <h2>Phones</h2>
-    <div class="analogy"><b>What an eSIM is:</b> a phone plan you download instead of a little card you push into the phone. Think of it like adding a second line to the same phone for ten days. You buy it in the Airalo app at home on Wi-Fi, it installs in two minutes, and you switch it on when you land. Your US number stays on the phone for texts.</div>
-    <div class="kv">
-      <div><span class="k">The frugal set-up</span><span>One eSIM on Dad’s phone — <b>UAE 1 GB for $4.50</b> and <b>Thailand 10 GB for $11</b> — with “Personal Hotspot” switched on so Mom’s phone uses it too. <b>$15.50 total.</b> Two eSIMs, one each: $31.</span></div>
-      <div><span class="k">Does my phone do it?</span><span>iPhone XS, XR (2018) and every model since: yes. iPhone 8, X, 7 or older: no. Samsung Galaxy S20 and newer and Google Pixel 3a and newer: yes. Check on an iPhone: dial <b>*#06#</b> — if a line called “EID” appears, it works. The phone must not be locked to a carrier.</span></div>
-      <div><span class="k">If not</span><span>A SIM card at the Bangkok airport arrivals hall: AIS or True counters, open all night, 8 days for about $15. Bring the passport; it takes 10–30 minutes. In Abu Dhabi your Etihad boarding pass gets a free tourist SIM if you want one.</span></div>
-      <div><span class="k">Using your US plan</span><span>Verizon charges $12 a day per phone; AT&amp;T $12 for the first and $6 for the second; nine days for two phones is $160–215. T-Mobile’s bigger plans include it for free. Turn off “data roaming” if you use the eSIM, or the US plan may charge a day anyway.</span></div>
-      <div><span class="k">WhatsApp</span><span>Works fully in Thailand. In the UAE, WhatsApp <b>texts and photos work but voice and video calls are blocked</b> — text the family from Abu Dhabi, and use Zoom if you want to see faces.</span></div>
+  <section class="notice" id="safety">
+    <h2>Read first: the Abu Dhabi question</h2>
+    <p>Since the US and Iran began fighting in February, the US government has told Americans to “reconsider travel” to the United Arab Emirates, where Abu Dhabi is. Flights are running and the city is open, but delays or worse are more likely than normal, and insurance does not cover war. Thailand has no warning at all.</p>
+    <div class="three">
+      <div><b>1. Keep the plan</b><span>Etihad through Abu Dhabi with the free night. Cheapest. Most exposed to the warning.</span></div>
+      <div><b>2. Etihad, no stop</b><span>Same tickets, 2 hours in the airport each way. You still pass through twice.</span></div>
+      <div><b>3. Avoid the Middle East</b><span>United through San Francisco and Hong Kong. About $280 more, 27 hours each way, no free hotel.</span></div>
     </div>
+    <p class="small">Sources: the <a href="https://ae.usembassy.gov/travel-advisory-united-arab-emirates-level-3-reconsider-travel-august-29-2026/">US Embassy in the UAE</a>, 29 August 2026.</p>
   </section>
 
-  <section class="g" id="money">
-    <h2>Money</h2>
-    <div class="analogy"><b>The rule of thumb:</b> 100 baht is about $3; 1,000 baht is about $30. 100 dirhams (Abu Dhabi) is about $27. A street lunch is 60–100 baht. A taxi across Bangkok is 150–200 baht. A nice dinner for two is 1,500–2,000 baht.</div>
-    <div class="kv">
-      <div><span class="k">Cash machines</span><span>Every Thai bank machine charges foreign cards a flat <b>220 baht (about $7)</b> per withdrawal, whatever the amount — so take the maximum (20,000–30,000 baht) once rather than small amounts often. Always choose <b>“continue without conversion / charge in Thai baht”</b>; the dollar option costs 3–7% more. With the Schwab card, the 220 baht comes back to you.</span></div>
-      <div><span class="k">Dollars</span><span>Bring $300–500 in crisp, new-style $100 bills (booths refuse torn or marked notes). Change them at <b>SuperRich</b> in the basement of the Bangkok airport, by the train station — 3–7% better than the booths in the arrivals hall upstairs.</span></div>
-      <div><span class="k">Cards</span><span>Hotels, hospitals, malls and taxi apps take Visa and Mastercard. Markets, street food, small shops, massages and ordinary taxis are cash. Apple Pay does not work in Thailand — carry the physical card.</span></div>
-      <div><span class="k">How much cash</span><span>About <b>2,500 baht ($75) a day for the two of you</b> covers food, taxis and small things. Abu Dhabi: one withdrawal of 200–300 dirhams for taxis and tips; cards for everything else.</span></div>
-      <div><span class="k">Tipping</span><span>Thailand: not expected. Round taxis up, 20–50 baht for a porter, 50–100 baht after a massage, 10% at nice restaurants only if the bill has no service charge. Abu Dhabi: 10–15% at restaurants without a service charge; round up taxis.</span></div>
-    </div>
-  </section>
-
-  <section class="g" id="around">
-    <h2>Getting around</h2>
-    <div class="analogy"><b>Grab is Uber.</b> You type where you want to go, it shows the price before you agree, a car comes, you pay by card in the app or cash. No haggling, no address in Thai, no wrong turns. Bolt is the same idea and a little cheaper, but cancels more often and only takes cash — use Grab.</div>
-    <div class="kv">
-      <div><span class="k">Bangkok</span><span>Grab for anything over ten minutes ($3–7 across town). The <b>Skytrain (BTS)</b> for the straight runs — clean, air-conditioned, $1 a ride, tap a contactless card at the gate; the hotel’s free tuk-tuk takes you to the station so there are no stairs from the street. The <b>river ferry</b> at Tha Tien is 15 cents and three minutes.</span></div>
-      <div><span class="k">Chiang Mai</span><span>The Old City is flat; most things are a walk. Grab for the temples in the evening ($2–3) and the airport ($3–5). The red pick-up trucks (songthaews) are 40 baht a person for short hops — board, ride, pay at the window at the end; the bench is high. The hotel sends a car to the airport for $11.</span></div>
-      <div><span class="k">Abu Dhabi</span><span>Metered taxis from the rank outside the terminal and outside every sight — card or cash, $10–20 between the places on the plan. Uber works but its airport pick-up is a 10-minute walk; the taxi rank is at the door.</span></div>
-      <div><span class="k">Never</span><span>Tuk-tuks for a ride (photo yes). Any driver who “recommends” a shop or restaurant. Anyone who says a temple is closed.</span></div>
-    </div>
-  </section>
-
-  <section class="g" id="airports">
-    <h2>The airports, one at a time</h2>
-    <div class="kv">
-      <div><span class="k">Atlanta</span><span>Etihad flies from the international terminal (Terminal F). Be there 3 hours before — 6:30 PM. TSA Cares meets you at security if you booked it. Shoes stay on.</span></div>
-      <div><span class="k">Abu Dhabi</span><span>Terminal A, opened 2023, all one building. Passport control is a counter with a stamp — free, no form; ask for the assistance lane. Your suitcases come out because you are staying the night; on Saturday you check them in again at the Etihad bag-drop. The airport hotel for the way home (AUHotel) is inside this same terminal.</span></div>
-      <div><span class="k">Bangkok Suvarnabhumi</span><span>Show the TDAC QR code and passport. Bags. Then either the <b>public taxi queue</b> on Level 1 (take a ticket, insist on the meter; about $15–20 all in with tolls) or a Grab from Level 1, Gate 4 ($10–14 plus $2 tolls). Ignore anyone inside offering a “limousine” for $30–45. SuperRich money-changer is in the basement.</span></div>
-      <div><span class="k">Chiang Mai</span><span>Small and easy. In the arrivals hall turn left to the official taxi counter (a person with a clipboard): flat $5–6 to the Old City.</span></div>
-      <div><span class="k">Coming home</span><span>Bangkok → Abu Dhabi (the night in the airport hotel) → Atlanta, landing 4:30 PM. Open the Mobile Passport Control app on the plane before landing; use its lane at passport control.</span></div>
-    </div>
-  </section>
-
-  <section class="g" id="hospital">
-    <h2>The hospital and the dentist, in plain words</h2>
-    <p>Bumrungrad is like Emory University Hospital in Atlanta — a big, modern hospital where every doctor and nurse speaks English and there are free interpreters — except it is one minute’s walk from your hotel, the full check-up for your age costs about $1,400 each instead of the several thousand it would bill in the US, and the doctor sits down with you the same afternoon to go through the first results. (A cheaper version of the same thing, about $970 for him and $1,080 for her, is at Bangkok Hospital, a 20-minute taxi away, and needs seven days’ notice.)</p>
-    <p>You will not eat after 7 PM on Sunday (water is fine), walk over at 7 AM Monday, and be done by early afternoon. The rest of the report appears in the hospital’s phone app within a week; they will print a copy on Wednesday if you ask.</p>
-    <p>The dental hospital, BIDH, is across the main road — a stand-alone dental building the size of a small hospital, with its own laboratory that can make a crown in two days. So Dad can have the tooth prepared Monday afternoon and the finished crown fitted Wednesday morning before you leave. A crown that costs over $1,000 in the US is about $680–830 there; a root canal about $400–520; pulling a tooth under $65.</p>
-    <p><b>The one thing that cannot be finished on this trip is an implant</b>, because the metal post has to heal in the jaw for two to four months before the new tooth goes on. If that is what the US dentist proposed, the sensible plan is to have the tooth pulled or the post placed now and finish next visit, or choose a bridge. Dentists ask for two to three days before flying after anything that cuts the gum — so nothing surgical on Wednesday, and Monday work should be Monday morning.</p>
-    <p><b>Bring:</b> your recent US lab results (2–3 years), the dentist’s x-rays and written quote, the list of medicines. They will use them, and it keeps the bill from growing. Pay by card; ask for an itemised English receipt.</p>
-  </section>
-
-  <section class="g" id="heat">
-    <h2>Heat, rain and walking</h2>
-    <div class="analogy"><b>Bangkok in September</b> feels like Atlanta in late July — around 90°F with heavy air — plus a rain shower most afternoons that lasts an hour or two. <b>Chiang Mai</b> is the same but a touch cooler, with mist on the mountain in the morning. <b>Abu Dhabi</b> is hotter than anywhere in Georgia ever gets: 100–105°F and dry. That is why the Abu Dhabi day is indoors from 10:30 on, and why every Thai morning starts early and every afternoon has a rest.</div>
-    <ul class="plain">
-      <li>A big glass of water before you leave the hotel each morning; a bottle each in the bag (15 baht at any 7-Eleven, which is on every corner). Electrolyte sachets from the Boots pharmacy if you feel drained.</li>
-      <li>Outdoors before 10:30 AM or after 4 PM. Midday is for the hotel pool, the museum, the mall or a nap.</li>
-      <li>A folding umbrella each — for sun as much as rain. Sandals that can get wet; a spare dry top.</li>
-      <li>Stop signs: headache, dizziness, feeling sick, or sweating that suddenly stops. Into air conditioning, water, and rest. If there is confusion or a high temperature, call 1669 in Thailand or 999 in the UAE.</li>
-      <li>The plan never asks for more than 15 minutes of walking at a stretch. Ask for the golf cart at the mosque, the cable car at Doi Suthep, and wheelchairs at any airport — all free, all normal.</li>
-    </ul>
-  </section>
-
-  <section class="g" id="dress">
-    <h2>What to wear</h2>
-    <div class="kv">
-      <div><span class="k">The mosque</span><span>Long, loose, ankle-length clothes for both of you; long sleeves; a headscarf for Stella (bring your own — the loan abayas at the door are not guaranteed any more). No tight or see-through clothing.</span></div>
-      <div><span class="k">Thai temples</span><span>Shoulders and knees covered, both of you. Shoes come off at every building — <b>slip-on shoes</b> save a hundred bends. Do not point your feet at a Buddha image when sitting. Women do not hand things directly to monks; place them on the table.</span></div>
-      <div><span class="k">Abu Dhabi in general</span><span>Shoulders and knees covered in malls and museums. No kissing in public. No photos of people (especially women), government buildings or the airport — the fines are serious. Buildings and landscapes are fine; the mosque, the palace and the museum explicitly allow photos.</span></div>
-      <div><span class="k">Everyday Thailand</span><span>Light, loose, quick-drying. Sandals or slip-ons. A hat. Nobody dresses up.</span></div>
-    </div>
-  </section>
-
-  <section class="g" id="scams">
-    <h2>Tricks to ignore</h2>
-    <p class="help">The defence is not vigilance — it is structure: pre-booked Grab rides, restaurants with printed prices, and the tourist police number saved in the phone (1155). These are the five you will actually meet.</p>
-    <ul class="plain">
-      <li><b>“The palace is closed today.”</b> A friendly, well-dressed man near the Grand Palace. It is open every day. Walk past.</li>
-      <li><b>The “government gem sale” or the tailor “special price”.</b> There is no government gem shop. Do not enter any shop a stranger or driver takes you to.</li>
-      <li><b>Bird seed, surveys, “I just want to practise my English”.</b> Free until it isn’t. A smile and “mai ao, khop khun” (no thank you) and keep walking.</li>
-      <li><b>Wrong change on a 1,000-baht note.</b> Pay small things with 100s and 20s; count change at the counter.</li>
-      <li><b>The cash machine offering to charge you in dollars.</b> Always pick baht.</li>
-    </ul>
-  </section>
-
-  <section class="g" id="phrases">
-    <h2>Ten phrases that do real work</h2>
-    <div class="tablewrap"><table>
-      <thead><tr><th>Say</th><th>Sounds like</th><th>When</th></tr></thead>
-      <tbody>
-        <tr><td class="phrase">Sawatdee khrap / kha</td><td>sa-wat-DEE krap (Cajetan) · sa-wat-DEE ka (Stella)</td><td>Hello. Add “khrap” or “kha” to everything — it is the polite ending, and it is the whole game.</td></tr>
-        <tr><td class="phrase">Khop khun khrap / kha</td><td>kop-KOON krap / ka</td><td>Thank you.</td></tr>
-        <tr><td class="phrase">Mai phet</td><td>my PET</td><td>Not spicy. Every order.</td></tr>
-        <tr><td class="phrase">Phet nit noi</td><td>pet nit NOY</td><td>Just a little spicy.</td></tr>
-        <tr><td class="phrase">Tao rai?</td><td>tow-RYE</td><td>How much?</td></tr>
-        <tr><td class="phrase">Phaeng pai</td><td>PANG pie</td><td>Too expensive — with a smile, at the market.</td></tr>
-        <tr><td class="phrase">Check bin</td><td>check BIN</td><td>The bill, please.</td></tr>
-        <tr><td class="phrase">Nam plao</td><td>nam PLOW</td><td>Water.</td></tr>
-        <tr><td class="phrase">Hong nam yoo nai?</td><td>hong nam yoo NIGH</td><td>Where is the toilet?</td></tr>
-        <tr><td class="phrase">Mai ao, khop khun</td><td>my OW, kop-KOON</td><td>No thank you — to touts, drivers, “friends”.</td></tr>
-      </tbody>
-    </table></div>
-    <p class="help">In Abu Dhabi everyone you meet speaks English. “Shukran” (SHOOK-ran) is thank you.</p>
-  </section>
-
-  <section class="g" id="pack">
-    <h2>Packing — what actually matters</h2>
-    <ul class="plain">
-      <li><b>Clothes:</b> light, loose, long. Two long-sleeved shirts and two long trousers/skirts for the mosque and temples; a scarf for Stella; a hat each; slip-on shoes with grip; sandals that can get wet; a light rain jacket; a sweater for the plane and the air-conditioned malls.</li>
-      <li><b>Health:</b> all medicines in original bottles plus a week extra; reading glasses; sunscreen; a small first-aid pouch; electrolyte sachets; hand sanitiser; any dental x-rays and the US treatment plan.</li>
-      <li><b>Papers:</b> passports; printed flight, hotel and insurance confirmations; the medicine list; the photo copies on the phone.</li>
-      <li><b>Electrics:</b> one <b>Type G plug adapter</b> (the big three-pin British kind) for Abu Dhabi. Thailand takes US flat pins as they are. Phone chargers work on both voltages. A power bank for the long days. Earphones for the plane.</li>
-      <li><b>Money:</b> the Schwab card, one credit card, $300–500 in new $100 bills, a small zipped purse for baht.</li>
-      <li><b>Comfort:</b> a neck pillow, an eye mask, compression socks for the 14-hour flights (ask the doctor), a refillable water bottle, snacks you know.</li>
-      <li><b>Leave at home:</b> jewellery you would mind losing, the bulky camera if the phone will do, anything with CBD in it (illegal in the UAE).</li>
-    </ul>
-  </section>
-
-  <section class="g" id="emergency">
-    <h2>Emergency numbers</h2>
-    <div class="tablewrap"><table>
-      <thead><tr><th>Where</th><th>Number</th><th>What</th></tr></thead>
-      <tbody>
-        <tr><td>Thailand</td><td><b>1669</b></td><td>Ambulance / medical emergency</td></tr>
-        <tr><td>Thailand</td><td><b>1155</b></td><td>Tourist police — English-speaking, for scams, lost passports, anything</td></tr>
-        <tr><td>Thailand</td><td><b>191</b></td><td>Police</td></tr>
-        <tr><td>Bangkok</td><td>Bumrungrad Hospital, Sukhumvit Soi 3</td><td>24-hour emergency room and pharmacy, one minute from the hotel</td></tr>
-        <tr><td>Chiang Mai</td><td>Chiangmai Ram Hospital, 8 Boonruangrit Rd</td><td>24-hour ER, English-speaking, 10 minutes from the Old City</td></tr>
-        <tr><td>Bangkok</td><td>US Embassy, 95 Wireless Rd · +66 2 205 4000</td><td>Lost passport, serious trouble. Ten minutes from the hotel.</td></tr>
-        <tr><td>UAE</td><td><b>999</b></td><td>Police and ambulance</td></tr>
-        <tr><td>Abu Dhabi</td><td>US Embassy · +971 2 414 2200</td><td>24 hours for emergencies</td></tr>
-        <tr><td>From anywhere</td><td>+1 202 501 4444</td><td>US State Department, for Americans abroad</td></tr>
-        <tr><td>Home</td><td>Vince · 678-404-0309</td><td>WhatsApp works in both countries for texts</td></tr>
-      </tbody>
-    </table></div>
-  </section>
-
-  <footer style="color:var(--muted);font-size:15px;border-top:1px solid var(--rule);padding-top:14px">Checked 30 August 2026 against the airlines, hospitals, banks, phone companies and government pages named above. Thailand’s visa-free stay for US passports is 60 days today and may drop to 30 in the coming weeks — either is far more than this trip needs.</footer>
+  <div>
+    <details open>
+      <summary>Before you fly</summary>
+      <div class="body"><ul class="dots">
+        <li><b>Passports</b> valid past 20 March 2027. Check the expiry line today.</li>
+        <li><b>Insurance</b> the same week as the flights: IMG iTravelInsured Choice or Trawick Safe Travels Voyager, about $105 to $140 each. Medicare pays nothing abroad.</li>
+        <li><b>Two shots:</b> Hepatitis A and typhoid. Any pharmacy. Hepatitis A needs two weeks to work.</li>
+        <li><b>Thailand arrival form,</b> free, online, 17 to 20 September. Vince will do it.</li>
+        <li><b>Medicines</b> in the original bottles, plus a week extra, with a printed list.</li>
+        <li><b>Apps:</b> Grab (the taxi app), Airalo (phone service), Mobile Passport Control, WhatsApp.</li>
+      </ul></div>
+    </details>
+    <details>
+      <summary>Phones</summary>
+      <div class="body">
+        <p>An eSIM is a phone plan you download instead of a card you push in. Buy it in the Airalo app at home on Wi-Fi. It switches on when you land.</p>
+        <ul class="dots">
+          <li><b>The cheap way:</b> one eSIM on Dad’s phone ($15.50 for both countries) with “Personal Hotspot” on for Mom’s phone.</li>
+          <li><b>Does my phone do it?</b> iPhone XS or newer, Samsung S20 or newer. Dial *#06# on an iPhone: if you see “EID”, yes.</li>
+          <li><b>If not:</b> a SIM card at the Bangkok airport, open all night, about $15. Bring the passport.</li>
+          <li><b>WhatsApp:</b> works in Thailand. In Abu Dhabi, texts and photos work, calls do not.</li>
+        </ul>
+      </div>
+    </details>
+    <details>
+      <summary>Money</summary>
+      <div class="body">
+        <p>100 baht is about $3. 1,000 baht is about $30. A street lunch is 60 to 100 baht. A taxi across Bangkok is 150 to 200.</p>
+        <ul class="dots">
+          <li><b>Cash machines</b> charge $7 every time. Take out the maximum once. Always choose “charge in baht”, never dollars.</li>
+          <li><b>Open a Charles Schwab checking account now.</b> It refunds every one of those fees. The card takes two weeks to arrive.</li>
+          <li><b>Bring $300 to $500</b> in new $100 bills. Change them at SuperRich in the airport basement, not upstairs.</li>
+          <li><b>Cards</b> work at hotels, hospitals, malls and the taxi app. Cash for markets, street food, massages.</li>
+          <li><b>Tips:</b> not expected in Thailand. Round up taxis. 50 to 100 baht after a massage.</li>
+        </ul>
+      </div>
+    </details>
+    <details>
+      <summary>Getting around</summary>
+      <div class="body">
+        <p>Grab is Uber. Type where you are going, see the price, a car comes. Set it up at home; the code arrives by WhatsApp.</p>
+        <ul class="dots">
+          <li><b>Bangkok:</b> Grab across town, $3 to $7. The Skytrain for straight runs, $1, tap a card at the gate. The river ferry, 15 cents.</li>
+          <li><b>Chiang Mai:</b> the Old City is flat; most things are a walk. Grab for the evenings, $2 to $3.</li>
+          <li><b>Abu Dhabi:</b> metered taxis from the rank at every door, $10 to $20 a hop.</li>
+          <li><b>Never</b> a tuk-tuk ride, and never a driver’s “recommended” shop.</li>
+        </ul>
+      </div>
+    </details>
+    <details>
+      <summary>The airports</summary>
+      <div class="body"><ul class="dots">
+        <li><b>Atlanta:</b> international terminal, 3 hours early. TSA Cares, (855) 787-2227, meets you at security if you call 72 hours ahead.</li>
+        <li><b>Abu Dhabi:</b> one new building. Free passport stamp; ask for the assistance lane. Your suitcases come out on the way there and are checked again on Saturday.</li>
+        <li><b>Bangkok:</b> show the arrival-form QR code. Then the metered taxi queue on Level 1, $15 to $20. Ignore anyone offering a “limousine”.</li>
+        <li><b>Chiang Mai:</b> turn left in arrivals to the taxi counter, $5.</li>
+        <li><b>Coming home:</b> open the Mobile Passport Control app on the plane and use its lane at Atlanta.</li>
+      </ul></div>
+    </details>
+    <details>
+      <summary>The hospital and the dentist</summary>
+      <div class="body">
+        <p>Bumrungrad is like Emory: big, modern, every doctor speaks English. The difference is it is one minute from the hotel, the check-up costs a third of the US price, and the doctor goes through the results the same afternoon.</p>
+        <ul class="dots">
+          <li><b>Check-up:</b> nothing to eat after 7 PM Sunday. 7 AM Monday. Done by early afternoon. Printed copy Wednesday.</li>
+          <li><b>Dentist:</b> across the road. Crown prepared Monday, fitted Wednesday. About $680 to $830.</li>
+          <li><b>An implant cannot be finished on this trip.</b> The post must heal for months. Pull the tooth or place the post now, finish next visit.</li>
+          <li><b>Bring:</b> recent US lab results, the dentist’s x-rays and quote, the medicine list.</li>
+          <li><b>Nothing surgical on Wednesday.</b> Dentists want two to three days before flying.</li>
+        </ul>
+      </div>
+    </details>
+    <details>
+      <summary>Heat, rain and walking</summary>
+      <div class="body">
+        <p>Bangkok in September feels like Atlanta in late July, with a one-hour shower most afternoons. Abu Dhabi is hotter than Georgia ever gets.</p>
+        <ul class="dots">
+          <li>Outdoors before 10:30 AM or after 4 PM. Midday is pool, museum or nap.</li>
+          <li>A big glass of water before leaving. A bottle each in the bag.</li>
+          <li>Nothing in the plan asks for more than 15 minutes of walking at a stretch.</li>
+          <li>Golf cart at the mosque, cable car on the mountain, wheelchairs at every airport. All free. Ask.</li>
+        </ul>
+      </div>
+    </details>
+    <details>
+      <summary>What to wear</summary>
+      <div class="body"><ul class="dots">
+        <li><b>The mosque:</b> ankle-length, long sleeves, both of you. A headscarf for Stella. Bring your own.</li>
+        <li><b>Temples:</b> shoulders and knees covered. Shoes off at every building, so slip-ons.</li>
+        <li><b>Abu Dhabi in general:</b> shoulders and knees covered in malls. No photos of people, government buildings or the airport.</li>
+        <li><b>Everyday Thailand:</b> light, loose, a hat. Nobody dresses up.</li>
+      </ul></div>
+    </details>
+    <details>
+      <summary>Tricks to ignore</summary>
+      <div class="body"><ul class="dots">
+        <li>“The palace is closed today.” It is open every day. Walk past.</li>
+        <li>The “government gem sale” and the tailor’s “special price”. No such things.</li>
+        <li>Free bird seed, surveys, “I just want to practise my English”.</li>
+        <li>Wrong change on a 1,000-baht note. Pay with 100s and count at the counter.</li>
+        <li>Tourist police, English-speaking, for anything: 1155.</li>
+      </ul></div>
+    </details>
+    <details>
+      <summary>Ten phrases</summary>
+      <div class="body tablewrap"><table>
+        <tr><td>sa-wat-DEE krap / ka</td><td>Hello. “krap” for Cajetan, “ka” for Stella. Add it to everything.</td></tr>
+        <tr><td>kop-KOON krap / ka</td><td>Thank you.</td></tr>
+        <tr><td>my PET</td><td>Not spicy. Every order.</td></tr>
+        <tr><td>pet nit NOY</td><td>A little spicy.</td></tr>
+        <tr><td>tow-RYE</td><td>How much?</td></tr>
+        <tr><td>PANG pie</td><td>Too expensive, with a smile.</td></tr>
+        <tr><td>check BIN</td><td>The bill, please.</td></tr>
+        <tr><td>nam PLOW</td><td>Water.</td></tr>
+        <tr><td>hong nam yoo NIGH</td><td>Where is the toilet?</td></tr>
+        <tr><td>my OW, kop-KOON</td><td>No thank you. For touts and drivers.</td></tr>
+      </table></div>
+    </details>
+    <details>
+      <summary>Packing</summary>
+      <div class="body"><ul class="dots">
+        <li>Light, loose, long clothes. Two long-sleeved shirts each. A scarf. Hats. Slip-on shoes. Sandals that can get wet. A light rain jacket. A sweater for the plane.</li>
+        <li>Medicines in original bottles plus a week. Reading glasses. Sunscreen. Electrolyte sachets.</li>
+        <li>Passports, printed bookings, insurance card, the medicine list, the dental x-rays.</li>
+        <li>One British-style three-pin adapter for Abu Dhabi. Thailand takes US plugs. A power bank. Earphones.</li>
+        <li>Neck pillow, eye mask, compression socks for the long flights, a refillable bottle, snacks you know.</li>
+      </ul></div>
+    </details>
+    <details>
+      <summary>Emergency numbers</summary>
+      <div class="body tablewrap"><table>
+        <tr><td>1669</td><td>Thailand ambulance</td></tr>
+        <tr><td>1155</td><td>Thailand tourist police, English-speaking</td></tr>
+        <tr><td>999</td><td>UAE police and ambulance</td></tr>
+        <tr><td>Bumrungrad</td><td>24-hour emergency room, one minute from the Bangkok hotel</td></tr>
+        <tr><td>Chiangmai Ram</td><td>24-hour hospital, 10 minutes from the Old City</td></tr>
+        <tr><td>US Embassy Bangkok</td><td>95 Wireless Rd, +66 2 205 4000</td></tr>
+        <tr><td>US Embassy Abu Dhabi</td><td>+971 2 414 2200</td></tr>
+        <tr><td>Vince</td><td>678-404-0309, WhatsApp texts work everywhere</td></tr>
+      </table></div>
+    </details>
+  </div>
 </main>
 </body>
 </html>

@@ -3,207 +3,110 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Questions — Cajetan &amp; Stella's Trip</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Sora:wght@600;700&display=swap">
+<title>Questions</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Outfit:wght@500;600&display=swap">
 <link rel="stylesheet" href="style.css">
+<style>
+  .q h1 { font-size: 32px; }
+  .review { display: grid; gap: 0; }
+  .review div { display: grid; gap: 2px; padding: 12px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .review .q { color: var(--ink-2); font-size: 16px; }
+  .review .a { font-weight: 700; }
+  .review .a.empty { color: var(--ink-2); font-weight: 400; }
+</style>
 </head>
 <body>
-<div class="topbar">
-  <div class="in"><a class="home" href="index.html">← Your trip</a><span class="step" id="stepLabel">Questions</span></div>
-  <div class="progress"><span id="bar" style="width:0%"></span></div>
-</div>
-
+<div class="nav"><div class="in"><a class="home" href="index.html">← Your trip</a><span class="where" id="stepLabel">Questions</span></div><div class="progress"><span id="bar" style="width:0%"></span></div></div>
 <main class="page" id="view" aria-live="polite"></main>
-
-<div class="navbar"><div class="in">
-  <button class="btn secondary" id="backBtn" type="button">← Back</button>
-  <button class="btn" id="nextBtn" type="button">Next →</button>
-</div></div>
+<div class="bottom"><div class="in"><button class="btn secondary" id="backBtn" type="button">Back</button><button class="btn" id="nextBtn" type="button">Next</button></div></div>
 <div class="toast" id="toast" role="status"></div>
-
 <script>
-// ---------- questions ----------
-// type: single | multi | text | intro | review
 const Q = [
-  { id: 'who', type: 'single', text: 'Who is answering right now?', help: 'You can each do this separately, or sit together. Your answers are saved on this phone or computer as you go, so you can stop and come back.',
-    options: [ { v: 'Stella', l: 'Stella (Mom)' }, { v: 'Cajetan', l: 'Cajetan (Dad)' }, { v: 'Both', l: 'Both of us, together' } ] },
-
-  { id: 'i_fly', type: 'intro', title: 'Part 1 — The flights', img: 'img/etihad_a350.jpg', cap: 'Etihad is the national airline of Abu Dhabi. Big, modern planes; meals are included.',
-    body: 'There are two long flights each way. Atlanta to Abu Dhabi is about 14 hours — a little longer than Atlanta to Lagos. Abu Dhabi to Bangkok is 6½ hours, about the same as Atlanta to Los Angeles. Both are overnight, so you sleep on the plane.' },
-  { id: 'flown_long', type: 'single', text: 'Have you flown more than 8 hours in one go before?', help: 'For example, Atlanta to Lagos or London counts. A flight to Canada does not.',
-    options: [ { v: 'yes', l: 'Yes, I have' }, { v: 'no', l: 'No, only shorter flights' }, { v: 'unsure', l: 'I am not sure' } ] },
-  { id: 'seat', type: 'single', text: 'On a long flight, which seat do you want?', help: 'Doctors suggest standing and walking every two hours on a flight this long. Most people over 60 pick the aisle so they can get up without waking a neighbour.',
-    options: [ { v: 'aisle', l: 'Aisle', s: 'Easy to get up, walk, use the bathroom' }, { v: 'window', l: 'Window', s: 'Lean against the wall and sleep; nobody climbs over you' }, { v: 'any', l: 'No preference' } ] },
-  { id: 'sleep_plane', type: 'single', text: 'Can you sleep on a plane?', help: 'This decides how much rest we plan for the day after you land.',
-    options: [ { v: 'well', l: 'Yes, I sleep fine' }, { v: 'poorly', l: 'Not really — I doze but wake up tired' }, { v: 'unknown', l: 'I have never tried a flight this long' } ] },
-  { id: 'stopover', type: 'single', text: 'Do you want to stop for one night in Abu Dhabi on the way?', img: 'img/grand_mosque.jpg', cap: 'Sheikh Zayed Grand Mosque, Abu Dhabi. Free to visit; one of the most photographed buildings in the world.',
-    help: 'The airline gives you the hotel night for free. You would land Friday evening, sleep, see the mosque and a museum on Saturday, and fly on to Bangkok Saturday night. It breaks the long journey into two halves. The catch: it will be about 105°F outside, so the day is planned indoors and early.',
-    options: [ { v: 'yes', l: 'Yes — one night in Abu Dhabi', s: 'A third country, and a rest between the two long flights' }, { v: 'no', l: 'No — fly straight through to Bangkok', s: 'About 2 hours in the airport, then on to Thailand' }, { v: 'vince', l: 'Let Vince decide' } ] },
-  { id: 'layover_home', type: 'single', text: 'Coming home there is an 8-hour wait overnight at the Abu Dhabi airport (12:30 AM to 9:20 AM). What would you prefer?', help: 'The airport is very modern and safe, with quiet areas. Still, 8 hours in a chair at 2 AM is hard at any age.',
-    options: [ { v: 'terminal', l: 'Rest in the terminal', s: 'Free. Quiet seating areas, cafés open all night' }, { v: 'lounge', l: 'Pay for a lounge with recliners', s: 'About $50 each; food, showers, comfortable chairs' }, { v: 'hotel', l: 'Pay for a room inside the airport', s: 'About $120 for both; a real bed for 6 hours' }, { v: 'reroute', l: 'Change the route home if it avoids the wait', s: 'May cost more' } ] },
-
-  { id: 'i_sleep', type: 'intro', title: 'Part 2 — Where you sleep', img: 'img/chao_phraya.jpg', cap: 'Bangkok from the river. The hotels we are looking at are in the city centre, near the hospital and the train.',
-    body: 'In Thailand your money goes far: a 4- or 5-star hotel with a pool and breakfast costs what a roadside motel costs in Georgia. No hostels, no shared rooms — only hotels that other travellers rate 9 out of 10 or better for cleanliness.' },
-  { id: 'hotel_matters', type: 'multi', max: 3, text: 'What matters most to you in a hotel? Pick up to three.',
-    options: [ { v: 'clean', l: 'Spotless and tidy' }, { v: 'quiet', l: 'Quiet at night' }, { v: 'breakfast', l: 'Breakfast included' }, { v: 'pool', l: 'A swimming pool' }, { v: 'elevator', l: 'An elevator (no stairs)' }, { v: 'hospital', l: 'Walking distance to the hospital' }, { v: 'sights', l: 'Walking distance to markets and sights' }, { v: 'bath', l: 'A big room with a bathtub' } ] },
-  { id: 'beds', type: 'single', text: 'One big bed or two beds?', options: [ { v: 'one', l: 'One big bed (king)' }, { v: 'two', l: 'Two beds' }, { v: 'either', l: 'Either is fine' } ] },
-  { id: 'money_style', type: 'single', text: 'Which sentence sounds most like you?', help: 'There is no right answer. This is how the plan balances comfort and savings between the two of you.',
-    options: [ { v: 'comfort', l: 'I would happily pay $30 more a night for the nicer, calmer place.' }, { v: 'save', l: 'I would rather save the $30 a night and spend it on food and outings.' }, { v: 'middle', l: 'Somewhere in the middle.' } ] },
-  { id: 'bkk_hotel', type: 'single', text: 'For Bangkok, which of these two sounds better?', help: 'Both are clean and highly rated. A is a big international hotel. B is a smaller Thai hotel in a lively market area.',
-    options: [ { v: 'A', l: 'A — DoubleTree by Hilton, 5-star, about $94 a night', s: 'Pool, 10-minute walk to the hospital and dentist, next to the train' }, { v: 'B', l: 'B — Vince Hotel Pratunam, 4-star, about $58 a night', s: 'Market district, 15-minute taxi to the hospital, rated 4.7 by 7,800 guests' }, { v: 'later', l: 'Show me both again later with photos' } ] },
-
-  { id: 'i_food', type: 'intro', title: 'Part 3 — Food', img: 'img/pad_thai.jpg', cap: 'Pad thai from a street stall — fried noodles with egg, peanuts and shrimp. About $2.',
-    body: 'Thai food is rice, noodles, grilled chicken and fish, soups and fresh fruit — a lot of it will feel familiar. It can be spicy, but every cook can make it mild if you ask. Clean, cooked food is everywhere; we will point you to the safe, famous places.' },
-  { id: 'food_adventure', type: 'single', text: 'How adventurous are you with food?',
-    options: [ { v: 'any', l: 'I will try anything once' }, { v: 'careful', l: 'I will try new food if it looks clean and is cooked' }, { v: 'familiar', l: 'I mostly want food I know — rice, chicken, fish, soup' }, { v: 'unsure', l: 'Not sure' } ] },
-  { id: 'spice', type: 'single', text: 'How do you feel about spicy food?', help: 'The words to learn: “mai phet” (my pet) means “not spicy”. Thai cooks hear it from visitors every day.',
-    options: [ { v: 'love', l: 'I like it spicy — like a good pepper soup' }, { v: 'little', l: 'A little spice is fine' }, { v: 'none', l: 'No spice, please' } ] },
-  { id: 'street_food', type: 'single', text: 'Would you eat at the famous night-market street?', img: 'img/yaowarat.jpg', cap: 'Yaowarat Road, Bangkok’s Chinatown, at night. Stalls, neon, and some of the best food in the city.',
-    help: 'You sit on plastic stools at a stall that has cooked the same dish for 30 years. It is loud and busy, and it is the Bangkok most people remember.',
-    options: [ { v: 'yes', l: 'Yes — take me there' }, { v: 'ac', l: 'I prefer sit-down restaurants with air conditioning' }, { v: 'mix', l: 'A mix of both' } ] },
-  { id: 'avoid_food', type: 'text', text: 'Anything you cannot or will not eat?', help: 'Allergies, doctor’s orders, religious reasons, or just dislikes. Write “nothing” if there is nothing.' },
-
-  { id: 'i_body', type: 'intro', title: 'Part 4 — Walking, heat, and your body', img: 'img/doi_suthep.jpg', cap: 'Doi Suthep temple, on the mountain above Chiang Mai. There are 306 steps — or a small cable car for about $1.',
-    body: 'Honest answers here make the trip better, not smaller. Every day is planned with rests, and every place has an easier way in.' },
-  { id: 'walk', type: 'single', text: 'How far can you walk comfortably before you need to sit?', help: 'For comparison: the Walmart parking lot end to end is about 5 minutes; a full lap inside Lenox Square mall is about 15 minutes.',
-    options: [ { v: '30', l: '30 minutes or more at a time is fine' }, { v: '15', l: 'About 15 minutes, then a rest' }, { v: '5', l: '5–10 minutes, then I need to sit' } ] },
-  { id: 'stairs', type: 'single', text: 'How are you with stairs?', options: [ { v: 'fine', l: 'Stairs are fine' }, { v: 'some', l: 'A flight or two is OK' }, { v: 'avoid', l: 'Please avoid stairs' } ] },
-  { id: 'heat', type: 'single', text: 'How do you handle heat?', help: 'Bangkok in September feels like Atlanta in late July, with a rain shower most afternoons. Abu Dhabi is hotter than anything in Georgia — which is why that day is planned indoors.',
-    options: [ { v: 'fine', l: 'Heat does not bother me much' }, { v: 'breaks', l: 'I manage with water and breaks in the shade' }, { v: 'struggle', l: 'I struggle in heat — keep me in air conditioning' } ] },
-  { id: 'mobility', type: 'multi', text: 'Anything the planner should know about getting around? Pick all that apply.',
-    options: [ { v: 'none', l: 'Nothing — I get around fine' }, { v: 'cane', l: 'I sometimes use a cane or stick' }, { v: 'wheelchair', l: 'I would like a wheelchair at the airports (free — the airline provides it)' }, { v: 'knees', l: 'Bad knees or hips' }, { v: 'balance', l: 'Balance is not what it was' } ] },
-
-  { id: 'i_do', type: 'intro', title: 'Part 5 — Things to see and do', img: 'img/wat_arun.jpg', cap: 'Wat Arun, the Temple of Dawn, Bangkok.',
-    body: 'You cannot see everything, and you should not try. Tell us what you would be sorry to miss, and we will build the days around that.' },
-  { id: 'must_see', type: 'multi', text: 'What would you be sorry to miss? Pick as many as you like.',
-    options: [ { v: 'temples', l: 'Temples and the Grand Palace', img: 'img/wat_pho.jpg' }, { v: 'river', l: 'A boat ride on the river', img: 'img/chao_phraya.jpg' }, { v: 'markets', l: 'Markets and shopping', img: 'img/night_bazaar.jpg' }, { v: 'elephants', l: 'Elephants at a sanctuary', img: 'img/elephant_nature_park.jpg' }, { v: 'mountain', l: 'The mountain temple with the view', img: 'img/doi_suthep.jpg' }, { v: 'mosque', l: 'The white mosque in Abu Dhabi', img: 'img/grand_mosque.jpg' }, { v: 'museum', l: 'The Louvre museum in Abu Dhabi', img: 'img/louvre_ad.jpg' }, { v: 'massage', l: 'A real Thai massage (about $10)' }, { v: 'cooking', l: 'A short Thai cooking class' } ] },
-  { id: 'elephants', type: 'single', text: 'About the elephants — how much do you want this?', img: 'img/elephant_nature_park.jpg', cap: 'Elephant Nature Park, near Chiang Mai. No riding, no shows; the elephants were rescued from logging and tourist camps.',
-    help: 'The good sanctuaries let you walk beside the elephants and feed them. It is a half-day with a hotel pick-up, about $70 each, and it can be muddy in September.',
-    options: [ { v: 'yes', l: 'Yes — even if it is muddy and takes half a day' }, { v: 'easy', l: 'Only if it is easy: see them and feed them, no mud' }, { v: 'no', l: 'No, thank you' } ] },
-  { id: 'photos', type: 'multi', text: 'What do you want photographs of?',
-    options: [ { v: 'us', l: 'The two of us at the famous places' }, { v: 'food', l: 'The food' }, { v: 'people', l: 'Markets and people' }, { v: 'temples', l: 'Temples and buildings' }, { v: 'sunset', l: 'The river at sunset' }, { v: 'none', l: 'I do not care much about photos' } ] },
-  { id: 'birthday', type: 'single', text: 'Stella’s birthday dinner in Bangkok — which sounds best?', help: 'It falls on the Tuesday, one week after the real date. All four are safe, clean, and used to visitors.',
-    options: [ { v: 'cruise', l: 'A dinner cruise on the river with music', s: 'About $35 each; the temples lit up from the water' }, { v: 'rooftop', l: 'A rooftop restaurant with the city lights', s: 'About $40 each' }, { v: 'chinatown', l: 'Street-food night in Chinatown', s: 'About $10 each; loud, bright, unforgettable' }, { v: 'quiet', l: 'A quiet, nice restaurant near the hotel' } ] },
-  { id: 'pace', type: 'single', text: 'What pace do you want?',
-    options: [ { v: 'full', l: 'Full days — see as much as possible' }, { v: 'one', l: 'One main thing each day, then rest' }, { v: 'slow', l: 'Very relaxed — mornings out, afternoons in' } ] },
-  { id: 'shopping', type: 'single', text: 'Shopping?', help: 'Chiang Mai is known for fabric, silver, and hand-made things. Bangkok has everything.',
-    options: [ { v: 'yes', l: 'Yes — clothes, fabric, gifts for people back home' }, { v: 'little', l: 'A little' }, { v: 'no', l: 'Not interested' } ] },
-
-  { id: 'i_health', type: 'intro', title: 'Part 6 — The dentist and the check-up',
-    body: 'Bumrungrad is a big private hospital in Bangkok, a bit like Emory in Atlanta: doctors trained in the US and UK, everyone speaks English, and it is used to visitors from abroad. The dental hospital is across the road. The difference is the price and the speed — a full check-up is done in one day and the first results come the same afternoon.' },
-  { id: 'dental_type', type: 'single', text: 'Dad — what did the dentist say you need?', help: 'This matters more than anything else on this list. Most treatments fit in the three Bangkok days. An implant (a metal screw into the jaw, then a new tooth months later) does not — it needs two trips.',
-    options: [ { v: 'crown', l: 'A crown (a cap over a tooth)' }, { v: 'root', l: 'A root canal' }, { v: 'extraction', l: 'Pulling a tooth' }, { v: 'implant', l: 'An implant (screw and new tooth)' }, { v: 'bridge', l: 'A bridge' }, { v: 'denture', l: 'A denture or partial denture' }, { v: 'unsure', l: 'I am not sure — I will ask the dentist' } ] },
-  { id: 'dental_docs', type: 'single', text: 'Do you have the dentist’s written treatment plan or your x-rays?', help: 'The Bangkok hospital will give a written price from these before you fly. Your US dentist’s office can email them to you.',
-    options: [ { v: 'yes', l: 'Yes, or I can get them' }, { v: 'no', l: 'No' }, { v: 'unsure', l: 'Not sure' } ] },
-  { id: 'checkup', type: 'single', text: 'The full health check-up — who wants it?', help: 'Roughly $1,000 each for the version built for your age (bloods, heart tracing, x-ray, ultrasound, PSA or mammogram, bone density, eyes, hearing), or about $500–640 each for a basic one. A doctor goes through everything with you the same day.',
-    options: [ { v: 'both', l: 'Both of us' }, { v: 'me', l: 'Only me' }, { v: 'neither', l: 'Neither of us' }, { v: 'unsure', l: 'Not sure yet' } ] },
-  { id: 'health_notes', type: 'text', text: 'Anything the planner should know about your health?', help: 'Daily medicines, conditions like blood pressure or diabetes, recent surgery, a bad back. Only Vince will read this.' },
-
-  { id: 'i_admin', type: 'intro', title: 'Part 7 — Phone, money, and papers', img: 'img/bts_skytrain.jpg', cap: 'The BTS Skytrain in Bangkok — clean, air-conditioned, about $1 a ride, and it runs right past the hotel.',
-    body: 'A few practical questions so nothing surprises you at the airport.' },
-  { id: 'phone', type: 'single', text: 'What kind of phone do you have?', help: 'Newer phones can download a foreign phone plan without a physical card (called an eSIM). Older ones need a small card from a counter at the airport — both are easy, we just need to know which.',
-    options: [ { v: 'iphone', l: 'iPhone' }, { v: 'android', l: 'Android (Samsung, Google, Motorola…)' }, { v: 'unsure', l: 'I am not sure' } ] },
-  { id: 'phone_model', type: 'text', text: 'What model is it, if you know? (Settings → General → About on an iPhone)', help: 'For example “iPhone 12” or “Samsung Galaxy S21”. Leave blank if unsure.' },
-  { id: 'carrier', type: 'single', text: 'Who is your phone company?', options: [ { v: 'att', l: 'AT&T' }, { v: 'verizon', l: 'Verizon' }, { v: 'tmobile', l: 'T-Mobile' }, { v: 'other', l: 'Another company / not sure' } ] },
-  { id: 'cards', type: 'multi', text: 'Money — pick all that apply.', help: 'Cash machines are everywhere in Thailand but each withdrawal has a fee of about $7, so it is better to take out larger amounts less often. Most hotels, hospitals and taxi apps take cards.',
-    options: [ { v: 'debit', l: 'I have a Visa or Mastercard debit card' }, { v: 'credit', l: 'I have a credit card' }, { v: 'cash', l: 'I prefer to carry cash' }, { v: 'unsure', l: 'I am not sure which of my cards work abroad' } ] },
-  { id: 'passport', type: 'single', text: 'Is your passport valid until at least the end of March 2027?', help: 'Thailand and the UAE want six months left on the passport after you leave. Check the “Date of expiration” line.',
-    options: [ { v: 'yes', l: 'Yes' }, { v: 'no', l: 'No — it expires before then' }, { v: 'check', l: 'I need to check' } ] },
-
-  { id: 'i_last', type: 'intro', title: 'Part 8 — Last two questions', body: 'These two are the most useful of all.' },
-  { id: 'worries', type: 'text', text: 'What worries you most about this trip?', help: 'The flights, the food, getting lost, the money, the heat, being far from home — anything. Saying it now means we can plan for it.' },
-  { id: 'wish', type: 'text', text: 'Is there anything you have always wanted to see or do there?', help: 'Big or small. A specific dish, a temple you saw on TV, a photo you want to take.' },
-  { id: 'review', type: 'review', title: 'Check your answers, then send them to Vince' }
+  { id: 'who', type: 'single', text: 'Who is answering?', options: [ { v: 'Stella', l: 'Stella' }, { v: 'Cajetan', l: 'Cajetan' }, { v: 'Both', l: 'Both of us' } ] },
+  { id: 'i_fly', type: 'intro', title: 'The flights', img: 'img/etihad_a350.jpg', body: 'Two long flights each way. Atlanta to Abu Dhabi is 14 hours, a little longer than Atlanta to Lagos. Both are overnight.' },
+  { id: 'seat', type: 'single', text: 'Window or aisle?', help: 'On a 14-hour flight most people pick the aisle so they can get up.', options: [ { v: 'aisle', l: 'Aisle' }, { v: 'window', l: 'Window' }, { v: 'any', l: 'Either' } ] },
+  { id: 'sleep_plane', type: 'single', text: 'Can you sleep on a plane?', options: [ { v: 'well', l: 'Yes' }, { v: 'poorly', l: 'Not really' }, { v: 'unknown', l: 'Never tried one this long' } ] },
+  { id: 'stopover', type: 'single', text: 'Stop one night in Abu Dhabi on the way?', img: 'img/grand_mosque.jpg', help: 'The airline pays for the hotel. It will be about 105°F, so the day is planned indoors.', options: [ { v: 'yes', l: 'Yes, one night' }, { v: 'no', l: 'No, straight to Bangkok' }, { v: 'vince', l: 'Let Vince decide' } ] },
+  { id: 'layover_home', type: 'single', text: 'Coming home there is an 8-hour wait overnight in the Abu Dhabi airport. What would you prefer?', options: [ { v: 'hotel', l: 'A room inside the airport, about $125' }, { v: 'lounge', l: 'A lounge with recliners, about $50 each' }, { v: 'terminal', l: 'Rest in the terminal, free' } ] },
+  { id: 'i_sleep', type: 'intro', title: 'Where you sleep', img: 'img/chao_phraya.jpg', body: 'In Thailand a clean 4-star hotel with a pool costs what a roadside motel costs in Georgia. No hostels.' },
+  { id: 'hotel_matters', type: 'multi', max: 3, text: 'What matters most in a hotel? Pick up to three.', options: [ { v: 'clean', l: 'Spotless' }, { v: 'quiet', l: 'Quiet at night' }, { v: 'breakfast', l: 'Breakfast included' }, { v: 'pool', l: 'A pool' }, { v: 'elevator', l: 'An elevator' }, { v: 'hospital', l: 'Walking distance to the hospital' }, { v: 'bath', l: 'A bathtub' } ] },
+  { id: 'beds', type: 'single', text: 'One big bed or two?', options: [ { v: 'one', l: 'One big bed' }, { v: 'two', l: 'Two beds' }, { v: 'either', l: 'Either' } ] },
+  { id: 'money_style', type: 'single', text: 'Which sounds more like you?', options: [ { v: 'comfort', l: 'I would pay $30 more a night for the nicer place' }, { v: 'save', l: 'I would rather save the $30 for food and outings' }, { v: 'middle', l: 'In the middle' } ] },
+  { id: 'i_food', type: 'intro', title: 'Food', img: 'img/pad_thai.jpg', body: 'Rice, noodles, grilled chicken and fish, soups, fresh fruit. It can be spicy, but every cook makes it mild if you ask.' },
+  { id: 'food_adventure', type: 'single', text: 'How adventurous are you with food?', options: [ { v: 'any', l: 'I will try anything once' }, { v: 'careful', l: 'New food if it looks clean and cooked' }, { v: 'familiar', l: 'Mostly food I know' } ] },
+  { id: 'spice', type: 'single', text: 'Spicy?', help: '“Mai phet” (my pet) means not spicy.', options: [ { v: 'love', l: 'Yes, like pepper soup' }, { v: 'little', l: 'A little' }, { v: 'none', l: 'None, please' } ] },
+  { id: 'street_food', type: 'single', text: 'Would you eat at the famous night-market street?', img: 'img/yaowarat.jpg', options: [ { v: 'yes', l: 'Yes, take me there' }, { v: 'ac', l: 'I prefer restaurants with air conditioning' }, { v: 'mix', l: 'A mix' } ] },
+  { id: 'avoid_food', type: 'text', text: 'Anything you cannot or will not eat?', help: 'Allergies, doctor’s orders, dislikes. Or “nothing”.' },
+  { id: 'i_body', type: 'intro', title: 'Walking, heat, your body', img: 'img/doi_suthep.jpg', body: 'Honest answers make the trip better, not smaller. Every day has rests, and every place has an easier way in.' },
+  { id: 'walk', type: 'single', text: 'How far can you walk before you need to sit?', help: 'A Walmart parking lot end to end is about 5 minutes. A lap of Lenox Square is about 15.', options: [ { v: '30', l: '30 minutes or more' }, { v: '15', l: 'About 15 minutes' }, { v: '5', l: '5 to 10 minutes' } ] },
+  { id: 'stairs', type: 'single', text: 'Stairs?', options: [ { v: 'fine', l: 'Fine' }, { v: 'some', l: 'A flight or two' }, { v: 'avoid', l: 'Please avoid them' } ] },
+  { id: 'heat', type: 'single', text: 'Heat?', help: 'Bangkok in September is like Atlanta in late July. Abu Dhabi is hotter than anywhere in Georgia.', options: [ { v: 'fine', l: 'Does not bother me' }, { v: 'breaks', l: 'Fine with water and breaks' }, { v: 'struggle', l: 'Keep me in air conditioning' } ] },
+  { id: 'mobility', type: 'multi', text: 'Anything we should know? Pick all that apply.', options: [ { v: 'none', l: 'Nothing, I get around fine' }, { v: 'cane', l: 'I sometimes use a cane' }, { v: 'wheelchair', l: 'A wheelchair at the airports, please (free)' }, { v: 'knees', l: 'Bad knees or hips' } ] },
+  { id: 'i_do', type: 'intro', title: 'Things to see and do', img: 'img/wat_arun.jpg', body: 'You cannot see everything. Tell us what you would be sorry to miss.' },
+  { id: 'must_see', type: 'multi', text: 'What would you be sorry to miss?', options: [ { v: 'temples', l: 'Temples and the Grand Palace', img: 'img/wat_pho.jpg' }, { v: 'river', l: 'A boat on the river', img: 'img/chao_phraya.jpg' }, { v: 'markets', l: 'Markets', img: 'img/night_bazaar.jpg' }, { v: 'elephants', l: 'Elephants at a sanctuary', img: 'img/elephant_nature_park.jpg' }, { v: 'mountain', l: 'The mountain temple', img: 'img/doi_suthep.jpg' }, { v: 'mosque', l: 'The white mosque', img: 'img/grand_mosque.jpg' }, { v: 'museum', l: 'The Louvre museum', img: 'img/louvre_ad.jpg' }, { v: 'massage', l: 'A Thai massage' } ] },
+  { id: 'elephants', type: 'single', text: 'The elephants: how much do you want this?', img: 'img/elephant_nature_park.jpg', help: 'A half day, $77 each. You walk beside them on a flat path and feed them. Can be muddy.', options: [ { v: 'yes', l: 'Yes, even if muddy' }, { v: 'easy', l: 'Only if it is easy' }, { v: 'no', l: 'No thank you' } ] },
+  { id: 'birthday', type: 'single', text: 'Stella’s birthday dinner. Which sounds best?', options: [ { v: 'rooftop', l: 'A rooftop table facing the lit-up temple' }, { v: 'cruise', l: 'A dinner cruise with music' }, { v: 'chinatown', l: 'Street food in Chinatown' }, { v: 'quiet', l: 'A quiet restaurant near the hotel' } ] },
+  { id: 'pace', type: 'single', text: 'What pace?', options: [ { v: 'full', l: 'Full days, see a lot' }, { v: 'one', l: 'One main thing a day, then rest' }, { v: 'slow', l: 'Mornings out, afternoons in' } ] },
+  { id: 'i_health', type: 'intro', title: 'The dentist and the check-up', body: 'Bumrungrad is like Emory in Atlanta: big, modern, everyone speaks English. The check-up is done in one day. The dental hospital is across the road.' },
+  { id: 'dental_type', type: 'single', text: 'Dad, what did the dentist say you need?', help: 'Everything fits in the three Bangkok days except an implant, which needs two trips.', options: [ { v: 'crown', l: 'A crown (a cap)' }, { v: 'root', l: 'A root canal' }, { v: 'extraction', l: 'Pull a tooth' }, { v: 'implant', l: 'An implant' }, { v: 'bridge', l: 'A bridge' }, { v: 'unsure', l: 'Not sure, I will ask' } ] },
+  { id: 'checkup', type: 'single', text: 'The full check-up. Who wants it?', help: 'About $1,000 each for the version built for your age.', options: [ { v: 'both', l: 'Both of us' }, { v: 'me', l: 'Only me' }, { v: 'neither', l: 'Neither' } ] },
+  { id: 'health_notes', type: 'text', text: 'Anything about your health the planner should know?', help: 'Daily medicines, conditions, recent surgery. Only Vince reads this.' },
+  { id: 'i_admin', type: 'intro', title: 'Phone and papers', img: 'img/bts_skytrain.jpg', body: 'Three quick ones so nothing surprises you at the airport.' },
+  { id: 'phone', type: 'single', text: 'What phone do you have?', help: 'Type the model on the next screen if you know it.', options: [ { v: 'iphone', l: 'iPhone' }, { v: 'android', l: 'Android (Samsung, Google…)' }, { v: 'unsure', l: 'Not sure' } ] },
+  { id: 'phone_model', type: 'text', text: 'Which model, if you know?', help: 'iPhone: Settings, General, About. Leave blank if unsure.' },
+  { id: 'carrier', type: 'single', text: 'Your phone company?', options: [ { v: 'att', l: 'AT&T' }, { v: 'verizon', l: 'Verizon' }, { v: 'tmobile', l: 'T-Mobile' }, { v: 'other', l: 'Other / not sure' } ] },
+  { id: 'passport', type: 'single', text: 'Is your passport valid past March 2027?', help: 'Look at the expiry line.', options: [ { v: 'yes', l: 'Yes' }, { v: 'no', l: 'No' }, { v: 'check', l: 'I need to check' } ] },
+  { id: 'worries', type: 'text', text: 'What worries you most about this trip?' },
+  { id: 'wish', type: 'text', text: 'Anything you have always wanted to see or do there?' },
+  { id: 'review', type: 'review', title: 'Check, then send to Vince' }
 ];
-
 const LABELS = {}; Q.forEach(q => { if (q.text) LABELS[q.id] = q.text; });
-const STORE = 'ptrip.answers.v1';
-const POS = 'ptrip.pos.v1';
-const ENDPOINT = 'https://n8n.americanlifeteam.com/webhook/parents-trip-answers';
-const TOKEN = 'ptrip_2026_kx7Qm9';
-
-let answers = {}; try { answers = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) {}
+const STORE = 'ptrip.answers.v2', POS = 'ptrip.pos.v2', ENDPOINT = 'https://n8n.americanlifeteam.com/webhook/parents-trip-answers', TOKEN = 'ptrip_2026_kx7Qm9';
+let answers = {}; try { answers = JSON.parse(localStorage.getItem(STORE) || localStorage.getItem('ptrip.answers.v1') || '{}') || {}; } catch (e) {}
 let pos = 0; try { pos = Math.min(parseInt(localStorage.getItem(POS) || '0', 10) || 0, Q.length - 1); } catch (e) {}
 const save = () => { try { localStorage.setItem(STORE, JSON.stringify(answers)); localStorage.setItem(POS, String(pos)); } catch (e) {} };
-const view = document.getElementById('view'), backBtn = document.getElementById('backBtn'), nextBtn = document.getElementById('nextBtn');
-const toastEl = document.getElementById('toast');
-function toast(msg) { toastEl.textContent = msg; toastEl.classList.add('show'); setTimeout(() => toastEl.classList.remove('show'), 2200); }
+const view = document.getElementById('view'), backBtn = document.getElementById('backBtn'), nextBtn = document.getElementById('nextBtn'), toastEl = document.getElementById('toast');
+function toast(m) { toastEl.textContent = m; toastEl.classList.add('show'); setTimeout(() => toastEl.classList.remove('show'), 2000); }
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const questionsOnly = Q.filter(q => q.type !== 'intro' && q.type !== 'review');
+const qs = Q.filter(q => q.type !== 'intro' && q.type !== 'review');
 function qNumber(i) { let n = 0; for (let k = 0; k <= i; k++) if (Q[k].type !== 'intro' && Q[k].type !== 'review') n++; return n; }
 function labelFor(q, v) { if (!q.options) return v; const o = q.options.find(o => o.v === v); return o ? o.l : v; }
-
 function render() {
-  const q = Q[pos];
-  const total = questionsOnly.length;
+  const q = Q[pos], total = qs.length;
   document.getElementById('bar').style.width = Math.round((qNumber(pos) / total) * 100) + '%';
-  document.getElementById('stepLabel').textContent = (q.type === 'intro' || q.type === 'review') ? q.title.split(' — ')[0] : ('Question ' + qNumber(pos) + ' of ' + total);
+  document.getElementById('stepLabel').textContent = (q.type === 'intro' || q.type === 'review') ? '' : (qNumber(pos) + ' of ' + total);
   window.scrollTo({ top: 0 });
   let h = '';
   if (q.type === 'intro') {
-    h += '<section class="card soft"><div class="eyebrow">' + esc(q.title.split(' — ')[0]) + '</div><h1>' + esc(q.title.split(' — ')[1] || q.title) + '</h1><p>' + esc(q.body) + '</p></section>';
-    if (q.img) h += '<figure class="photo"><img src="' + q.img + '" alt=""><figcaption>' + esc(q.cap || '') + '</figcaption></figure>';
-    nextBtn.textContent = 'Continue →';
+    h += (q.img ? '<figure class="photo"><img src="' + q.img + '" alt=""></figure>' : '') + '<section class="q" style="display:grid;gap:10px"><h1>' + esc(q.title) + '</h1><p>' + esc(q.body) + '</p></section>';
+    nextBtn.textContent = 'Continue';
   } else if (q.type === 'review') {
-    h += '<section><h1>' + esc(q.title) + '</h1><p class="help" style="margin-top:8px">Tap any answer to change it. Blank ones are fine — send what you have.</p></section>';
-    h += '<div class="review">';
-    questionsOnly.forEach(qq => {
-      const v = answers[qq.id];
-      const shown = v == null || v === '' || (Array.isArray(v) && !v.length) ? '' : (Array.isArray(v) ? v.map(x => labelFor(qq, x)).join(', ') : labelFor(qq, v));
-      h += '<div role="button" tabindex="0" data-goto="' + Q.indexOf(qq) + '"><span class="q">' + esc(qq.text) + '</span><span class="a' + (shown ? '' : ' empty') + '">' + (shown ? esc(shown) : 'Not answered') + '</span></div>';
-    });
-    h += '</div>';
-    h += '<section class="card"><h2>Send to Vince</h2><p class="help">This sends your answers to Vince by email. Nothing is booked or paid. You can come back and send again if you change your mind.</p><button class="btn big" id="sendBtn" type="button">Send my answers to Vince</button><p class="help" id="sendStatus"></p></section>';
+    h += '<section class="q" style="display:grid;gap:8px"><h1>' + esc(q.title) + '</h1><p class="small">Tap an answer to change it. Blank ones are fine.</p></section><div class="review">';
+    qs.forEach(qq => { const v = answers[qq.id]; const shown = v == null || v === '' || (Array.isArray(v) && !v.length) ? '' : (Array.isArray(v) ? v.map(x => labelFor(qq, x)).join(', ') : labelFor(qq, v)); h += '<div role="button" tabindex="0" data-goto="' + Q.indexOf(qq) + '"><span class="q">' + esc(qq.text) + '</span><span class="a' + (shown ? '' : ' empty') + '">' + (shown ? esc(shown) : 'Not answered') + '</span></div>'; });
+    h += '</div><section style="display:grid;gap:10px"><button class="btn big" id="sendBtn" type="button">Send to Vince</button><p class="small" id="sendStatus">Nothing is booked by sending.</p></section>';
     nextBtn.textContent = 'Done';
   } else {
-    h += '<section style="display:grid;gap:10px"><div class="eyebrow">Question ' + qNumber(pos) + ' of ' + total + (q.type === 'multi' ? ' · pick ' + (q.max ? 'up to ' + q.max : 'any') : '') + '</div><h1>' + esc(q.text) + '</h1>' + (q.help ? '<p class="help">' + esc(q.help) + '</p>' : '') + '</section>';
-    if (q.img) h += '<figure class="photo"><img src="' + q.img + '" alt=""><figcaption>' + esc(q.cap || '') + '</figcaption></figure>';
-    if (q.type === 'text') {
-      h += '<textarea id="ta" aria-label="' + esc(q.text) + '" placeholder="Type here…">' + esc(answers[q.id] || '') + '</textarea>';
-    } else {
-      const cur = answers[q.id];
-      h += '<div class="options" role="' + (q.type === 'single' ? 'radiogroup' : 'group') + '">';
-      q.options.forEach(o => {
-        const on = q.type === 'single' ? cur === o.v : Array.isArray(cur) && cur.includes(o.v);
-        h += '<button type="button" class="opt ' + (q.type === 'single' ? 'radio' : '') + (o.img ? ' withimg' : '') + '" role="' + (q.type === 'single' ? 'radio' : 'checkbox') + '" aria-checked="' + (on ? 'true' : 'false') + '" data-v="' + esc(o.v) + '"><span class="box"></span>' + (o.img ? '<img src="' + o.img + '" alt="">' : '') + '<span><span class="lbl">' + esc(o.l) + '</span>' + (o.s ? '<span class="sub">' + esc(o.s) + '</span>' : '') + '</span></button>';
-      });
-      h += '</div>';
-    }
-    nextBtn.textContent = pos === Q.length - 2 ? 'Review answers →' : 'Next →';
+    h += '<section class="q" style="display:grid;gap:10px"><h1>' + esc(q.text) + '</h1>' + (q.help ? '<p class="small">' + esc(q.help) + '</p>' : '') + '</section>';
+    if (q.img) h += '<figure class="photo"><img src="' + q.img + '" alt=""></figure>';
+    if (q.type === 'text') h += '<textarea id="ta" aria-label="' + esc(q.text) + '" placeholder="Type here">' + esc(answers[q.id] || '') + '</textarea>';
+    else { const cur = answers[q.id]; h += '<div class="options" role="' + (q.type === 'single' ? 'radiogroup' : 'group') + '">'; q.options.forEach(o => { const on = q.type === 'single' ? cur === o.v : Array.isArray(cur) && cur.includes(o.v); h += '<button type="button" class="opt' + (q.type === 'multi' ? ' check' : '') + (o.img ? ' withimg' : '') + '" role="' + (q.type === 'single' ? 'radio' : 'checkbox') + '" aria-checked="' + (on ? 'true' : 'false') + '" data-v="' + esc(o.v) + '"><span class="box"></span>' + (o.img ? '<img src="' + o.img + '" alt="">' : '') + '<span><span class="lbl">' + esc(o.l) + '</span></span></button>'; }); h += '</div>'; }
+    nextBtn.textContent = pos === Q.length - 2 ? 'Review' : 'Next';
   }
-  view.innerHTML = h;
-  backBtn.disabled = pos === 0;
-  // wire
-  view.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
-    const v = b.dataset.v;
-    if (q.type === 'single') { answers[q.id] = v; save(); render(); setTimeout(next, 350); return; }
-    let arr = Array.isArray(answers[q.id]) ? answers[q.id].slice() : [];
-    if (arr.includes(v)) arr = arr.filter(x => x !== v);
-    else { if (q.max && arr.length >= q.max) { toast('Pick up to ' + q.max + ' — tap one to remove it first'); return; } arr.push(v); }
-    answers[q.id] = arr; save(); render();
-  }));
-  const ta = document.getElementById('ta'); if (ta) { ta.addEventListener('input', () => { answers[q.id] = ta.value; save(); }); setTimeout(() => ta.focus(), 50); }
+  view.innerHTML = h; backBtn.disabled = pos === 0;
+  view.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => { const v = b.dataset.v; if (q.type === 'single') { answers[q.id] = v; save(); render(); setTimeout(next, 300); return; } let arr = Array.isArray(answers[q.id]) ? answers[q.id].slice() : []; if (arr.includes(v)) arr = arr.filter(x => x !== v); else { if (q.max && arr.length >= q.max) { toast('Pick up to ' + q.max); return; } arr.push(v); } answers[q.id] = arr; save(); render(); }));
+  const ta = document.getElementById('ta'); if (ta) { ta.addEventListener('input', () => { answers[q.id] = ta.value; save(); }); }
   view.querySelectorAll('[data-goto]').forEach(d => { const go = () => { pos = +d.dataset.goto; save(); render(); }; d.addEventListener('click', go); d.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }); });
-  const sendBtn = document.getElementById('sendBtn'); if (sendBtn) sendBtn.addEventListener('click', send);
+  const sb = document.getElementById('sendBtn'); if (sb) sb.addEventListener('click', send);
 }
-function next() { if (pos < Q.length - 1) { pos++; save(); render(); } else { location.href = 'index.html'; } }
+function next() { if (pos < Q.length - 1) { pos++; save(); render(); } else location.href = 'index.html'; }
 function back() { if (pos > 0) { pos--; save(); render(); } }
 nextBtn.addEventListener('click', next); backBtn.addEventListener('click', back);
-
 async function send() {
-  const btn = document.getElementById('sendBtn'), st = document.getElementById('sendStatus');
-  btn.disabled = true; st.textContent = 'Sending…';
-  const payload = { token: TOKEN, who: answers.who || 'unknown', section: 'all', answers, labels: LABELS, sentAt: new Date().toISOString() };
-  try {
-    const body = new URLSearchParams(); body.set('payload', JSON.stringify(payload));
-    const r = await fetch(ENDPOINT, { method: 'POST', body });
-    const j = await r.json().catch(() => ({}));
-    if (r.ok && j.ok) { st.textContent = 'Sent. Vince has your answers — thank you.'; toast('Sent to Vince'); btn.textContent = 'Sent ✓'; }
-    else { throw new Error(j.error || ('HTTP ' + r.status)); }
-  } catch (e) {
-    st.textContent = 'It did not go through (' + e.message + '). Your answers are still saved here — try again in a minute, or just tell Vince you are done and he can read them from this device.';
-    btn.disabled = false;
-  }
+  const btn = document.getElementById('sendBtn'), st = document.getElementById('sendStatus'); btn.disabled = true; st.textContent = 'Sending…';
+  try { const body = new URLSearchParams(); body.set('payload', JSON.stringify({ token: TOKEN, who: answers.who || 'unknown', section: 'all', answers, labels: LABELS, sentAt: new Date().toISOString() }));
+    const r = await fetch(ENDPOINT, { method: 'POST', body }); const j = await r.json().catch(() => ({}));
+    if (r.ok && j.ok) { st.textContent = 'Sent. Vince has your answers.'; btn.textContent = 'Sent'; toast('Sent to Vince'); } else throw new Error(j.error || ('HTTP ' + r.status));
+  } catch (e) { st.textContent = 'It did not go through (' + e.message + '). Your answers are saved here. Try again in a minute.'; btn.disabled = false; }
 }
 render();
 </script>

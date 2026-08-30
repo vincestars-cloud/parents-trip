@@ -3,282 +3,183 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Plan — Cajetan &amp; Stella's Trip</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Sora:wght@600;700&display=swap">
+<title>The Plan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Outfit:wght@500;600&display=swap">
 <link rel="stylesheet" href="style.css">
 <style>
-  .toc { display: flex; flex-wrap: wrap; gap: 8px; }
-  .toc a { background: var(--panel); border: 1px solid var(--rule); border-radius: 999px; padding: 8px 14px; text-decoration: none; color: var(--ink); font-weight: 700; font-size: 16px; }
-  .day { display: grid; gap: 14px; scroll-margin-top: 70px; }
-  .day header { display: grid; gap: 6px; }
-  .day .when { font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
-  .day h2 { font-size: 28px; }
-  .day .sleep { background: var(--accent-wash); color: var(--accent-ink); border-radius: 8px; padding: 8px 12px; font-size: 17px; display: inline-block; }
-  .anchor { border-left: 4px solid var(--pick); background: var(--pick-wash); padding: 12px 16px; border-radius: 0 8px 8px 0; }
-  .anchor b { font-family: "Sora", sans-serif; }
-  .tl { display: grid; gap: 0; border-top: 1px solid var(--rule); }
-  .tl div { display: grid; grid-template-columns: 92px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--rule); font-size: 18px; }
-  .tl .t { font-family: "Sora", sans-serif; font-weight: 700; font-size: 16px; color: var(--accent-ink); padding-top: 2px; }
-  .tl .cost { color: var(--muted); font-size: 16px; }
-  .backup { background: var(--panel); border-radius: 8px; padding: 12px 16px; font-size: 17px; }
-  .backup b { color: var(--warn); }
-  .eat { font-size: 17px; }
-  .eat b { font-family: "Sora", sans-serif; }
-  .picks { display: grid; gap: 12px; }
-  .pick { background: var(--card); border: 2px solid var(--rule); border-radius: 12px; padding: 14px 18px; display: grid; gap: 6px; }
-  .pick.best { border-color: var(--accent); }
-  .pick h3 { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
-  .pick h3 { flex-wrap: wrap; }
-  .pick h3 span { font-family: "Atkinson Hyperlegible", sans-serif; font-weight: 400; color: var(--muted); font-size: 16px; }
-  .pick p { font-size: 17px; max-width: none; }
-  table { border-collapse: collapse; width: 100%; font-size: 17px; }
-  th, td { text-align: left; padding: 9px 10px 9px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
-  th { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
-  .tablewrap { overflow-x: auto; min-width: 0; }
-  .page > * { min-width: 0; }
-  ul.plain { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
-  ul.plain li { max-width: 66ch; }
-  .skip li b { color: var(--warn); }
-  @media (max-width: 480px) { .tl div { grid-template-columns: 70px 1fr; font-size: 17px; } .day h2 { font-size: 24px; } }
+  .day { display: grid; gap: 14px; }
+  .day .pic { border-radius: var(--r); overflow: hidden; background: var(--bg-2); }
+  .day .pic img { width: 100%; height: 230px; object-fit: cover; }
+  .day .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .day .date { font-size: 16px; color: var(--ink-2); }
+  .day .cost { font-family: "Outfit", sans-serif; font-weight: 600; color: var(--accent-2); white-space: nowrap; }
+  .day .one { font-size: 20px; }
+  .day .one b { font-family: "Outfit", sans-serif; font-weight: 600; }
+  .day ul { margin: 0; padding-left: 22px; display: grid; gap: 6px; font-size: 18px; }
+  .day details { border: 1px solid var(--line); border-radius: var(--r); padding: 0 16px; }
+  .day details:last-of-type { border-bottom: 1px solid var(--line); }
+  .day summary { font-size: 18px; padding: 14px 0; }
+  .tl { display: grid; gap: 10px; font-size: 17px; }
+  .tl div { display: grid; grid-template-columns: 78px 1fr; gap: 10px; }
+  .tl .t { font-family: "Outfit", sans-serif; font-weight: 600; color: var(--accent-2); font-size: 16px; }
+  .divider { border: 0; border-top: 1px solid var(--line); margin: 0; }
+  .hlist { display: grid; gap: 14px; }
+  .hlist .h { display: grid; grid-template-columns: 1fr; gap: 4px; }
+  .hlist .h b { font-family: "Outfit", sans-serif; font-weight: 600; font-size: 19px; }
+  .hlist .h span { font-size: 17px; color: var(--ink-2); }
 </style>
 </head>
 <body>
-<div class="topbar"><div class="in"><a class="home" href="index.html">← Your trip</a><span class="step">The plan</span></div></div>
+<div class="nav"><div class="in"><a class="home" href="index.html">← Your trip</a><span class="where">The plan</span></div></div>
 <main class="page">
-  <header style="display:grid;gap:12px">
-    <div class="eyebrow">Thursday 17 — Saturday 26 September 2026 · nine days · three countries</div>
-    <h1>The plan, day by day</h1>
-    <p class="help">Each day has one main thing, a rest, and a back-up if it rains or you are tired. Times are local. Prices are in dollars for the two of you unless it says “each”. Nothing here is booked yet — the <a href="costs.html">cost sheet</a> is where you choose.</p>
-    <nav class="toc" aria-label="Days"><a href="#d1">Thu 17</a><a href="#d2">Fri 18</a><a href="#d3">Sat 19</a><a href="#d4">Sun 20</a><a href="#d5">Mon 21</a><a href="#d6">Tue 22</a><a href="#d7">Wed 23</a><a href="#d8">Thu 24</a><a href="#d9">Fri 25</a><a href="#d10">Sat 26</a><a href="#skip">What to skip</a><a href="#hotels">Hotels</a><a href="#book">Book by</a></nav>
+  <header style="display:grid;gap:10px">
+    <h1>Nine days, one thing a day.</h1>
+    <p class="small">Prices are for both of you. Every day has a rest built in. Tap “See the day” for the times.</p>
   </header>
 
-  <section class="card" style="border-color:var(--warn);background:var(--warn-wash)">
-    <div class="eyebrow" style="color:var(--warn)">Before reading the days</div>
-    <p style="max-width:none">Days 2, 3 and 10 are in Abu Dhabi, which the US government currently rates <b>“Level 3 — Reconsider Travel”</b> because of the conflict with Iran. The route can be changed to avoid the Middle East entirely (United through San Francisco and Hong Kong, about $280 more, no stopover). <a href="guide.html#safety">The three choices are explained here.</a> Everything else on this page stays the same whichever route you pick.</p>
+  <section class="notice">
+    <p>Days 2, 3 and 10 are in Abu Dhabi, which the US government currently says to “reconsider”. The route can avoid the Middle East for about $280 more. <a href="guide.html#safety">The three choices.</a></p>
   </section>
 
-  <section class="card soft">
-    <h2>The shape of the trip</h2>
-    <p><b>Days 1–3</b> get you across the world in two halves, with a real day in Abu Dhabi between the two long flights. <b>Day 4</b> is for sleep. <b>Day 5</b> is the hospital and the dentist — the reason for the trip, done and dusted by mid-afternoon. <b>Day 6</b> is the big Bangkok day and Stella's birthday dinner. <b>Day 7</b> finishes the dentist and moves you north. <b>Day 8</b> is the elephants (or the mountain). <b>Day 9</b> is a quiet morning and the long ride home. Every outdoor thing happens before 10:30 AM or after 4 PM; every midday is indoors.</p>
-  </section>
-
-  <!-- DAY 1 -->
-  <article class="day" id="d1">
-    <header><div class="when">Day 1 · Thursday 17 September · Atlanta</div><h2>Leave home after an early dinner</h2><span class="sleep">Tonight: on the plane</span></header>
-    <div class="tl">
-      <div><span class="t">6:00 PM</span><span>Leave Marietta for the airport. 45 minutes to ATL; be at the Etihad counter 3 hours before the flight. <span class="cost">Ride to the airport: about $60 by Uber, or a family drop-off.</span></span></div>
-      <div><span class="t">6:45 PM</span><span>Check in, drop the suitcases (they are checked only to Abu Dhabi, because you are staying the night there), security. Ask for wheelchair assistance at the counter if you want it — it is free and it also skips the long walk to the gate.</span></div>
-      <div><span class="t">9:30 PM</span><span><b>Etihad EY 14 to Abu Dhabi.</b> 13 hours 50 minutes. Dinner is served about an hour after take-off, then lights go down. Breakfast before landing.</span></div>
-    </div>
-    <div class="backup"><b>On the plane:</b> aisle seats, shoes off, a small pillow, and a walk to the back every two hours. Set your watch to Abu Dhabi time (8 hours ahead) as soon as you sit down, and try to sleep when the cabin goes dark — it will be the middle of the night where you are going.</div>
+  <!-- Day 1 -->
+  <article class="day">
+    <div class="pic"><img src="img/etihad_a350.jpg" alt=""></div>
+    <div class="head"><h2>Thursday 17. Leave home.</h2><span class="cost">$60</span></div>
+    <p class="one"><b>The one thing:</b> the 9:30 PM Etihad flight to Abu Dhabi, 14 hours, dinner and breakfast on board.</p>
+    <ul><li>Leave Marietta at 6 PM. Ask for wheelchair help at the counter if you want it. It is free.</li><li>Aisle seats. Walk every two hours. Sleep when the lights go down.</li></ul>
   </article>
 
-  <!-- DAY 2 -->
-  <article class="day" id="d2">
-    <header><div class="when">Day 2 · Friday 18 September · Abu Dhabi</div><h2>Land in the evening, sleep in a real bed</h2><span class="sleep">Tonight: the Etihad stopover hotel, paid for by the airline</span></header>
-    <figure class="photo"><img src="img/zayed_airport.jpg" alt="Zayed International Airport terminal"><figcaption>Abu Dhabi’s Terminal A — opened in 2023. Everything is new, air-conditioned, and signposted in English.</figcaption></figure>
-    <div class="tl">
-      <div><span class="t">7:20 PM</span><span>Land. Passport control: a stamp at the counter, free for US passports, no forms. Ask any staff member for the assistance lane — they will take you. Collect the suitcases.</span></div>
-      <div><span class="t">8:45 PM</span><span>Walk straight out to the <b>taxi rank at the kerb</b> (not Uber — its pick-up point is a 10-minute walk away). Metered, card or cash. <span class="cost">$15–27 to the hotel depending on where it is.</span></span></div>
-      <div><span class="t">9:30 PM</span><span>Check in. Say “Etihad stopover” and your surname; the room is already paid. The room is yours for 24 hours from this moment — so it is also your air-conditioned nap spot tomorrow at midday. Something light to eat at the hotel, then bed.</span></div>
-    </div>
-    <div class="backup"><b>Good to know:</b> the hotel night is free but breakfast and the taxi are not. Your Etihad boarding pass is also an “Abu Dhabi Pass” — 15% off the museum and palace tomorrow and a free phone SIM if you want one.</div>
+  <!-- Day 2 -->
+  <article class="day">
+    <div class="pic"><img src="img/zayed_airport.jpg" alt=""></div>
+    <div class="head"><h2>Friday 18. Land, sleep.</h2><span class="cost">$25</span></div>
+    <p class="one"><b>The one thing:</b> a real bed. The airline pays for the hotel.</p>
+    <ul><li>Land 7:20 PM. Passport stamp at the counter, free. Ask for the assistance lane.</li><li>Taxi from the rank at the door, $15 to $27.</li><li>Say “Etihad stopover” and your surname at the hotel. Bed.</li></ul>
   </article>
 
-  <!-- DAY 3 -->
-  <article class="day" id="d3">
-    <header><div class="when">Day 3 · Saturday 19 September · Abu Dhabi, then the night flight</div><h2>The white mosque at nine, everything else indoors</h2><span class="sleep">Tonight: on the plane to Bangkok</span></header>
-    <figure class="photo"><img src="img/grand_mosque.jpg" alt="Sheikh Zayed Grand Mosque courtyard"><figcaption>Sheikh Zayed Grand Mosque. Be at the door at 9:00 — by 10:30 the marble is too hot to enjoy.</figcaption></figure>
-    <div class="anchor"><b>The one big thing:</b> the Grand Mosque at opening time, before the heat. It is the most beautiful building either of you will have stood inside, and it is free. Long loose clothes and a headscarf for Stella; long trousers and sleeves for Cajetan. Golf-cart rides from the car park are offered to seniors — ask.</div>
-    <div class="tl">
-      <div><span class="t">8:00 AM</span><span>Breakfast at the hotel café. Drink a big glass of water each before you leave — the day will be 100–105°F.</span></div>
-      <div><span class="t">8:45 AM</span><span>Taxi to the mosque. <span class="cost">$10–15, 10–25 min.</span></span></div>
-      <div><span class="t">9:00–10:30</span><span><b>Grand Mosque.</b> Courtyard first (best light, before the heat), then the prayer hall. Photos allowed; not of people praying.</span></div>
-      <div><span class="t">10:40</span><span>Taxi to <b>Qasr Al Watan</b>, the presidential palace — gold, marble, fully air-conditioned. <span class="cost">$10–12 taxi · $17 each entry (15% off with the boarding pass).</span></span></div>
-      <div><span class="t">12:45 PM</span><span>Lunch at <b>Al Mrzab</b> — an Emirati restaurant locals eat at; dates and Arabic coffee arrive free before the meal; order lamb or chicken machboos (spiced rice, like jollof’s cousin). <span class="cost">$14–27 each.</span></span></div>
-      <div><span class="t">2:20 PM</span><span>Taxi to the <b>Louvre Abu Dhabi</b>. Two or three hours of world art under a giant dome that lets the light through like rain. Café inside. Open until 8:30 PM, so no rush. <span class="cost">$12–15 taxi · $15 each entry.</span></span></div>
-      <div><span class="t">5:20 PM</span><span>Taxi back to the hotel for the bags, then to the airport. <span class="cost">$16–20.</span> At Terminal A by 6:15–6:30. Camel-milk ice cream at The Majlis café inside the airport — Stella’s photo for the album.</span></div>
-      <div><span class="t">9:10 PM</span><span><b>Etihad EY 402 to Bangkok.</b> 6½ hours; lands 6:45 AM Sunday.</span></div>
-    </div>
-    <div class="backup"><b>If the heat is too much (Stella’s version):</b> mosque 9:00–10:15 → coffee at the Souk Qaryat Al Beri 5 minutes away, with the mosque across the water → back to the hotel for lunch and a nap in the air conditioning until 2:30 → the Louvre only, slowly, 3:00–5:30 → airport. One outdoor hour, one museum, one nap. Still a real day in a new country. About $136 for two instead of $188.</div>
+  <!-- Day 3 -->
+  <article class="day">
+    <div class="pic"><img src="img/grand_mosque.jpg" alt=""></div>
+    <div class="head"><h2>Saturday 19. The white mosque.</h2><span class="cost">$188</span></div>
+    <p class="one"><b>The one thing:</b> Sheikh Zayed Grand Mosque at 9 AM sharp, before the heat. Free. Golf carts for seniors.</p>
+    <ul><li>Then indoors all day: the palace, an Emirati lunch, the Louvre museum.</li><li>It will be 100 to 105°F. Long loose clothes, a scarf for Stella, water in the bag.</li><li>Airport by 6:30 PM. Flight to Bangkok 9:10 PM.</li></ul>
+    <details><summary>See the day</summary><div class="body tl">
+      <div><span class="t">8:45</span><span>Taxi to the mosque, $10 to $15.</span></div>
+      <div><span class="t">9:00</span><span>Grand Mosque, 90 minutes. Courtyard first.</span></div>
+      <div><span class="t">10:40</span><span>Qasr Al Watan, the presidential palace. Air-conditioned. $17 each.</span></div>
+      <div><span class="t">12:45</span><span>Lunch at Al Mrzab. Dates and Arabic coffee come free. $14 to $27 each.</span></div>
+      <div><span class="t">2:20</span><span>Louvre Abu Dhabi, open till 8:30 PM. $15 each. Café inside.</span></div>
+      <div><span class="t">5:20</span><span>Taxi to the hotel for the bags, then the airport. Camel-milk ice cream at the Majlis café inside.</span></div>
+      <div><span class="t">Tired?</span><span>Mosque, coffee at the souk across the water, nap at the hotel till 2:30, then only the Louvre. $136.</span></div>
+    </div></details>
   </article>
 
-  <!-- DAY 4 -->
-  <article class="day" id="d4">
-    <header><div class="when">Day 4 · Sunday 20 September · Bangkok</div><h2>Arrive, sleep, one gentle evening</h2><span class="sleep">Tonight: Ad Lib Bangkok, Sukhumvit Soi 1 — one minute from the hospital</span></header>
-    <figure class="photo"><img src="img/bts_skytrain.jpg" alt="Bangkok BTS Skytrain"><figcaption>The Skytrain. Your hotel runs a free tuk-tuk to the station so there are no stairs from the street.</figcaption></figure>
-    <div class="anchor"><b>The one big thing:</b> nothing. This is the jet-lag day. The plan books the hotel from Saturday night so the room is ready when you walk in at 9 AM.</div>
-    <div class="tl">
-      <div><span class="t">6:45 AM</span><span>Land at Suvarnabhumi. The arrival card was filed online before you left (see the guide). Passport control and bags take 60–90 minutes at this hour.</span></div>
-      <div><span class="t">8:15 AM</span><span>Ride to the hotel. <b>Grab</b> (the taxi app) from Level 1, Gate 4 — or the official metered-taxi queue on the same level, which is simpler after a long night. <span class="cost">Grab $10–14 + $2 tolls · metered taxi $15–20 all in · 35–50 minutes.</span></span></div>
-      <div><span class="t">9:00 AM</span><span>Check in and sleep until 1 PM. Curtains closed, phones off.</span></div>
-      <div><span class="t">1:15 PM</span><span>Lunch at <b>Pier 21</b>, the food court on the 5th floor of the Terminal 21 mall: spotless, air-conditioned, every dish $1–2, you buy a card at the counter and hand it to the stalls. Hotel tuk-tuk to the Skytrain, one stop to Asok. Walk the mall’s themed floors for Stella’s first photos.</span></div>
-      <div><span class="t">3:00 PM</span><span>Back to the hotel. Pool or nap.</span></div>
-      <div><span class="t">5:30 PM</span><span>One stop on the Skytrain to Chit Lom: the <b>Erawan Shrine</b> (dancers, flowers, incense — five minutes) and a lap of Central World in the air conditioning.</span></div>
-      <div><span class="t">7:00 PM</span><span>Dinner at <b>Cabbages &amp; Condoms</b> on Soi 12 — a lantern-lit garden restaurant with printed prices and mild dishes; the profits fund a health charity. Chicken satay, chicken in pandan leaves, massaman curry. <span class="cost">About $18 each. Reserve.</span> Bed by 9. Last food by 7 PM if the check-up is tomorrow — water is fine.</span></div>
-    </div>
-    <div class="backup"><b>Do not</b> go to Chinatown or the river today, however good you feel at 4 PM. Tuesday is for that, rested.</div>
+  <!-- Day 4 -->
+  <article class="day">
+    <div class="pic"><img src="img/bts_skytrain.jpg" alt=""></div>
+    <div class="head"><h2>Sunday 20. Bangkok. Sleep first.</h2><span class="cost">$60</span></div>
+    <p class="one"><b>The one thing:</b> nothing. The room is booked from Saturday night, so it is ready when you land at 6:45 AM.</p>
+    <ul><li>Metered taxi from the Level 1 queue, $15 to $20 all in. Hotel by 9. Sleep till 1.</li><li>Lunch at Pier 21, the spotless $2-a-plate food court in the Terminal 21 mall.</li><li>Dinner at Cabbages &amp; Condoms, a lantern garden with mild food. Bed by 9. No food after 7 PM.</li></ul>
   </article>
 
-  <!-- DAY 5 -->
-  <article class="day" id="d5">
-    <header><div class="when">Day 5 · Monday 21 September · Bangkok</div><h2>The hospital morning and the dentist</h2><span class="sleep">Tonight: Ad Lib Bangkok</span></header>
-    <div class="anchor"><b>The one big thing:</b> the check-ups. Bumrungrad is one minute’s walk from the hotel door. It is like Emory — big, modern, every doctor speaks English — except they do the whole check-up in one go and sit down with you the same afternoon.</div>
-    <div class="tl">
-      <div><span class="t">6:50 AM</span><span>Walk to <b>Bumrungrad</b>, Health Screening Center, 11th floor. Fasting since 7 PM last night. Blood draw first, then breakfast is provided, then the rest: heart tracing, chest x-ray, ultrasound, eyes, hearing, PSA for him, mammogram for her, bone density. The full “70+” version takes 6–8 hours; the basic one about 4.</span></div>
-      <div><span class="t">2:00 PM</span><span><b>Bangkok International Dental Hospital</b>, Sukhumvit Soi 2 — a 10-minute walk from Bumrungrad (do not take a car; the one-way streets make it a 4-km loop). X-rays, consultation, and the first visit for the crown: the tooth is prepared today and the finished crown is fitted Wednesday morning. <span class="cost">A zirconia crown is about $680–830 all in.</span></span></div>
-      <div><span class="t">4:30 PM</span><span>If there is energy: Grab to <b>Jim Thompson House</b> — teak houses and a shaded garden, a 60-minute guided tour, mostly flat. <span class="cost">$8 each · Grab $3–4.</span> If not: the pool.</span></div>
-      <div><span class="t">6:30 PM</span><span>Dinner at <b>Baan Khanitha</b> on Soi 23 — a Thai heritage house with white tablecloths and full air conditioning; every dish can be made mild. Massaman curry, grilled river prawns, mango sticky rice with coconut ice cream. <span class="cost">$18–31 each. Reserve.</span> Bed by 9:30; tomorrow starts at 7:15.</span></div>
-    </div>
-    <div class="backup"><b>If the dentist runs long or the check-up wipes you out:</b> one sunset drink at <b>Above Eleven</b> (33rd-floor rooftop, a 4-minute walk from the hotel, no minimum spend, an elevator all the way up) and room service. Many Bangkok museums are closed on Mondays, which is why today is not a sightseeing day.</div>
+  <!-- Day 5 -->
+  <article class="day">
+    <div class="pic"><img src="img/chao_phraya.jpg" alt=""></div>
+    <div class="head"><h2>Monday 21. Hospital, dentist.</h2><span class="cost">$70</span></div>
+    <p class="one"><b>The one thing:</b> the check-ups at Bumrungrad, one minute’s walk from the hotel. Like Emory, but done in one day.</p>
+    <ul><li>7 AM, fasting since last night. Blood first, then breakfast, then the rest. Results the same afternoon.</li><li>2 PM the dental hospital across the road. Tooth prepared today, crown fitted Wednesday.</li><li>Dinner at Baan Khanitha, white tablecloths, air conditioning, everything can be made mild.</li></ul>
   </article>
 
-  <!-- DAY 6 -->
-  <article class="day" id="d6">
-    <header><div class="when">Day 6 · Tuesday 22 September · Bangkok</div><h2>The Grand Palace, the river, and the birthday dinner</h2><span class="sleep">Tonight: Ad Lib Bangkok</span></header>
-    <figure class="photo"><img src="img/wat_pho.jpg" alt="Wat Pho temple in Bangkok"><figcaption>Wat Pho, home of the 150-foot reclining Buddha. Ten minutes’ flat walk from the Grand Palace.</figcaption></figure>
-    <div class="anchor"><b>The one big thing:</b> the Grand Palace at opening, then Wat Pho, then the ferry to Wat Arun — the three famous sights are within one square kilometre, so the whole day happens in one place. Dinner is booked on a rooftop facing Wat Arun as the lights come on.</div>
-    <div class="tl">
-      <div><span class="t">7:15 AM</span><span>Breakfast. Dress for temples: shoulders and knees covered, slip-on shoes (you take them off at every building), hat, small umbrella.</span></div>
-      <div><span class="t">7:35 AM</span><span>Grab to the <b>Grand Palace</b>, Na Phra Lan Road gate. <span class="cost">$5–7 · 25–40 min.</span> Anyone outside who says “the palace is closed today” is lying — walk past them to the gate.</span></div>
-      <div><span class="t">8:30–10:30</span><span><b>Grand Palace and the Emerald Buddha temple.</b> <span class="cost">$15 each.</span> Shade breaks in the cloisters; water at every turn.</span></div>
-      <div><span class="t">10:40</span><span>Walk 10 minutes (flat) to <b>Wat Pho</b> and the reclining Buddha. <span class="cost">$9 each.</span> Then a 30-minute foot massage in the temple’s own pavilion — the original Thai massage school. <span class="cost">$8–16 each.</span></span></div>
-      <div><span class="t">12:30 PM</span><span>Lunch 100 m away in the air-conditioned ground floor of <b>Supanniga</b> (the same restaurant as tonight), or a 10-minute Grab to <b>Krua Apsorn</b>, where Bangkok’s civil servants eat — crab omelette, mild curries. <span class="cost">$9–20 each.</span></span></div>
-      <div><span class="t">1:45–3:45</span><span>Out of the heat: <b>Museum Siam</b> (air-conditioned, $6 each) or a café at the Tha Maharaj pier mall. Or, if Stella is fading, Grab back to the hotel for a nap and return at 4.</span></div>
-      <div><span class="t">4:00 PM</span><span>The cross-river ferry from Tha Tien to <b>Wat Arun</b> — 15 cents, three minutes. At the temple: Thai-dress portraits with the tower behind you, <span class="cost">from $6</span> — Stella’s birthday photo. Ferry back at 5.</span></div>
-      <div><span class="t">5:15 PM</span><span><b>Birthday dinner on the Supanniga rooftop</b>, table booked and facing Wat Arun. Sunset at 6:15, the temple lit at 7. <span class="cost">The table has a $62 minimum for two — which is dinner.</span> A box of mooncakes from Chinatown for the cake: the Mid-Autumn festival is this week.</span></div>
-      <div><span class="t">7:45 PM</span><span>Grab home. <span class="cost">$5–7 · 20–30 min.</span> Bed by 9:30.</span></div>
-    </div>
-    <div class="backup"><b>Plan B for the evening (cheaper, louder, hotter):</b> 4:45 Grab to Chinatown’s Yaowarat Road, dinner at <b>T&amp;K Seafood</b> (grilled prawns, steamed sea bass, chairs not stools — arrive by 5 for an air-conditioned seat, $6–11 each), then the neon walk and photos under the Odeon arch. <b>If it rains:</b> Museum Siam and the Supanniga ground floor are both dry.</div>
+  <!-- Day 6 -->
+  <article class="day">
+    <div class="pic"><img src="img/wat_pho.jpg" alt=""></div>
+    <div class="head"><h2>Tuesday 22. The palace and the birthday.</h2><span class="cost">$178</span></div>
+    <p class="one"><b>The one thing:</b> the Grand Palace at opening, then the giant reclining Buddha, then the ferry to Wat Arun. All within one square kilometre.</p>
+    <ul><li>Shoulders and knees covered. Slip-on shoes. Anyone who says “the palace is closed today” is lying.</li><li>Foot massage in the temple pavilion. Out of the heat 2 to 4 in the museum.</li><li><b>Birthday dinner</b> on the Supanniga rooftop facing Wat Arun as the lights come on. Mooncakes for the cake.</li></ul>
+    <details><summary>See the day</summary><div class="body tl">
+      <div><span class="t">7:35</span><span>Taxi app to the Grand Palace, $5 to $7.</span></div>
+      <div><span class="t">8:30</span><span>Grand Palace and the Emerald Buddha. $15 each.</span></div>
+      <div><span class="t">10:40</span><span>Walk 10 minutes to Wat Pho. $9 each. Foot massage $8 to $16 each.</span></div>
+      <div><span class="t">12:30</span><span>Lunch downstairs at Supanniga, air-conditioned.</span></div>
+      <div><span class="t">1:45</span><span>Museum Siam, air-conditioned, $6 each. Or back to the hotel to rest.</span></div>
+      <div><span class="t">4:00</span><span>Ferry to Wat Arun, 15 cents. Thai-dress birthday portrait, from $6.</span></div>
+      <div><span class="t">5:15</span><span>Rooftop table, booked. Sunset 6:15. $62 for two.</span></div>
+      <div><span class="t">Plan B</span><span>Chinatown instead: T&amp;K Seafood at 5 PM, then the neon walk. $25.</span></div>
+    </div></details>
   </article>
 
-  <!-- DAY 7 -->
-  <article class="day" id="d7">
-    <header><div class="when">Day 7 · Wednesday 23 September · Bangkok → Chiang Mai</div><h2>The crown goes on, then north</h2><span class="sleep">Tonight: THEE Vijit Lanna, at the Old City gate in Chiang Mai</span></header>
-    <div class="tl">
-      <div><span class="t">9:00 AM</span><span><b>Dental hospital</b>: the finished crown is fitted and checked. Collect the printed check-up report from Bumrungrad on the way back.</span></div>
-      <div><span class="t">12:00</span><span>Check out (ask for late check-out or bag storage — both are routine). Lunch at Pier 21 again, or at the hotel.</span></div>
-      <div><span class="t">2:30 PM</span><span>Grab to the airport. <span class="cost">$13–18 + tolls · 45–70 min at this hour.</span> Arrive by 3:45 for the 5:35 flight.</span></div>
-      <div><span class="t">5:35 PM</span><span><b>Thai Vietjet VZ 122 to Chiang Mai</b>, 1 h 25 min. Same airport as the big flights, no cross-town transfer.</span></div>
-      <div><span class="t">7:00 PM</span><span>Land. Walk left in the arrivals hall to the <b>official taxi counter</b> (a person with a clipboard): flat <span class="cost">$5–6</span>, 15 minutes to the hotel. Or the hotel’s own car, <span class="cost">$11</span>, booked the day before.</span></div>
-      <div><span class="t">8:15 PM</span><span>Dinner five minutes away at the <b>Anusarn food court</b> by the Night Bazaar — clean, well-lit, seated, $1.50–3 a dish: khao soi (the northern coconut-curry noodle) and mango sticky rice. First lantern photos. Bed by 10.</span></div>
-    </div>
-    <div class="backup"><b>Tonight, confirm:</b> the elephant sanctuary pick-up time (they text the evening before) and Friday’s 11:20 car to the airport.</div>
+  <!-- Day 7 -->
+  <article class="day">
+    <div class="pic"><img src="img/night_bazaar.jpg" alt=""></div>
+    <div class="head"><h2>Wednesday 23. Crown on, fly north.</h2><span class="cost">$110</span></div>
+    <p class="one"><b>The one thing:</b> the 5:35 PM flight to Chiang Mai, 85 minutes, same airport.</p>
+    <ul><li>9 AM dentist: the crown is fitted. Collect the printed check-up report.</li><li>Leave the hotel 2:30 PM. Taxi $13 to $18.</li><li>In Chiang Mai, turn left in arrivals for the official taxi counter, $5. Dinner at the clean Anusarn food court.</li></ul>
   </article>
 
-  <!-- DAY 8 -->
-  <article class="day" id="d8">
-    <header><div class="when">Day 8 · Thursday 24 September · Chiang Mai</div><h2>Elephants in the morning, temples at golden hour</h2><span class="sleep">Tonight: THEE Vijit Lanna</span></header>
-    <figure class="photo"><img src="img/elephant_nature_park.jpg" alt="Elephants at Elephant Nature Park"><figcaption>Elephant Nature Park. Rescued animals, no riding, no shows — you walk beside them on a flat path and feed them.</figcaption></figure>
-    <div class="anchor"><b>The one big thing:</b> Elephant Nature Park, half-day morning. Hotel pick-up at 7:30, a slow one-hour walk with the herd on a path a wheelchair could manage, a feeding platform, a big vegetarian lunch, back at the hotel by 2:15. <span class="cost">$77 each.</span> Closed shoes, hat, light rain jacket.</div>
-    <div class="tl">
-      <div><span class="t">6:30 AM</span><span>Breakfast (the hotel serves from 6:30 — confirm).</span></div>
-      <div><span class="t">7:30 AM</span><span>Sanctuary minibus picks you up. About 90 minutes each way into the hills.</span></div>
-      <div><span class="t">2:15 PM</span><span>Back. Rest until 4:30 — pool, air conditioning, nap. This is the hour the afternoon shower usually comes anyway.</span></div>
-      <div><span class="t">4:30 PM</span><span>Grab ($2–3) to <b>Wat Phra Singh</b> — the gold stupa glows in low light. Walk 10 minutes along Ratchadamnoen Road to <b>Wat Chedi Luang</b> (the huge brick tower) and <b>Wat Phan Tao</b> (the teak temple). At the orange tables under the trees, young monks sit for “monk chat” until 6 — ask one what his day is like.</span></div>
-      <div><span class="t">6:15 PM</span><span>Dinner at <b>Huen Phen</b>, 5 minutes’ walk — the classic northern-Thai house restaurant, antique-filled evening room, partly air-conditioned. Gaeng hang lay (a gentle pork curry), sai ua (herb sausage), fish steamed in banana leaf. <span class="cost">$8–11 each.</span> Arrive early; it fills.</span></div>
-      <div><span class="t">8:00 PM</span><span>Optional: 10-minute Grab to the <b>Night Bazaar</b> for 45 minutes of lanterns and a 30-minute foot massage ($6–8). Or straight to bed.</span></div>
-    </div>
-    <div class="backup"><b>If you would rather see the mountain than the elephants:</b> 7:00 AM Grab up to <b>Doi Suthep</b> (the temple on the hill above the city) before the clouds; the little cable car up the last stretch is 60 cents, so no 306 steps; back down by 10:30 and a bowl of khao soi at <b>Khao Soi Khun Yai</b> at 11:15 (open 10–2, $1 a bowl, the one every guide sends you to). Hotel by 12:15. About $25 for the two of you instead of $154. <b>If it rains all afternoon:</b> the Lanna Folklife Museum opposite the Three Kings monument, $3 each.</div>
+  <!-- Day 8 -->
+  <article class="day">
+    <div class="pic"><img src="img/elephant_nature_park.jpg" alt=""></div>
+    <div class="head"><h2>Thursday 24. Elephants.</h2><span class="cost">$210</span></div>
+    <p class="one"><b>The one thing:</b> Elephant Nature Park, a rescue sanctuary. You walk beside them on a flat path and feed them. No riding, no shows. $77 each, pick-up at 7:30, back by 2:15.</p>
+    <ul><li>Rest 2:15 to 4:30. The afternoon shower comes then anyway.</li><li>4:30 the two great Old City temples in golden light, then dinner at Huen Phen, the northern-Thai house.</li><li>Rather see the mountain? Doi Suthep at 7 AM, cable car up (60 cents), khao soi at 11. $25 instead of $154.</li></ul>
+    <details><summary>See the day</summary><div class="body tl">
+      <div><span class="t">7:30</span><span>Sanctuary minibus at the hotel. Closed shoes, hat, rain jacket.</span></div>
+      <div><span class="t">2:15</span><span>Back. Pool, air conditioning, nap.</span></div>
+      <div><span class="t">4:30</span><span>Taxi app $2 to Wat Phra Singh. Walk 10 minutes to Wat Chedi Luang. Monks chat at the orange tables till 6.</span></div>
+      <div><span class="t">6:15</span><span>Huen Phen, 5 minutes on foot. Gentle pork curry, herb sausage. $8 to $11 each.</span></div>
+      <div><span class="t">8:00</span><span>Optional: Night Bazaar lanterns and a $7 foot massage. Or bed.</span></div>
+    </div></details>
   </article>
 
-  <!-- DAY 9 -->
-  <article class="day" id="d9">
-    <header><div class="when">Day 9 · Friday 25 September · Chiang Mai → Bangkok → the night flight</div><h2>A quiet morning, then the long ride home begins</h2><span class="sleep">Tonight: on the plane to Abu Dhabi</span></header>
-    <figure class="photo"><img src="img/wat_chedi_luang.jpg" alt="Wat Chedi Luang, Chiang Mai"><figcaption>Wat Chedi Luang in the early morning, when the monks are out and the square is empty.</figcaption></figure>
-    <div class="anchor"><b>Stella’s surprise (under $5):</b> at 6:40 AM, walk to the Three Kings monument with two small packets of rice and fruit the hotel helps you prepare, and give alms to the monks as they pass. Then Wat Chedi Luang in morning light, and light a lotus candle for a first-trip-abroad wish. Back by 9:30 for breakfast.</div>
-    <div class="tl">
-      <div><span class="t">6:40 AM</span><span>Alms at the Three Kings (or, for Cajetan, the <b>Warorot market</b> — open since 5 AM — for dried mango, herb sausage and a $3 scarf).</span></div>
-      <div><span class="t">9:30 AM</span><span>Breakfast, pack, late check-out at 11:30 (free in low season, usually).</span></div>
-      <div><span class="t">11:20 AM</span><span>Hotel car or Grab to the airport. <span class="cost">$3–11 · 15–20 min.</span></span></div>
-      <div><span class="t">1:40 PM</span><span><b>Thai Airways TG 107 to Bangkok</b>, lands 3:05 PM. Suitcases included on this one.</span></div>
-      <div><span class="t">3:05 PM</span><span>Six hours at Suvarnabhumi: collect the bags, check them in again with Etihad, dinner in the terminal. A paid lounge with recliners is an option ($40–50 each).</span></div>
-      <div><span class="t">9:00 PM</span><span><b>Etihad EY 407 to Abu Dhabi</b>, lands 12:30 AM.</span></div>
-    </div>
-    <div class="backup"><b>If the mountain was skipped on Thursday and the sky is clear at 6:15:</b> Doi Suthep at dawn instead of the alms — the cable car, an hour on the terrace, back by 9:15. If the summit is in cloud, do the alms; nothing lost.</div>
+  <!-- Day 9 -->
+  <article class="day">
+    <div class="pic"><img src="img/wat_chedi_luang.jpg" alt=""></div>
+    <div class="head"><h2>Friday 25. A quiet morning, then home.</h2><span class="cost">$40</span></div>
+    <p class="one"><b>The one thing:</b> at 6:40 AM, give rice and fruit to the monks passing the Three Kings square. Then light a candle at Wat Chedi Luang for a first-trip wish. Under $5.</p>
+    <ul><li>Late check-out 11:30. Car to the airport 11:20, $11.</li><li>Thai Airways 1:40 PM to Bangkok. Six hours there, then the 9 PM night flight to Abu Dhabi.</li></ul>
   </article>
 
-  <!-- DAY 10 -->
-  <article class="day" id="d10">
-    <header><div class="when">Day 10 · Saturday 26 September · Abu Dhabi → Atlanta</div><h2>Six hours in a bed, then home</h2><span class="sleep">Tonight: your own bed in Marietta</span></header>
-    <div class="tl">
-      <div><span class="t">12:30 AM</span><span>Land in Abu Dhabi. The 8 hours 50 minutes here are the price of the cheap fare. The plan books the <b>AUHotel inside Terminal A</b> — a real room without leaving the airport, about $125 for a 6-hour block. Sleep 1:15–7:15.</span></div>
-      <div><span class="t">9:20 AM</span><span><b>Etihad EY 13 to Atlanta</b>, 16 hours 10 minutes. Lands 4:30 PM the same day (you get the 8 hours back).</span></div>
-      <div><span class="t">4:30 PM</span><span>Atlanta. Passport control (see the guide for the free “Mobile Passport Control” app that skips most of the line). Home by about 6:30.</span></div>
-    </div>
-    <div class="backup"><b>If you would rather not pay for the room:</b> the terminal is new and quiet, with rest zones — but it is 2 AM on a chair at 70 and 71. The room is the best $125 in this plan.</div>
+  <!-- Day 10 -->
+  <article class="day">
+    <div class="pic"><img src="img/zayed_airport.jpg" alt=""></div>
+    <div class="head"><h2>Saturday 26. Home.</h2><span class="cost">$125</span></div>
+    <p class="one"><b>The one thing:</b> six hours in a real bed at the hotel inside the Abu Dhabi terminal, 12:30 to 9 AM. The best $125 in the plan.</p>
+    <ul><li>9:20 AM flight to Atlanta, 16 hours, lands 4:30 PM the same day.</li><li>Open the free Mobile Passport Control app before landing. Home by 6:30.</li></ul>
   </article>
 
-  <!-- SKIP -->
-  <section class="card" id="skip">
-    <h2>What to skip, and why</h2>
-    <ul class="plain skip">
-      <li><b>“The palace is closed today.”</b> Said by friendly men in nice shirts near the Grand Palace, followed by a cheap tuk-tuk tour that ends at a gem or tailor shop. The palace is open every day. Walk past and smile.</li>
-      <li><b>Tuk-tuk rides.</b> Fun to photograph, bad to sit in: exhaust, rain, a high step, and a fare that starts at double the taxi app. One photo in a parked one, yes.</li>
-      <li><b>Khao San Road.</b> A backpacker bar street. Nothing there for you.</li>
-      <li><b>Damnoen Saduak floating market.</b> Two hours each way to a floating souvenir stand in boat fumes. If you want boats, the Wat Arun ferry on Tuesday is the real thing for 15 cents.</li>
-      <li><b>Elephant shows, tiger selfies, “long-neck villages”.</b> Animals and people on display for money. The sanctuary on Thursday is the opposite of this.</li>
-      <li><b>River dinner cruises.</b> A 200-person buffet with a cover band, boarding 40 minutes away by taxi. The rooftop table on Tuesday gives you the same view sitting still, for the same money, 100 m from where you already are.</li>
-      <li><b>Restaurants without printed prices</b>, and any restaurant a taxi driver “recommends” — he is paid 30% of your bill.</li>
-      <li><b>The cash machine’s offer to charge you in dollars.</b> Always choose “continue in Thai baht”. The dollar option costs 3–7% more.</li>
-      <li><b>Sightseeing on Sunday</b>, however good you feel at 4 PM. Sunday is lunch, a mall and a shrine.</li>
-    </ul>
-  </section>
+  <hr class="divider">
 
-  <!-- HOTELS -->
-  <section id="hotels" style="display:grid;gap:16px">
-    <h2>Where you sleep — three choices in Bangkok, two in Chiang Mai</h2>
-    <p class="help">All meet the bar: 4-star or better, rated 9 or above by other travellers, an elevator, and no surprises. The difference is the walk to the hospital.</p>
-    <div class="picks">
-      <div class="pick best"><h3>Bangkok · Ad Lib Bangkok <span>$75–100 a night · Booking.com 9.1</span></h3><p>The pick, because Monday morning you walk one minute to Bumrungrad and 500 m to the dentist, and the free tuk-tuk to the Skytrain means no stairs from the street. Salt-water pool, good breakfast, spotless. Rooms are on the small side. The plan books Saturday night too, so the room is ready at 9 AM Sunday.</p></div>
-      <div class="pick"><h3>Bangkok · DoubleTree by Hilton Ploenchit <span>$82–132 · Booking.com 8.8</span></h3><p>The most “big hotel” feel for the money, large rooms, a strong breakfast, and on the same little street as the dental hospital. It misses the 9.0 bar by two tenths, and the Skytrain is a 10-minute walk in the heat (use a $2 Grab). Take it if Stella wants a grand lobby.</p></div>
-      <div class="pick"><h3>Bangkok · Sindhorn Midtown <span>$64–182 · Booking.com 9.2, cleanliness 9.5</span></h3><p>The best-rated hotel on the list: 5-star, 18th-floor infinity pool, quiet street. But it is 2 km from the hospitals, so every medical trip is a taxi and Monday starts at 6:30. Best hotel, worst logistics for this particular trip.</p></div>
-      <div class="pick best"><h3>Chiang Mai · THEE Vijit Lanna <span>about $68 a night · 4-star, elevator, two pools</span></h3><p>One minute from the Old City gate, so the temples, Huen Phen and the Night Bazaar are all on foot. Sends a car to the airport for $11. The frugal choice that is also the practical one.</p></div>
-      <div class="pick"><h3>Chiang Mai · Meliá Chiang Mai <span>from $112 · Booking.com 9.0, elevator</span></h3><p>5-star, rooftop pool, quiet rooms (a January 2026 review calls out how quiet). Next to the Night Bazaar, a 10-minute taxi from the Old City temples. The comfortable upgrade.</p></div>
-      <div class="pick"><h3>Abu Dhabi · the free Etihad stopover hotel <span>$0 + about $14 in fees</span></h3><p>You pick from the airline’s list on the day you buy the tickets. Ask for <b>Aloft Abu Dhabi</b> (modern, rooftop pool, elevators everywhere) or City Seasons. If only basic hotels show, pay about $99 for Khalidiya Palace Rayhaan (Booking.com 9.0, on the beach) or $79 for Novotel Abu Dhabi Gate (next to the mosque).</p></div>
+  <details>
+    <summary>Where you sleep</summary>
+    <div class="body hlist">
+      <div class="h"><b>Bangkok: Ad Lib, $85 a night</b><span>Rated 9.1. One minute to the hospital. Pool. Free tuk-tuk to the train.</span></div>
+      <div class="h"><b>Bangkok, bigger: DoubleTree by Hilton, $105</b><span>Rated 8.8. Large rooms, big breakfast, same street as the dentist.</span></div>
+      <div class="h"><b>Chiang Mai: THEE Vijit Lanna, $68</b><span>Elevator, two pools, at the Old City gate. Sends a car to the airport.</span></div>
+      <div class="h"><b>Chiang Mai, nicer: Meliá, $112</b><span>Rated 9.0. Rooftop pool, very quiet rooms.</span></div>
+      <div class="h"><b>Abu Dhabi: the free Etihad hotel</b><span>Ask for Aloft. If only basic ones show, Khalidiya Palace, $99, rated 9.0.</span></div>
     </div>
-  </section>
-
-  <!-- RESTAURANTS -->
-  <section style="display:grid;gap:12px">
-    <h2>The restaurant list</h2>
-    <p class="help">Every one has printed prices, chairs with backs, and cooks who hear “mai phet” (not spicy) all day. Prices are per person.</p>
-    <div class="tablewrap"><table>
-      <thead><tr><th>Where</th><th>Place</th><th>Why</th><th>Price</th></tr></thead>
-      <tbody>
-        <tr><td>Abu Dhabi</td><td><b>Al Mrzab</b>, Airport Road</td><td>Emirati home cooking; dates and coffee free; machboos rice, lamb. Michelin-listed, locals’ place.</td><td>$14–27</td></tr>
-        <tr><td>Bangkok, near hotel</td><td><b>Pier 21</b>, Terminal 21 mall</td><td>The clean $2 food court. First meal, and any time you want easy.</td><td>$1–2 a plate</td></tr>
-        <tr><td>Bangkok, near hotel</td><td><b>Cabbages &amp; Condoms</b>, Soi 12</td><td>Garden, lanterns, mild plates, printed prices, a charity story.</td><td>$18</td></tr>
-        <tr><td>Bangkok, near hotel</td><td><b>Baan Khanitha</b>, Soi 23</td><td>White-tablecloth Thai in a heritage house, full AC. Massaman, river prawns.</td><td>$18–31</td></tr>
-        <tr><td>Bangkok, near hotel</td><td><b>Above Eleven</b>, Soi 11 rooftop</td><td>Sunset skyline drink, no minimum, elevator to the roof.</td><td>$11–15 a drink</td></tr>
-        <tr><td>Bangkok, Old City</td><td><b>Supanniga Eating Room</b>, Tha Tien</td><td>Facing Wat Arun; AC downstairs for lunch, rooftop for the birthday. Crab omelette, mild red curry.</td><td>$18–22 · rooftop $62 min per table</td></tr>
-        <tr><td>Bangkok, Old City</td><td><b>Krua Apsorn</b>, Dinso Road</td><td>Where civil servants lunch. Crab omelette, mild curries. Closed Sunday; open Tuesday.</td><td>$9–15</td></tr>
-        <tr><td>Bangkok, Chinatown</td><td><b>T&amp;K Seafood</b>, Yaowarat</td><td>The famous grill on the corner. Prawns, steamed sea bass. Arrive by 5 for an AC seat. Closed Monday.</td><td>$6–11</td></tr>
-        <tr><td>Chiang Mai</td><td><b>Anusarn food court</b>, Night Bazaar</td><td>Clean, lit, seated. Khao soi and mango sticky rice on arrival night.</td><td>$1.50–3 a dish</td></tr>
-        <tr><td>Chiang Mai</td><td><b>Huen Phen</b>, Old City</td><td>The northern-Thai house. Gentle pork curry, herb sausage. Evening room 5–10 PM.</td><td>$8–11</td></tr>
-        <tr><td>Chiang Mai</td><td><b>Khao Soi Khun Yai</b>, Old City</td><td>The bowl every guide sends you to. Open 10–2 only; ask for it plain.</td><td>$1</td></tr>
-        <tr><td>Chiang Mai</td><td><b>Kao Soy Nimman</b>, Nimman Road</td><td>The one khao soi place with air conditioning and dinner hours.</td><td>$3–6</td></tr>
-        <tr><td>Chiang Mai</td><td><b>Deck 1</b>, riverside</td><td>Quiet, modern, on the river. The one nicer dinner if the budget allows.</td><td>$23</td></tr>
-      </tbody>
-    </table></div>
-  </section>
-
-  <!-- BOOK -->
-  <section class="card" id="book">
-    <h2>Book by these dates</h2>
-    <ol class="steps" style="display:grid;gap:10px;margin:0;padding-left:22px">
-      <li><b>As soon as the dentist confirms the procedure:</b> the Etihad tickets on etihad.com (not through another website), choosing the “Value” fare so suitcases are included, and adding the Abu Dhabi stopover the same day. Prices move daily; today $1,921 + about $280 for the bag fare.</li>
-      <li><b>The same day as the tickets:</b> travel insurance (so pre-existing conditions are covered) and the free stopover hotel on etihad.com/stopover with the booking reference.</li>
-      <li><b>By 8 September:</b> the Supanniga rooftop table for Tuesday 22 at 5:15 PM (tables go a month out; $15 deposit) — supannigaeatingroom.com.</li>
-      <li><b>By 8 September:</b> Elephant Nature Park half-day morning for Thursday 24 — elephantnaturepark.org (sells out).</li>
-      <li><b>By 12 September:</b> the check-ups. Bumrungrad “Holistic 70+” at bumrungrad.com/en/book-appointment for Monday 21, 7:00 AM; or Bangkok Hospital “Longevity 60+”, which needs 7 days’ notice.</li>
-      <li><b>Now:</b> email the dental hospital (contact@dentalhospitalthailand.com) with the US dentist’s plan and x-rays for a written price, and ask for Monday 21 at 2 PM and Wednesday 23 at 9 AM.</li>
-      <li><b>Two to three weeks out:</b> hotels on Booking.com with free cancellation — Ad Lib from Saturday 19 (so the room is ready Sunday morning), THEE Vijit Lanna 23–25; Baan Khanitha and Cabbages &amp; Condoms tables; the AUHotel 6-hour room for the 26th.</li>
-      <li><b>17–19 September:</b> the Thailand Digital Arrival Card online for both, free, at tdac.immigration.go.th.</li>
-    </ol>
-  </section>
-
-  <footer style="color:var(--muted);font-size:15px;border-top:1px solid var(--rule);padding-top:14px">Prices were checked on 29–30 August 2026 against the airlines, hotels, hospitals and restaurants’ own pages and recent traveller reports; airfares and hotel rates move until booked. Where two sources disagreed (the mosque’s small entry fee, a restaurant’s hours) the plan says so in the guide.</footer>
+  </details>
+  <details>
+    <summary>Things to skip</summary>
+    <div class="body"><ul class="dots">
+      <li>Tuk-tuk rides. A photo in a parked one, yes.</li>
+      <li>Anyone saying a temple is closed, and any shop a driver takes you to.</li>
+      <li>The far-away floating market. Two hours each way in boat fumes.</li>
+      <li>Elephant shows and tiger selfies.</li>
+      <li>The river dinner cruise. Same view from the rooftop table, sitting still.</li>
+      <li>The cash machine’s offer to charge in dollars. Always choose baht.</li>
+    </ul></div>
+  </details>
+  <details>
+    <summary>Book by these dates</summary>
+    <div class="body"><ul class="dots">
+      <li><b>First:</b> decide the route. Then Etihad on etihad.com, “Value” fare (suitcases included), stopover added the same day. Insurance the same week.</li>
+      <li><b>By 8 September:</b> the rooftop birthday table and the elephant sanctuary. Both sell out.</li>
+      <li><b>By 12 September:</b> the check-ups. Email the dentist the US x-rays now for a written price.</li>
+      <li><b>Two weeks out:</b> hotels with free cancellation. Bangkok from Saturday night.</li>
+      <li><b>17 to 19 September:</b> the free Thailand arrival form online. Vince can do it.</li>
+    </ul></div>
+  </details>
 </main>
 </body>
 </html>
