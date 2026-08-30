@@ -61,9 +61,9 @@
 const BUDGET = 3500;
 // Each group: id, title, help, mode (one|many), options [{id, l, s, p (USD for two), tag}]
 const G = [
-  { id: 'flights', title: 'The big flights', help: 'Atlanta to Bangkok and back, both of you. Etihad is the cheapest AND the only one with a free stopover hotel.', mode: 'one',
+  { id: 'flights', title: 'The big flights', help: 'Atlanta to Bangkok and back, both of you. Etihad is the cheapest and the only one with a free stopover hotel — but Abu Dhabi is under a US “Reconsider Travel” warning right now (see the guide). United is the route that avoids the Middle East.', mode: 'one',
     o: [ { id: 'etihad', l: 'Etihad through Abu Dhabi', s: 'Thu 9:30 PM out, home Sat 4:30 PM. One free hotel night in Abu Dhabi included. Price checked 30 Aug; was $1,841 the day before.', p: 1921, tag: 'rec' },
-         { id: 'united', l: 'United through San Francisco', s: 'No stopover, 2 stops, 27 hours each way.', p: 2062 },
+         { id: 'united', l: 'United through San Francisco and Hong Kong', s: 'Avoids the Middle East entirely. No stopover, 2 stops, 27 hours each way. Suitcases included, so no bag fare needed.', p: 2198 },
          { id: 'qatar', l: 'Qatar Airways through New York and Doha', s: 'Doha instead of Abu Dhabi; 3 flights each way.', p: 2532 } ] },
   { id: 'bags', title: 'Suitcases on the big flights', help: 'The cheapest Etihad ticket (“Economy Basic”) allows only a 7 kg carry-on — no suitcase at all. The next ticket up (“Value”) includes two 50-lb suitcases each. For a nine-day trip you need the suitcase.', mode: 'one',
     o: [ { id: 'value', l: 'Value fare — two suitcases each, included', s: 'Estimated $280 more for both than Basic; the exact difference shows on etihad.com when booking.', p: 280, tag: 'rec' },
@@ -153,7 +153,8 @@ function compute() {
   let inside = 0;
   G.filter(g => !g.outside && g.id !== 'misc').forEach(g => { inside += groupTotal(g); });
   // Abu Dhabi day only counts if stopover taken
-  if (sel.stopover === 'skip') inside -= groupTotal(G.find(g => g.id === 'auh'));
+  if (sel.stopover === 'skip' || sel.flights !== 'etihad') inside -= groupTotal(G.find(g => g.id === 'auh'));
+  if (sel.flights !== 'etihad') { inside -= groupTotal(G.find(g => g.id === 'bags')); inside -= groupTotal(G.find(g => g.id === 'stopover')); inside -= groupTotal(G.find(g => g.id === 'layover')); }
   const base = inside;
   const misc = groupTotal(G.find(g => g.id === 'misc'), base);
   inside += misc;
@@ -170,8 +171,8 @@ function render() {
   document.getElementById('saveline').innerHTML = s > 0 ? 'Dad’s meter: your choices are <b>' + money(s) + ' cheaper</b> than the recommended set-up.' : (s < 0 ? 'Your choices are <b>' + money(-s) + ' more</b> than the recommended set-up — that is fine if it buys comfort.' : 'These are the recommended choices. Tap any option to see what changes.');
   let h = '';
   G.forEach(g => {
-    const disabled = g.id === 'auh' && sel.stopover === 'skip';
-    h += '<section class="group ' + (g.outside ? 'medical' : '') + '" ' + (disabled ? 'style="opacity:.5"' : '') + '><h2>' + esc(g.title) + '<span class="gsum">' + (g.outside ? 'outside budget · ' : '') + money(groupTotal(g, base)) + '</span></h2>' + (g.help ? '<p class="help">' + esc(g.help) + '</p>' : '') + (disabled ? '<p class="help"><b>Not counted</b> because you chose to skip Abu Dhabi.</p>' : '') + '<div class="options">';
+    const disabled = (g.id === 'auh' && (sel.stopover === 'skip' || sel.flights !== 'etihad')) || (['bags', 'stopover', 'layover'].includes(g.id) && sel.flights !== 'etihad');
+    h += '<section class="group ' + (g.outside ? 'medical' : '') + '" ' + (disabled ? 'style="opacity:.5"' : '') + '><h2>' + esc(g.title) + '<span class="gsum">' + (g.outside ? 'outside budget · ' : '') + money(groupTotal(g, base)) + '</span></h2>' + (g.help ? '<p class="help">' + esc(g.help) + '</p>' : '') + (disabled ? '<p class="help"><b>Not counted</b> with the route you chose.</p>' : '') + '<div class="options">';
     g.o.forEach(o => {
       const on = g.mode === 'one' ? sel[g.id] === o.id : sel[g.id].includes(o.id);
       const price = o.dyn === 'buffer' ? money(base * 0.10) : (o.p === 0 ? 'Free' : money(o.p));

@@ -28,12 +28,14 @@
   .pick { background: var(--card); border: 2px solid var(--rule); border-radius: 12px; padding: 14px 18px; display: grid; gap: 6px; }
   .pick.best { border-color: var(--accent); }
   .pick h3 { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
-  .pick h3 span { font-family: "Atkinson Hyperlegible", sans-serif; font-weight: 400; color: var(--muted); font-size: 16px; white-space: nowrap; }
+  .pick h3 { flex-wrap: wrap; }
+  .pick h3 span { font-family: "Atkinson Hyperlegible", sans-serif; font-weight: 400; color: var(--muted); font-size: 16px; }
   .pick p { font-size: 17px; max-width: none; }
   table { border-collapse: collapse; width: 100%; font-size: 17px; }
   th, td { text-align: left; padding: 9px 10px 9px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
   th { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
-  .tablewrap { overflow-x: auto; }
+  .tablewrap { overflow-x: auto; min-width: 0; }
+  .page > * { min-width: 0; }
   ul.plain { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
   ul.plain li { max-width: 66ch; }
   .skip li b { color: var(--warn); }
@@ -49,6 +51,11 @@
     <p class="help">Each day has one main thing, a rest, and a back-up if it rains or you are tired. Times are local. Prices are in dollars for the two of you unless it says “each”. Nothing here is booked yet — the <a href="costs.html">cost sheet</a> is where you choose.</p>
     <nav class="toc" aria-label="Days"><a href="#d1">Thu 17</a><a href="#d2">Fri 18</a><a href="#d3">Sat 19</a><a href="#d4">Sun 20</a><a href="#d5">Mon 21</a><a href="#d6">Tue 22</a><a href="#d7">Wed 23</a><a href="#d8">Thu 24</a><a href="#d9">Fri 25</a><a href="#d10">Sat 26</a><a href="#skip">What to skip</a><a href="#hotels">Hotels</a><a href="#book">Book by</a></nav>
   </header>
+
+  <section class="card" style="border-color:var(--warn);background:var(--warn-wash)">
+    <div class="eyebrow" style="color:var(--warn)">Before reading the days</div>
+    <p style="max-width:none">Days 2, 3 and 10 are in Abu Dhabi, which the US government currently rates <b>“Level 3 — Reconsider Travel”</b> because of the conflict with Iran. The route can be changed to avoid the Middle East entirely (United through San Francisco and Hong Kong, about $280 more, no stopover). <a href="guide.html#safety">The three choices are explained here.</a> Everything else on this page stays the same whichever route you pick.</p>
+  </section>
 
   <section class="card soft">
     <h2>The shape of the trip</h2>
